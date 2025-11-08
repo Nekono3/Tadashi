@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Test - The Pyramid of Cestius</title>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --sidebar-bg: #f8f9fa;
+            --accent-color: #ff6b6b;
+            --correct-color: #4caf50;
+            --incorrect-color: #f44336;
+            --highlight-yellow: rgba(255, 235, 59, 0.5);
+            --highlight-blue: rgba(66, 165, 245, 0.3);
+            --border-color: #e0e0e0;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .theme-night {
+            --bg-color: #121212;
+            --text-color: #ffffff;
+            --sidebar-bg: #1e1e1e;
+            --border-color: #444444;
+            --shadow-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .theme-sepia {
+            --bg-color: #f4ecd8;
+            --text-color: #5b4636;
+            --sidebar-bg: #eaddc9;
+            --border-color: #d6c8a8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .header {
+            display: flex;
+            justify-content: center;
+            padding: 15px;
+            background-color: var(--sidebar-bg);
+            border-bottom: 2px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .telegram-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #0088cc;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+
+        .telegram-btn:hover {
+            background-color: #0077b3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+
+        .telegram-icon {
+            font-size: 18px;
+        }
+
+        .container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .passage-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            height: calc(100vh - 120px);
+            border-right: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .questions-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            height: calc(100vh - 120px);
+            background-color: var(--sidebar-bg);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .passage-container {
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            .questions-container {
+                height: auto;
+            }
+        }
+
+        .passage {
+            font-size: 16px;
+            line-height: 1.8;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .passage h1 {
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 28px;
+        }
+
+        .passage p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .questions-section {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .question-group {
+            margin-bottom: 30px;
+            background-color: var(--bg-color);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px var(--shadow-color);
+        }
+
+        .question-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 5px;
+        }
+
+        .question-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.08);
+            transition: transform 0.2s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .question-item:hover {
+            transform: translateX(5px);
+        }
+
+        .question-text {
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .option-btn {
+            padding: 8px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            background-color: transparent;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-color);
+            transition: all 0.2s ease;
+        }
+
+        .option-btn:hover {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        .option-btn.selected {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            margin-top: 5px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 5px rgba(255, 107, 107, 0.3);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            background-color: var(--sidebar-bg);
+            border-top: 2px solid var(--border-color);
+        }
+
+        .timer {
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background-color: var(--accent-color);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .timer.warning {
+            background-color: #ff9800;
+        }
+
+        .timer.danger {
+            background-color: var(--incorrect-color);
+            animation: flash 1s infinite;
+        }
+
+        @keyframes flash {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .theme-toggle {
+            display: flex;
+            gap: 10px;
+        }
+
+        .theme-btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .theme-btn.active {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .submit-btn {
+            padding: 12px 30px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 8px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #e55a5a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px var(--shadow-color);
+        }
+
+        .highlight-menu {
+            position: absolute;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px;
+            display: none;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            z-index: 1000;
+            flex-direction: row;
+            gap: 8px;
+            color: var(--text-color);
+            min-width: 180px;
+        }
+
+        .highlight-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            flex: 1;
+            text-align: center;
+        }
+
+        .yellow-btn {
+            background-color: #ffeb3b;
+            color: #333;
+        }
+
+        .blue-btn {
+            background-color: #42a5f5;
+            color: white;
+        }
+
+        .clear-btn {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .highlight-yellow {
+            background-color: var(--highlight-yellow);
+        }
+
+        .highlight-blue {
+            background-color: var(--highlight-blue);
+        }
+
+        /* Results Modal */
+        .results-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .results-content {
+            background-color: var(--bg-color);
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--accent-color);
+        }
+
+        .score-display {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+
+        .result-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-color);
+        }
+
+        .result-item.correct {
+            border-left: 5px solid var(--correct-color);
+        }
+
+        .result-item.incorrect {
+            border-left: 5px solid var(--incorrect-color);
+        }
+
+        .result-question {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .result-answer {
+            margin-bottom: 5px;
+        }
+
+        .result-correct-answer {
+            color: var(--correct-color);
+            font-weight: 600;
+        }
+
+        .result-explanation {
+            font-size: 14px;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: rgba(76, 175, 80, 0.1);
+            border-radius: 5px;
+            border: 1px solid var(--correct-color);
+        }
+
+        .close-btn {
+            display: block;
+            margin: 20px auto 0;
+            padding: 10px 30px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background-color: #e55a5a;
+            transform: translateY(-2px);
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #e55a5a;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="tg://resolve?domain=aftum_8" class="telegram-btn">
+            <span class="telegram-icon">📱</span>
+            Телеграмм канал
+        </a>
+    </div>
+
+    <div class="container">
+        <div class="passage-container">
+            <div class="passage" id="passage">
+                <h1>The Pyramid of Cestius</h1>
+                <p>A 2000-year-old pyramid in the city of Rome has been restored by archaeologists.</p>
+                <p>Though Rome draws tourists from around the world to its many impressive sites, one notable monument there has never attracted nearly as much interest: The Pyramid of Cestius. But why would there be a pyramid in Italy? After the Roman conquest of Egypt in 30 B.C., Egyptian architectural style became the fashion in Rome.</p>
+                <p>Though obelisks and other monuments inspired by Egypt’s great pyramids sprung up around the city, only two actual pyramids are known to have been built. The only one left standing, the Pyramid of Cestius, was designed as the burial pyramid for a Roman politician named Caius Cestius, who ordered that the building work be completed within a period of 330 days.</p>
+                <p>Construction took place at some point between 18 B.C. and 12 B.C. Cestius' pyramid had a layer of white Carrara marble on the outside and was constructed from brick held together by cement on the inside. One of the things that strikes you when you look at the pyramid is how steep it is, making its shape quite unlike that of typical Egyptian pyramids. This difference could have resulted from inaccurate information sent back to Rome by soldiers who saw the pyramids in person in Egypt. Alternatively, Roman builders could have drawn inspiration from the pyramids in Nubia, a region in present-day northern Sudan and southern Egypt.</p>
+                <p>At the time of its construction, a strict Roman law prohibited tombs within the city, so the Pyramid of Cestius would have stood in countryside. Rome grew enormously over the next two centuries, and by the 3rd century A.D., the pyramid would have been surrounded by buildings. We also know that in the 3rd century A.D., the Pyramid of Cestius was hidden behind a high wall on the orders of Emperor Aurelian; this likely helped it survive through the centuries, even as other ancient monuments disappeared.</p>
+                <p>By the Middle Ages, the pyramid was covered in vegetation and dirt, and a popular myth suggested that it might be the tomb of Romulus or Remus, the legendary founders of Rome. Cestius’ actual tomb and an inscription identifying the pyramid were not rediscovered until the 1660s, when the pyramid underwent restoration.</p>
+                <p>During excavations, workers cleared away trees and plants and found two marble bases in front of the pyramid, as well as fragments of bronze statues that once stood on either side. However, they did not find the urn containing Cestius' remains, but they did discover a tunnel, suggesting that robbers might have looted the tomb long ago. Though some features no longer exist, at least the pyramid itself has survived.</p>
+                <p>Today, the Pyramid of Cestius stands near a busy intersection, making it easy for tourists and residents to overlook its full height of 119 feet. Across the intersection is Pirámide station, located on Line B of the Rome Metro.</p>
+                <p>In 2011, Japanese entrepreneur Yuzo Yagi, president of Yagi Tsusho Ltd, announced his intention to fund a major renovation of the Pyramid of Cestius. He described it as “an act of gratitude” to Italy, a country that contributed to his company's success. Work began shortly after he signed an agreement with the Special Superintendency for the Archaeological Heritage of Rome, and thanks to his 2-million-euro donation, the project was completed ahead of schedule.</p>
+                <p>As archaeologist Leonardo Guarnieri explained, officials now conduct tours of the newly renovated pyramid twice a month by reservation. Visitors can walk through a narrow corridor to reach the burial chamber, where they can admire frescoes, including four images of the winged Roman goddess Victoria, as well as vases used for rituals and purification. Some frescoes have disappeared over time, but historical records confirm their existence.</p>
+                <p>Only one issue remains after the restoration: the white exterior of the Pyramid of Cestius needs to be cleaned regularly due to urban pollution. A team of free-climbers will handle the task to avoid placing scaffolding around the newly restored monument.</p>
+            </div>
+            <div class="highlight-menu" id="highlightMenu">
+                <button class="highlight-btn yellow-btn" data-color="yellow">Yellow</button>
+                <button class="highlight-btn blue-btn" data-color="blue">Blue</button>
+                <button class="highlight-btn clear-btn" data-color="clear">Clear</button>
+            </div>
+        </div>
+
+        <div class="questions-container">
+            <div class="questions-section">
+                <div class="question-group">
+                    <h2 class="question-title">Questions 1-7</h2>
+                    <p>Do the following statements agree with the information given in the reading passage?</p>
+                    <p>In boxes 1-7 on your answer sheet, write:</p>
+                    <p><strong>TRUE</strong> if the statement agrees with the information</p>
+                    <p><strong>FALSE</strong> if the statement contradicts the information</p>
+                    <p><strong>NOT GIVEN</strong> if there is no information on this</p>
+                    
+                    <div class="question-item" data-question="1">
+                        <div class="question-text">1. The Pyramid of Cestius has always been one of Rome's most popular tourist attractions.</div>
+                        <div class="options">
+                            <button class="option-btn" data-value="TRUE">TRUE</button>
+                            <button class="option-btn" data-value="FALSE">FALSE</button>
+                            <button class="option-btn" data-value="NOT GIVEN">NOT GIVEN</button>
+                        </div>
+                    </div>
+                    
+                    <div class="question-item" data-question="2">
+                        <div class="question-text">2. The construction of the Pyramid was completed before Cestius' death.</div>
+                        <div class="options">
+                            <button class="option-btn" data-value="TRUE">TRUE</button>
+                            <button class="option-btn" data-value="FALSE">FALSE</button>
+                            <button class="option-btn" data-value="NOT GIVEN">NOT GIVEN</button>
+                        </div>
+                    </div>
+                    
+                    <div class="question-item" data-question="3">
+                        <div class="question-text">3. In the Middle Ages, people thought an original founder of Rome was buried in the Pyramid of Cestius.</div>
+                        <div class="options">
+                            <button class="option-btn" data-value="TRUE">TRUE</button>
+                            <button class="option-btn" data-value="FALSE">FALSE</button>
+                            <button class="option-btn" data-value="NOT GIVEN">NOT GIVEN</button>
+                        </div>
+                    </div>
+                    
+                    <div class="question-item" data-question="4">
+                        <div class="question-text">4. Today the height of the Pyramid is something that tourists and residents immediately notice.</div>
+                        <div class="options">
+                            <button class="option-btn" data-value="TRUE">TRUE</button>
+                            <button class="option-btn" data-value="FALSE">FALSE</button>
+                            <button class="option-btn" data-value="NOT GIVEN">NOT GIVEN</button>
+                        </div>
+                    </div>
+                    
+                    <div class="question-item" data-question="5">
+                        <div class="question-text">5. Japanese businessman Yuzo Yagi was an admirer of both Italian and Egyptian architecture.</div>
+                        <div class="options">
+                            <button class="option-btn" data-value="TRUE">TRUE</button>
+                            <button class="option-btn" data-value="FALSE">FALSE</button>
+                            <button class="option-btn" data-value="NOT GIVEN">NOT GIVEN</button>
+                        </div>
+                    </div>
+                    
+                    <div class="question-item" data-question="6">
+                        <div class="question-text">6. The restoration of the Pyramid of Cestius, which was funded by Yuzo Yagi, finished earlier than expected.</div>
+                        <div class="options">
+                            <button class="option-btn" data-value="TRUE">TRUE</button>
+                            <button class="option-btn" data-value="FALSE">FALSE</button>
+                            <button class="option-btn" data-value="NOT GIVEN">NOT GIVEN</button>
+                        </div>
+                    </div>
+                    
+                    <div class="question-item" data-question="7">
+                        <div class="question-text">7. Most of the original frescoes inside Cestius’ tomb have survived to this day.</div>
+                        <div class="options">
+                            <button class="option-btn" data-value="TRUE">TRUE</button>
+                            <button class="option-btn" data-value="FALSE">FALSE</button>
+                            <button class="option-btn" data-value="NOT GIVEN">NOT GIVEN</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question-group">
+                    <h2 class="question-title">Questions 8-13</h2>
+                    <p>Complete the notes below.</p>
+                    <p>Choose ONE WORD ONLY from the passage for each answer.</p>
+                    <p>Write your answers in boxes 8-13 on your answer sheet.</p>
+                    
+                    <h3>History of the Pyramid of Cestius</h3>
+                    <h4>Construction of Cestius' pyramid</h4>
+                    
+                    <div class="question-item" data-question="8">
+                        <div class="question-text">8. It was made from <input type="text" class="text-input" data-question="8"> marble and cement.</div>
+                    </div>
+                    
+                    <div class="question-item" data-question="9">
+                        <div class="question-text">9. Its <input type="text" class="text-input" data-question="9"> is different from the pyramids found in Egypt.</div>
+                    </div>
+                    
+                    <div class="question-item" data-question="10">
+                        <div class="question-text">10. It was originally built in the <input type="text" class="text-input" data-question="10"> as tombs in the city were forbidden.</div>
+                    </div>
+                    
+                    <div class="question-item" data-question="11">
+                        <div class="question-text">11. In the 1660s, some broken <input type="text" class="text-input" data-question="11"> were found next to it.</div>
+                    </div>
+                    
+                    <div class="question-item" data-question="12">
+                        <div class="question-text">12. The <input type="text" class="text-input" data-question="12"> inside the tomb suggests that robbers had been there.</div>
+                    </div>
+                    
+                    <div class="question-item" data-question="13">
+                        <div class="question-text">13. Climbers are helping to remove signs of <input type="text" class="text-input" data-question="13">.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <div class="timer" id="timer">20:00</div>
+        <div class="theme-toggle">
+            <button class="theme-btn active" data-theme="day">Day</button>
+            <button class="theme-btn" data-theme="night">Night</button>
+            <button class="theme-btn" data-theme="sepia">Sepia</button>
+        </div>
+        <button class="submit-btn" id="submitBtn">Submit Answers</button>
+    </div>
+
+    <div class="results-modal" id="resultsModal">
+        <div class="results-content">
+            <div class="results-header">
+                <h2>IELTS Reading Test Results</h2>
+                <div class="score-display" id="scoreDisplay">Your Score: 0/13</div>
+            </div>
+            <div id="resultsList"></div>
+            <button class="close-btn" id="closeBtn">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Timer functionality
+        let timeLeft = 20 * 60; // 20 minutes in seconds
+        const timerElement = document.getElementById('timer');
+        const passageElement = document.getElementById('passage');
+        const highlightMenu = document.getElementById('highlightMenu');
+        let currentSelection = null;
+
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft <= 300) { // 5 minutes warning
+                timerElement.classList.add('warning');
+            }
+            
+            if (timeLeft <= 60) { // 1 minute warning
+                timerElement.classList.add('danger');
+            }
+            
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                timerElement.textContent = "Time's up!";
+                submitAnswers();
+            }
+            
+            timeLeft--;
+        }
+
+        const timerInterval = setInterval(updateTimer, 1000);
+
+        // Theme toggle functionality
+        const themeButtons = document.querySelectorAll('.theme-btn');
+        
+        themeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                themeButtons.forEach(btn => btn.classList.remove('active'));
+                // Add active class to clicked button
+                button.classList.add('active');
+                
+                // Remove all theme classes from body
+                document.body.classList.remove('theme-night', 'theme-sepia');
+                
+                // Add selected theme class
+                const theme = button.dataset.theme;
+                if (theme === 'night') {
+                    document.body.classList.add('theme-night');
+                } else if (theme === 'sepia') {
+                    document.body.classList.add('theme-sepia');
+                }
+            });
+        });
+
+        // Enhanced Text Highlighting System with extractContents and insertNode
+        function showHighlightMenu() {
+            const selection = window.getSelection();
+            if (selection.rangeCount === 0 || selection.toString().trim() === '') {
+                hideHighlightMenu();
+                return;
+            }
+            
+            currentSelection = selection;
+            const range = selection.getRangeAt(0);
+            const rect = range.getBoundingClientRect();
+            
+            // Position the menu near the selection
+            highlightMenu.style.display = 'flex';
+            let leftPos = rect.left + window.scrollX + (rect.width / 2) - (highlightMenu.offsetWidth / 2);
+            let topPos = rect.top + window.scrollY - highlightMenu.offsetHeight - 10;
+            
+            // Adjust if menu goes off screen
+            if (leftPos < 0) {
+                leftPos = 10;
+            }
+            if (leftPos + highlightMenu.offsetWidth > window.innerWidth) {
+                leftPos = window.innerWidth - highlightMenu.offsetWidth - 10;
+            }
+            if (topPos < 0) {
+                topPos = rect.bottom + window.scrollY + 10;
+            }
+            
+            highlightMenu.style.left = `${leftPos}px`;
+            highlightMenu.style.top = `${topPos}px`;
+        }
+
+        function hideHighlightMenu() {
+            highlightMenu.style.display = 'none';
+            if (currentSelection) {
+                currentSelection.removeAllRanges();
+                currentSelection = null;
+            }
+        }
+
+        function applyHighlight(color) {
+            if (!currentSelection || currentSelection.rangeCount === 0) {
+                hideHighlightMenu();
+                return;
+            }
+            
+            const range = currentSelection.getRangeAt(0);
+            const selectedText = range.toString().trim();
+            
+            if (selectedText === '') {
+                hideHighlightMenu();
+                return;
+            }
+            
+            try {
+                // Create a new span element for highlighting
+                const highlightSpan = document.createElement('span');
+                highlightSpan.className = `highlight-${color}`;
+                
+                // Use extractContents and insertNode as requested
+                const extractedContent = range.extractContents();
+                highlightSpan.appendChild(extractedContent);
+                range.insertNode(highlightSpan);
+                
+                // Clear the selection
+                currentSelection.removeAllRanges();
+                hideHighlightMenu();
+            } catch (error) {
+                console.error('Error in applyHighlight:', error);
+                
+                // Fallback method for mobile browsers or edge cases
+                try {
+                    const selectedText = range.toString();
+                    const textNode = document.createTextNode(selectedText);
+                    
+                    // Delete the selected content
+                    range.deleteContents();
+                    
+                    // Create highlight span
+                    const highlightSpan = document.createElement('span');
+                    highlightSpan.className = `highlight-${color}`;
+                    highlightSpan.appendChild(textNode);
+                    
+                    // Insert the highlighted content
+                    range.insertNode(highlightSpan);
+                    
+                    currentSelection.removeAllRanges();
+                    hideHighlightMenu();
+                } catch (fallbackError) {
+                    console.error('Fallback method also failed:', fallbackError);
+                    alert('Unable to apply highlight. Please try selecting the text again.');
+                    hideHighlightMenu();
+                }
+            }
+        }
+
+        function clearHighlight() {
+            if (!currentSelection || currentSelection.rangeCount === 0) {
+                hideHighlightMenu();
+                return;
+            }
+            
+            const range = currentSelection.getRangeAt(0);
+            const selectedText = range.toString().trim();
+            
+            if (selectedText) {
+                try {
+                    // Get the common ancestor container
+                    const commonAncestor = range.commonAncestorContainer;
+                    let highlightElement = null;
+                    
+                    // Check if the common ancestor is already a highlight element
+                    if (commonAncestor.nodeType === Node.ELEMENT_NODE && 
+                        (commonAncestor.classList.contains('highlight-yellow') || 
+                         commonAncestor.classList.contains('highlight-blue'))) {
+                        highlightElement = commonAncestor;
+                    } else {
+                        // Look for parent highlight element
+                        let parent = commonAncestor.parentNode;
+                        while (parent && parent !== document.body) {
+                            if (parent.nodeType === Node.ELEMENT_NODE &&
+                                (parent.classList.contains('highlight-yellow') || 
+                                 parent.classList.contains('highlight-blue'))) {
+                                highlightElement = parent;
+                                break;
+                            }
+                            parent = parent.parentNode;
+                        }
+                    }
+                    
+                    if (highlightElement) {
+                        // Extract all child nodes from the highlight element
+                        const fragment = document.createDocumentFragment();
+                        while (highlightElement.firstChild) {
+                            fragment.appendChild(highlightElement.firstChild);
+                        }
+                        
+                        // Replace the highlight element with its children
+                        highlightElement.parentNode.replaceChild(fragment, highlightElement);
+                    }
+                } catch (error) {
+                    console.error('Error in clearHighlight:', error);
+                    alert('Unable to clear highlight. Please try again.');
+                }
+            }
+            
+            currentSelection.removeAllRanges();
+            hideHighlightMenu();
+        }
+
+        // Event listeners for highlight menu
+        document.addEventListener('mouseup', function() {
+            setTimeout(showHighlightMenu, 10); // Small delay to ensure selection is registered
+        });
+        
+        document.addEventListener('touchend', function() {
+            setTimeout(showHighlightMenu, 10);
+        });
+        
+        // Hide menu when clicking/touching outside
+        document.addEventListener('mousedown', function(e) {
+            if (!highlightMenu.contains(e.target) && !e.target.closest('.passage')) {
+                hideHighlightMenu();
+            }
+        });
+        
+        document.addEventListener('touchstart', function(e) {
+            if (!highlightMenu.contains(e.target) && !e.target.closest('.passage')) {
+                hideHighlightMenu();
+            }
+        });
+
+        // Highlight menu button event listeners
+        document.querySelectorAll('.highlight-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation(); // Prevent event from bubbling up
+                const color = this.dataset.color;
+                
+                if (color === 'clear') {
+                    clearHighlight();
+                } else {
+                    applyHighlight(color);
+                }
+            });
+        });
+
+        // Answer selection for True/False/Not Given
+        document.querySelectorAll('.option-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove selected class from all buttons in this question
+                const questionItem = this.closest('.question-item');
+                questionItem.querySelectorAll('.option-btn').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                
+                // Add selected class to clicked button
+                this.classList.add('selected');
+            });
+        });
+
+        // Submit answers functionality
+        const submitBtn = document.getElementById('submitBtn');
+        const resultsModal = document.getElementById('resultsModal');
+        const closeBtn = document.getElementById('closeBtn');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const resultsList = document.getElementById('resultsList');
+
+        // Correct answers based on the provided document
+        const correctAnswers = {
+            1: "NOT GIVEN",
+            2: "TRUE",
+            3: "TRUE",
+            4: "FALSE",
+            5: "NOT GIVEN",  // The passage mentions gratitude to Italy but doesn't mention admiration for Egyptian architecture
+            6: "TRUE",
+            7: "FALSE",
+            8: "brick",
+            9: "shape",
+            10: "countryside",
+            11: "statues",
+            12: "tunnel",
+            13: "pollution"  // "urban pollution" in text but instructions say "ONE WORD ONLY"
+        };
+
+        // Explanations for answers
+        const explanations = {
+            1: "The passage states the pyramid 'has never attracted nearly as much interest' but doesn't discuss its popularity throughout all of history.",
+            2: "Cestius ordered the pyramid to be completed within 330 days, suggesting he was alive during construction.",
+            3: "In the Middle Ages, people thought it might be the tomb of Romulus or Remus, the legendary founders of Rome.",
+            4: "The passage says it's easy for people to 'overlook its full height' due to its location near a busy intersection.",
+            5: "The passage mentions Yagi's 'act of gratitude' to Italy but doesn't mention his views on Egyptian architecture.",
+            6: "The passage states 'thanks to his 2-million-euro donation, the project was completed ahead of schedule.'",
+            7: "The passage says 'some frescoes have disappeared over time,' indicating not most have survived.",
+            8: "From the passage: 'was constructed from brick held together by cement on the inside.'",
+            9: "From the passage: 'making its shape quite unlike that of typical Egyptian pyramids.'",
+            10: "From the passage: 'so the Pyramid of Cestius would have stood in countryside.'",
+            11: "From the passage: 'fragments of bronze statues that once stood on either side.'",
+            12: "From the passage: 'they did discover a tunnel, suggesting that robbers might have looted the tomb long ago.'",
+            13: "From the passage: 'needs to be cleaned regularly due to urban pollution.' (Answer is 'pollution' as per 'ONE WORD ONLY' requirement)"
+        };
+
+        function submitAnswers() {
+            let score = 0;
+            let totalQuestions = 13;
+            let resultsHTML = '';
+            
+            // Check True/False/Not Given questions (1-7)
+            for (let i = 1; i <= 7; i++) {
+                const questionItem = document.querySelector(`.question-item[data-question="${i}"]`);
+                const selectedBtn = questionItem.querySelector('.option-btn.selected');
+                const userAnswer = selectedBtn ? selectedBtn.dataset.value : '';
+                const correctAnswer = correctAnswers[i];
+                const isCorrect = userAnswer === correctAnswer;
+                
+                if (isCorrect) score++;
+                
+                resultsHTML += `
+                    <div class="result-item ${isCorrect ? 'correct' : 'incorrect'}">
+                        <div class="result-question">Question ${i}: ${questionItem.querySelector('.question-text').textContent}</div>
+                        <div class="result-answer">Your answer: ${userAnswer || 'Not answered'}</div>
+                        <div class="result-correct-answer">Correct answer: ${correctAnswer}</div>
+                        <div class="result-explanation">${explanations[i]}</div>
+                    </div>
+                `;
+            }
+            
+            // Check text input questions (8-13)
+            for (let i = 8; i <= 13; i++) {
+                const questionItem = document.querySelector(`.question-item[data-question="${i}"]`);
+                const input = questionItem.querySelector('.text-input');
+                const userAnswer = input.value.trim().toLowerCase();
+                const correctAnswer = correctAnswers[i].toLowerCase();
+                const isCorrect = userAnswer === correctAnswer;
+                
+                if (isCorrect) score++;
+                
+                resultsHTML += `
+                    <div class="result-item ${isCorrect ? 'correct' : 'incorrect'}">
+                        <div class="result-question">Question ${i}: ${questionItem.querySelector('.question-text').textContent.replace(input.outerHTML, '______')}</div>
+                        <div class="result-answer">Your answer: "${userAnswer || 'Not answered'}"</div>
+                        <div class="result-correct-answer">Correct answer: "${correctAnswer}"</div>
+                        <div class="result-explanation">${explanations[i]}</div>
+                    </div>
+                `;
+            }
+            
+            // Display results
+            scoreDisplay.textContent = `Your Score: ${score}/${totalQuestions}`;
+            resultsList.innerHTML = resultsHTML;
+            resultsModal.style.display = 'flex';
+        }
+
+        submitBtn.addEventListener('click', submitAnswers);
+        closeBtn.addEventListener('click', () => {
+            resultsModal.style.display = 'none';
+        });
+
+        // Close modal when clicking outside
+        resultsModal.addEventListener('click', (e) => {
+            if (e.target === resultsModal) {
+                resultsModal.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

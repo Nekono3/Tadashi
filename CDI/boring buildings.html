@@ -1,0 +1,560 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Test: Boring Buildings</title>
+    <style>
+        /* Base styles for cute, aesthetic, modern design */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --accent-color: #ff69b4;
+            --highlight-yellow: #ffff99;
+            --highlight-blue: #add8e6;
+            --header-bg: #f0f8ff;
+            --button-bg: #ffb6c1;
+            --button-text: #ffffff;
+            --timer-color: #4caf50;
+            --warning-color: #ff9800;
+            --error-color: #f44336;
+            --success-color: #4caf50;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        header {
+            background-color: var(--header-bg);
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        #telegram {
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: transform 0.2s ease, background-color 0.3s ease;
+        }
+
+        #telegram:hover {
+            transform: scale(1.05);
+        }
+
+        .theme-button {
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            margin: 5px;
+            transition: transform 0.2s ease;
+        }
+
+        .theme-button:hover {
+            transform: scale(1.05);
+        }
+
+        .container {
+            display: flex;
+            height: calc(100vh - 60px);
+            overflow: hidden;
+        }
+
+        .left, .right {
+            padding: 20px;
+            overflow-y: auto;
+            transition: background-color 0.3s ease;
+        }
+
+        .left {
+            flex: 1;
+            border-right: 1px solid #ddd;
+        }
+
+        .right {
+            flex: 1;
+        }
+
+        #passage {
+            line-height: 1.6;
+        }
+
+        #passage p {
+            margin-bottom: 15px;
+        }
+
+        #questions {
+            margin-bottom: 20px;
+        }
+
+        .question {
+            margin-bottom: 15px;
+        }
+
+        select, input {
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease;
+        }
+
+        select:focus, input:focus {
+            border-color: var(--accent-color);
+        }
+
+        #timer {
+            font-size: 18px;
+            color: var(--timer-color);
+            margin-bottom: 10px;
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.05); }
+        }
+
+        #submit {
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.2s ease;
+        }
+
+        #submit:hover {
+            transform: scale(1.05);
+        }
+
+        #report {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(255, 255, 255, 0.95);
+            color: var(--text-color);
+            overflow-y: auto;
+            padding: 20px;
+            display: none;
+            z-index: 1000;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .report-item {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .report-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .correct {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .wrong {
+            background-color: var(--error-color);
+            color: white;
+        }
+
+        #menu {
+            position: absolute;
+            display: none;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            padding: 5px;
+            z-index: 999;
+        }
+
+        .menu-button {
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 2px;
+            transition: background-color 0.3s ease;
+        }
+
+        .menu-button:hover {
+            background-color: #ff1493;
+        }
+
+        /* Night mode */
+        body.night {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --header-bg: #1e1e1e;
+            --button-bg: #333333;
+            --button-text: #ffffff;
+            --timer-color: #81c784;
+        }
+
+        /* Sepia mode */
+        body.sepia {
+            --bg-color: #f4ecd8;
+            --text-color: #5b4636;
+            --header-bg: #e0d4b8;
+            --button-bg: #d2b48c;
+            --button-text: #4b3621;
+            --timer-color: #8b4513;
+        }
+
+        /* Adaptive design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .left, .right {
+                border: none;
+                height: auto;
+            }
+
+            #menu {
+                transform: scale(0.8); /* Smaller menu on mobile */
+            }
+        }
+    </style>
+</head>
+<body class="day"> <!-- Default Day theme -->
+
+    <header>
+        <button id="telegram" onclick="window.location.href='tg://resolve?domain=aftum_8'">📱 Telegram channel</button>
+        <button class="theme-button" onclick="changeTheme('day')">Day</button>
+        <button class="theme-button" onclick="changeTheme('night')">Night</button>
+        <button class="theme-button" onclick="changeTheme('sepia')">Sepia</button>
+    </header>
+
+    <div class="container">
+        <div class="left">
+            <div id="passage">
+                <h2>Boring buildings</h2>
+                <p>There could be more than an economic or nostalgic price to impersonal retail and high-rise construction; boring architecture may take an emotional toll on the people forced to live with it.</p>
+                <p><strong>A</strong><br>A growing body of research in cognitive science illuminates the physical and mental toll bland cityscapes take on residents. Generally, these researchers argue that humans are healthier when they live surrounded by variety or work in well-designed, unique spaces, rather than unattractive generic ones. Urban policy professor Justin Hollander and architect Ann Sussman review scientific data to help architects and urban planners understand how, exactly, people respond to their built surroundings, particularly at work. People, they argue, function best in intricate settings, not big, blank, boxy offices.</p>
+                <p><strong>B</strong><br>Indeed, that's what Colin Ellard, a neuroscientist at the University of Waterloo in Canada, has found in his work. Five years ago, Ellard became interested in a certain building—the gigantic Whole Foods Market ‘plopped into’ a notoriously textured part of lower Manhattan in New York. Ellard partnered with the Guggenheim Museum to analyze what happens when someone walks out of a tiny neighborhood restaurant and encounters a full city block with nothing but the long, blank façade of the Whole Foods Market building. In 2011, Ellard led small groups on Lower East Side walks to measure the effect of the urban environment on them. Participants recorded their response to questions at each stopping point and wore sensors that measured skin conductance, a response to emotional excitement. Passing the monolithic Whole Foods Market, people's state of arousal plummeted. Physiologically, Ellard explained, they were bored. To describe this place, they used words like 'bland' and 'passionless.' In contrast, one block east at the other test site—a lively sea of restaurants with lots of open doors and windows—people measured high levels of excitement, and they listed words like 'lively' and 'socializing.' Ellard explains that the main objective of urban design should be to produce some kind of novelty or change every few seconds; otherwise, we become cognitively disengaged.</p>
+                <p><strong>C</strong><br>The trick, it seems, is to design a world that excites but doesn't overload our senses with a constant barrage of information. “We are, as animals, programmed to respond to thrill,” said professor Brendan Walker. In Walker's ‘Thrill Laboratory’ at the University of Nottingham in the UK, devices measure heart rate and skin conductance to see how people respond to adrenaline-producing experiences such as a roller-coaster ride. A thrilling encounter moves us quickly from a state of equilibrium to a desirable ‘disorientation.’ “Humans want a certain element of turmoil or confusion,” he said. “Complexity is thrilling whether in an amusement park or architecture.”</p>
+                <p><strong>D</strong><br>Psychologists have found that awe-inspiring moments can potentially improve our well-being. One study conducted by Melanie Rudd, Kathleen Vohs, and Jennifer Aaker of Stanford University in the US showed that the feeling of 'awe' can make people more patient and less materialistic. In an experiment, the researchers showed students 60-second clips of waterfalls, whales, or astronauts in space. After only a minute of virtual images, those who said they were awed also felt less pressed for time. And in another variation, people made hypothetical choices between physical and experiential goods of equal monetary value. Those who had just felt awe were more likely to choose an experience over a possession, a choice that is linked with greater satisfaction in the long run. In other words, awe might have the ability to change our frame of mind, making modern life more satisfying and interactive.</p>
+                <p><strong>E</strong><br>It’s important to note, however, that architectural boredom isn’t about how pristine a street is. People often confuse successful architecture with whether an area looks pleasant. On the contrary, when it comes to city buildings, people often focus too narrowly on aesthetics, said Charles Montgomery, author of Happy City: Transforming Our Lives Through Urban Design. Some of the happiest blocks in New York City, he argues, are kind of ugly and messy. In 2014, Montgomery's Happy City lab conducted an experiment in which he found a strong correlation between messier blocks and pro-social behavior. Montgomery sent researchers, posing as lost tourists, to places he coded as either 'active' or 'inactive' facades. He concluded that the former had a high level of interest, that is, they were messy, while the latter had no special features such as long warehouse blocks. Pedestrians at active sites were nearly five times more likely to offer assistance than at inactive ones. Of those who assisted, seven times as many at the active site offered the use of their phone.</p>
+                <p><strong>F</strong><br>Fortunately, it’s not necessarily a dichotomy—new architecture can achieve the optimal level of cacophony and beauty. Take the 2006 Hearst Tower in midtown Manhattan. Designed by architect Norman Foster, Hearst Tower is a glass-and-steel skyscraper, 40 stories of which are designed in a triangular pattern, differing in style from the 1920s base. The building's facade has a striking impact on commuters and employees. Some may find the design confusing, as it mixes old and new elements. Inside the tower, elevators carry employees up past a large water sculpture in the light-filled lobby.</p>
+            </div>
+        </div>
+        <div class="right">
+            <div id="timer">Time left: 20:00</div>
+            <div id="questions">
+                <h2>Questions 14-26</h2>
+                <div class="question">
+                    <p>Questions 14-18</p>
+                    <p>Reading Passage 2 has six sections, A-F.</p>
+                    <p>Which section contains the following information?</p>
+                    <p>14 a description of a building that has a positive effect</p>
+                    <select id="q14"><option value="">Select</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select>
+                    <p>15 a reference to architecture affecting performance in their jobs</p>
+                    <select id="q15"><option value="">Select</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select>
+                    <p>16 examples of the intensity of reactions in two urban settings</p>
+                    <select id="q16"><option value="">Select</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select>
+                    <p>17 details of a study where seeing certain pictures reduced stress</p>
+                    <select id="q17"><option value="">Select</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select>
+                    <p>18 a claim about feelings experienced in response to both architecture and leisure settings</p>
+                    <select id="q18"><option value="">Select</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select>
+                </div>
+                <div class="question">
+                    <p>Questions 19-23</p>
+                    <p>Look at the following statements (Questions 19-23) and the list of researchers below.</p>
+                    <p>Match each statement with the correct researcher, A, B, C or D.</p>
+                    <p>19 The aim of good city planning is to provide variety in architecture.</p>
+                    <select id="q19"><option value="">Select</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
+                    <p>20 People in untidy areas were more helpful.</p>
+                    <select id="q20"><option value="">Select</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
+                    <p>21 People who had recently felt amazed, placed less importance on material goods.</p>
+                    <select id="q21"><option value="">Select</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
+                    <p>22 Clean places are not necessarily the most enjoyable places to be.</p>
+                    <select id="q22"><option value="">Select</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
+                    <p>23 One particular building failed to provide visual stimulation.</p>
+                    <select id="q23"><option value="">Select</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
+                    <p>List of Researchers</p>
+                    <p>A Colin Ellard</p>
+                    <p>B Brendan Walker</p>
+                    <p>C Rudd, Vohs and Aaker</p>
+                    <p>D Charles Montgomery</p>
+                </div>
+                <div class="question">
+                    <p>Questions 24-26</p>
+                    <p>Complete the summary below. Choose ONE WORD ONLY from the passage for each answer.</p>
+                    <p>Hearst Tower</p>
+                    <p>Norman Foster’s Hearst Tower was built in 2006. The modern patterned building is made of glass and steel, contrasting with the base which is in the style of the 1920s. The sight of the building’s <input id="q24" type="text" size="10"> has a striking impact on commuters and employees. Some may find the design confusing, as it mixes old and new elements. Inside the tower <input id="q25" type="text" size="10"> carry employees up past a large water sculpture in the <input id="q26" type="text" size="10">.</p>
+                </div>
+            </div>
+            <button id="submit">Submit Answers</button>
+        </div>
+    </div>
+
+    <div id="report">
+        <h2>Test Report</h2>
+        <p id="score"></p>
+        <div id="details"></div>
+        <button onclick="closeReport()" style="background-color: #ffb6c1; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer;">Close</button>
+    </div>
+
+    <div id="menu">
+        <button class="menu-button" onclick="highlight('yellow')">Yellow</button>
+        <button class="menu-button" onclick="highlight('blue')">Blue</button>
+        <button class="menu-button" onclick="highlight('clear')">Clear</button>
+    </div>
+
+    <script>
+        // Timer
+        let time = 20 * 60; // 20 minutes
+        const timerElement = document.getElementById('timer');
+        const interval = setInterval(() => {
+            time--;
+            const minutes = Math.floor(time / 60);
+            const seconds = time % 60;
+            timerElement.textContent = `Time left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            if (time <= 5 * 60) {
+                timerElement.style.color = 'var(--warning-color)';
+            }
+            if (time <= 0) {
+                clearInterval(interval);
+                alert('Time up!');
+                submitAnswers();
+            }
+        }, 1000);
+
+        // Theme change
+        function changeTheme(theme) {
+            document.body.className = theme;
+        }
+
+        // Improved Highlighting for cross-browser compatibility
+        const passage = document.getElementById('passage');
+        const menu = document.getElementById('menu');
+        let currentRange = null;
+
+        // Handle text selection for both mouse and touch
+        function showHighlightMenu(e) {
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                if (!range.collapsed && passage.contains(range.commonAncestorContainer)) {
+                    currentRange = range;
+                    const rect = range.getBoundingClientRect();
+                    menu.style.display = 'flex';
+                    // Position menu near selection
+                    let posX = rect.left + window.scrollX;
+                    let posY = rect.bottom + window.scrollY + 5;
+                    // Adjust if menu goes off-screen
+                    const menuWidth = menu.offsetWidth;
+                    const menuHeight = menu.offsetHeight;
+                    if (posX + menuWidth > window.innerWidth) {
+                        posX = window.innerWidth - menuWidth - 10;
+                    }
+                    if (posY + menuHeight > window.innerHeight + window.scrollY) {
+                        posY = rect.top + window.scrollY - menuHeight - 5;
+                    }
+                    menu.style.left = `${posX}px`;
+                    menu.style.top = `${posY}px`;
+                } else {
+                    menu.style.display = 'none';
+                }
+            }
+        }
+
+        // Mouse event for desktop
+        passage.addEventListener('mouseup', showHighlightMenu);
+
+        // Touch event for mobile
+        passage.addEventListener('touchend', (e) => {
+            // Delay to allow selection to register on mobile
+            setTimeout(() => showHighlightMenu(e), 100);
+        });
+
+        // Hide menu when clicking or tapping outside
+        document.addEventListener('mousedown', (e) => {
+            if (!menu.contains(e.target) && !passage.contains(e.target)) {
+                menu.style.display = 'none';
+                window.getSelection().removeAllRanges();
+            }
+        });
+
+        document.addEventListener('touchstart', (e) => {
+            if (!menu.contains(e.target) && !passage.contains(e.target)) {
+                menu.style.display = 'none';
+                window.getSelection().removeAllRanges();
+            }
+        });
+
+        function highlight(color) {
+            if (!currentRange) return;
+            try {
+                // Check if selection is within passage to avoid cross-element issues
+                if (!passage.contains(currentRange.commonAncestorContainer)) {
+                    console.warn('Selection outside passage');
+                    return;
+                }
+
+                const fragment = currentRange.extractContents();
+                if (color === 'clear') {
+                    // Remove highlighting by inserting back plain text
+                    currentRange.insertNode(fragment);
+                } else {
+                    // Create a span with the highlight color
+                    const span = document.createElement('span');
+                    span.style.backgroundColor = color === 'yellow' ? 'var(--highlight-yellow)' : 'var(--highlight-blue)';
+                    span.appendChild(fragment);
+                    currentRange.insertNode(span);
+                }
+                // Normalize DOM to merge adjacent text nodes
+                passage.normalize();
+            } catch (err) {
+                console.error('Highlight error:', err);
+                alert('Error applying highlight. Please try again.');
+            }
+            menu.style.display = 'none';
+            currentRange = null;
+            window.getSelection().removeAllRanges();
+        }
+
+        // Submit and report
+        const correctAnswers = {
+            q14: 'F', // description of positive building - F Hearst Tower
+            q15: 'A', // architecture affecting jobs - A function best in intricate settings
+            q16: 'B', // reactions in two settings - B Whole Foods vs restaurants
+            q17: 'D', // study with pictures - D awe study with clips
+            q18: 'C', // feelings in architecture and leisure - C complexity thrilling in amusement park or architecture
+            q19: 'A', // variety in architecture - A Ellard novelty every few seconds
+            q20: 'D', // untidy areas helpful - D Montgomery messier blocks pro-social
+            q21: 'C', // amazed less materialistic - C Rudd et al choose experience
+            q22: 'D', // clean not most enjoyable - D Montgomery happiest blocks ugly and messy
+            q23: 'A', // building failed stimulation - A Ellard Whole Foods bored
+            q24: 'facade', // from text
+            q25: 'elevators',
+            q26: 'lobby'
+        };
+
+        const explanations = {
+            q14: 'Section F: "new architecture can achieve the optimal level of cacophony and beauty. Take the 2006 Hearst Tower..." - Describes positive effect.',
+            q15: 'Section A: "People, they argue, function best in intricate settings, not big, blank, boxy offices." - Affects job performance.',
+            q16: 'Section B: "Passing the monolithic Whole Foods Market... bored... In contrast, one block east... lively" - Reactions in two settings.',
+            q17: 'Section D: "researchers showed students 60-second clips... felt less pressed for time." - Study reducing stress.',
+            q18: 'Section C: "Complexity is thrilling whether in an amusement park or architecture." - Feelings in both.',
+            q19: 'A Colin Ellard: "produce some kind of novelty or change every few seconds" - Variety in planning.',
+            q20: 'D Charles Montgomery: "messier blocks and pro-social behavior... more likely to offer assistance" - Untidy helpful.',
+            q21: 'C Rudd, Vohs and Aaker: "Those who had just felt awe were more likely to choose an experience over a possession" - Less materialistic.',
+            q22: 'D Charles Montgomery: "Some of the happiest blocks... are kind of ugly and messy." - Clean not most enjoyable.',
+            q23: 'A Colin Ellard: "Passing the monolithic Whole Foods Market... they were bored." - Failed stimulation.',
+            q24: 'Facade - "The building\'s facade has a striking impact..." - Location in F.',
+            q25: 'Elevators - "Inside the tower, elevators carry employees up..." - Location in F.',
+            q26: 'Lobby - "...in the light-filled lobby." - Location in F.'
+        };
+
+        document.getElementById('submit').addEventListener('click', submitAnswers);
+
+        function submitAnswers() {
+            clearInterval(interval);
+            let score = 0;
+            const total = 13; // 14-26 = 13 questions
+            const details = document.getElementById('details');
+            details.innerHTML = '';
+            for (let i = 14; i <= 26; i++) {
+                const qid = `q${i}`;
+                const userAnswer = (i >= 24 ? document.getElementById(qid).value.trim().toLowerCase() : document.getElementById(qid).value);
+                const correct = correctAnswers[qid].toLowerCase();
+                if (userAnswer === correct) {
+                    score++;
+                    const item = document.createElement('div');
+                    item.classList.add('report-item', 'correct');
+                    item.innerHTML = `<p>Question ${i}: Correct! Your answer: ${userAnswer}</p><p>Explanation: ${explanations[qid]}</p>`;
+                    details.appendChild(item);
+                } else {
+                    const item = document.createElement('div');
+                    item.classList.add('report-item', 'wrong');
+                    item.innerHTML = `<p>Question ${i}: Wrong. Your answer: ${userAnswer} | Correct: ${correctAnswers[qid]}</p><p>Explanation: ${explanations[qid]}</p>`;
+                    details.appendChild(item);
+                }
+            }
+            document.getElementById('score').textContent = `Score: ${score}/${total}`;
+            document.getElementById('report').style.display = 'block';
+        }
+
+        function closeReport() {
+            document.getElementById('report').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

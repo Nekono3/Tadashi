@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Test: Planet Formation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --accent: #fd79a8;
+            --text: #2d3436;
+            --bg: #f7f7f7;
+            --card-bg: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --highlight-yellow: rgba(255, 255, 0, 0.3);
+            --highlight-blue: rgba(173, 216, 230, 0.3);
+            --transition: all 0.3s ease;
+        }
+
+        .night-theme {
+            --primary: #a29bfe;
+            --secondary: #6c5ce7;
+            --accent: #ff7675;
+            --text: #dfe6e9;
+            --bg: #2d3436;
+            --card-bg: #3c4245;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        .sepia-theme {
+            --primary: #a17c5f;
+            --secondary: #d9bca3;
+            --accent: #e67e22;
+            --text: #4a3c2a;
+            --bg: #f5ecd7;
+            --card-bg: #faf3e6;
+            --shadow: rgba(118, 93, 64, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: var(--transition);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: var(--primary);
+            color: white;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+        }
+
+        .theme-selector {
+            display: flex;
+            gap: 10px;
+        }
+
+        .theme-btn {
+            background: var(--card-bg);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px var(--shadow);
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .telegram-btn {
+            background: #0088cc;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            box-shadow: 0 2px 5px var(--shadow);
+        }
+
+        .telegram-btn i {
+            margin-right: 8px;
+        }
+
+        .telegram-btn:hover {
+            background: #0077b5;
+            transform: translateY(-2px);
+        }
+
+        .timer-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .timer {
+            background: var(--card-bg);
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            box-shadow: 0 4px 12px var(--shadow);
+            display: flex;
+            align-items: center;
+        }
+
+        .timer i {
+            margin-right: 10px;
+            color: var(--accent);
+        }
+
+        .timer.warning {
+            color: #e74c3c;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .content {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 992px) {
+            .content {
+                flex-direction: column;
+            }
+        }
+
+        .passage-container {
+            flex: 1;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px var(--shadow);
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .passage-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 10px;
+        }
+
+        .passage-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .passage-text p {
+            margin-bottom: 15px;
+        }
+
+        .questions-container {
+            flex: 1;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px var(--shadow);
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .questions-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 10px;
+        }
+
+        .question {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--secondary);
+        }
+
+        .question-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .option {
+            background: var(--bg);
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .option:hover {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .option.selected {
+            background: var(--primary);
+            color: white;
+        }
+
+        .input-answer {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--secondary);
+            background: var(--bg);
+            color: var(--text);
+            margin-top: 5px;
+        }
+
+        .submit-container {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .submit-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px var(--shadow);
+            display: flex;
+            align-items: center;
+        }
+
+        .submit-btn i {
+            margin-right: 10px;
+            color: white;
+        }
+
+        .submit-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+        }
+
+        .result-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .result-content {
+            background: var(--card-bg);
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            border-radius: 12px;
+            padding: 30px;
+            overflow-y: auto;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 25px;
+            color: var(--primary);
+        }
+
+        .score {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .result-details {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .result-item {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background: var(--bg);
+        }
+
+        .correct {
+            border-left: 5px solid #2ecc71;
+        }
+
+        .incorrect {
+            border-left: 5px solid #e74c3c;
+        }
+
+        .close-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: block;
+            margin: 25px auto 0;
+        }
+
+        .close-btn:hover {
+            background: var(--secondary);
+        }
+
+        .highlight-menu {
+            position: absolute;
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 3px 10px var(--shadow);
+            padding: 5px;
+            display: none;
+            z-index: 100;
+        }
+
+        .highlight-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        .yellow {
+            background: #ffeb3b;
+        }
+
+        .blue {
+            background: #03a9f4;
+        }
+
+        .clear {
+            background: #e74c3c;
+            color: white;
+            font-size: 12px;
+        }
+
+        .highlight-yellow {
+            background-color: var(--highlight-yellow);
+        }
+
+        .highlight-blue {
+            background-color: var(--highlight-blue);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            color: var(--text);
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .paragraph-select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid var(--secondary);
+            background: var(--bg);
+            color: var(--text);
+            margin-top: 5px;
+        }
+
+        .sentence-match {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: var(--bg);
+            border-radius: 8px;
+        }
+
+        .word-bank {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .word-option {
+            padding: 10px;
+            background: var(--bg);
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .word-option:hover {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .word-option.selected {
+            background: var(--primary);
+            color: white;
+        }
+
+        .answer-number {
+            font-weight: bold;
+            color: var(--primary);
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <i class="fas fa-globe-americas"></i>
+            <span>IELTS Reading: Planet Formation</span>
+        </div>
+        <div class="theme-selector">
+            <button class="theme-btn" id="day-theme" title="Day Theme"><i class="fas fa-sun"></i></button>
+            <button class="theme-btn" id="night-theme" title="Night Theme"><i class="fas fa-moon"></i></button>
+            <button class="theme-btn" data-theme="sepia" title="Sepia Theme"><i class="fas fa-seedling"></i></button>
+        </div>
+        <a href="tg://resolve?domain=aftum_8" class="telegram-btn">
+            <i class="fab fa-telegram"></i>
+            Телеграмм канал
+        </a>
+    </header>
+
+    <div class="container">
+        <div class="timer-container">
+            <div class="timer" id="timer">
+                <i class="fas fa-clock"></i>
+                <span>20:00</span>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="passage-container">
+                <h2 class="passage-title">Passage 3: Theories of planet formation questioned</h2>
+                <div class="passage-text" id="passage-text">
+                    <p><strong>A</strong> The traditional view of astronomy has been that Planets form slowly as material congeals within the disk of gas, dust and ice known to surround young stars. First, gravity gathers together bits of dust that merge to form boulder-sized bodies, which themselves coalesce into bigger and bigger objects. In about a million years, these form rocky planets like Earth and Mar Over the ne few million years, gas from the disk settles around some of these solid bodies and they crow far larger, becoming giants like gaseous Saturn and Jupiter. This theory of planet formation is known as the care-accretion model. However, several astronomers now say that this model for making planets may not be entirely correct.</p>
+                    
+                    <p><strong>B</strong> These astronomers have devised an alternative theory in which planets as massive as Jupiter, whether orbiting our sun or a distant star, would form completely within a few hundred years, rather than millions of years as previously believed. Both theories for planet formation start with the same reservoir of planet-making materials, The spinning cloud of gas, dust and ice rapidly fattens into disk-like shapes known as proto-planetary disks: and, as time goes by, gravity causes material in these disks to clump into planet-sized objects. However it is the speed of the clustering, and the size of the initial clumps, that provide the disparity in the two models for planet formation.</p>
+                    
+                    <p><strong>C</strong> According to the core-accretion model, the making of Jupiter required the initial formation of a solid core five to ten times Earth's mass, it would have taken about a million years to achieve this. Most astronomers believe that the large core then had enough gravity to attract a huge amount of gas from the proto-planetary disk to create a planet of the massive proportions of Jupiter. In this core-accretion model, these 'gas giants may take as long as ten million years to form.</p>
+                    
+                    <p><strong>D</strong> That is several million years too long in the opinion of Lucio Mayer of Zurich University. Direct telescope sightings suggest that the proto-planetary disks do not last more than about seven million years, and studies of the environment in which stars form suggest that many disks may evaporate in much less time, Mayer asserts that most stars in the Milky Way form in dense clouds of gas, dust and ice. Their temperatures are very intense and the ultraviolet light they send into space can evaporate a proto-planetary disk in less than 100,000 years. In the core-accretion model, that is not enough time for a Jupiter-like planet to form.</p>
+                    
+                    <p><strong>E</strong> Recent computer simulations show that when individual stars form, the gravitational pull between them can result in the outer gaseous parts of the proto-planetary disks being destroyed in 100 000 years or less. Thus, Thomas Quinn of the University of Washington concludes that if a 'gas giant' planet cannot form quickly, it will probably never form. He also asserts that if the core-accretion model is correct. Gas giant planets like Jupiter should be rare. However, since 1995, astronomers have found more than one hundred planets as large as Jupiter outside our solar system.</p>
+                    
+                    <p><strong>F</strong> Quinn and his colleagues recently analysed the standard core-accretion model of planet formation and investigated whether not giant planets could form quickly. They looked at the work of Gerard Kuiper who, in the 1950s, proposed that they could. Alan P Boss of the Carnegie Institute did more extensive work on the subject in the late 1980s. Using computer simulations, he was surprised to find that ratty could cause a proto-planetary disk. after a few orbits of its parent star, to break into clumps as big as an average-sized planet. The clumps would continue to pull in gas, ice and dust. This is called the gravitational-instability model of planet formation.</p>
+                    
+                    <p><strong>G</strong> Recent calculations have suggested that many of the solid bodies that might be the rocky core for Jupiter-size planets in the traditional theory would pin into the parent star before the massive planet could form. Moreover, further analysis has shown that other effects could also cause a proto-planetary disk to become unstable and split into large fragments. For instance, within the disk, electrically charged material might accumulate, leading to fragmentation of the disk. Or a powerful gravitational disturbance, such a he pull of a star passing nearby, could produce instability in the proto-planetary disk.</p>
+                    
+                    <p><strong>H</strong> Nevertheless, the gravitational-instability model has problems of its own, as it is mathematically complicated and requires sophisticated computer use. Therefore, no one has studied the simulations long enough to establish conclusively that the model allows for the formation of massive planets.</p>
+                    
+                    <p><strong>I</strong> In response, Mayer says that he and his team have described the results of an extensive simulation based on the gravitational-instability model. They spent two years refining calculations to track what would happen to a proto-planetary disk over one thousand years, which is more than any other simulation had done. In addition, over a decade previously Mayer and his team had made simulations of the formation and evolution of galaxies. In doing this, they had already developed a fast computer code that could run in parallel on machines with hundreds of processors, and this knowledge assisted them in investigating their gravitational-instability theory.</p>
+                </div>
+            </div>
+
+            <div class="questions-container">
+                <h2 class="questions-title">Questions 27-40</h2>
+                
+                <div class="question">
+                    <p class="question-title">Questions 27-32</p>
+                    <p>Reading Passage 3 has nine paragraphs, A-I</p>
+                    <p>Which paragraph contains the following information?</p>
+                    <p>Write the correct letter, A-I, in boxes 27-32 on your answer sheet.</p>
+                    
+                    <div class="question">
+                        <p>27. the significance of recent discoveries of a large number of massive planets</p>
+                        <select class="paragraph-select" data-number="27">
+                            <option value="">Select paragraph</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                            <option value="G">G</option>
+                            <option value="H">H</option>
+                            <option value="I">I</option>
+                        </select>
+                    </div>
+                    
+                    <div class="question">
+                        <p>28. an explanation of the difference between the theories of planet creation</p>
+                        <select class="paragraph-select" data-number="28">
+                            <option value="">Select paragraph</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                            <option value="G">G</option>
+                            <option value="H">H</option>
+                            <option value="I">I</option>
+                        </select>
+                    </div>
+                    
+                    <div class="question">
+                        <p>29. the difficulties of proving that the more recent theory of planet creation is correct</p>
+                        <select class="paragraph-select" data-number="29">
+                            <option value="">Select paragraph</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                            <option value="G">G</option>
+                            <option value="H">H</option>
+                            <option value="I">I</option>
+                        </select>
+                    </div>
+                    
+                    <div class="question">
+                        <p>30. reasons why Mayer claims he was able to develop his theory</p>
+                        <select class="paragraph-select" data-number="30">
+                            <option value="">Select paragraph</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                            <option value="G">G</option>
+                            <option value="H">H</option>
+                            <option value="I">I</option>
+                        </select>
+                    </div>
+                    
+                    <div class="question">
+                        <p>31. a detailed explanation of the long-held theory of planet creation</p>
+                        <select class="paragraph-select" data-number="31">
+                            <option value="">Select paragraph</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                            <option value="G">G</option>
+                            <option value="H">H</option>
+                            <option value="I">I</option>
+                        </select>
+                    </div>
+                    
+                    <div class="question">
+                        <p>32. description of the destructive effect of heat in space</p>
+                        <select class="paragraph-select" data-number="32">
+                            <option value="">Select paragraph</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                            <option value="G">G</option>
+                            <option value="H">H</option>
+                            <option value="I">I</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <p class="question-title">Questions 33-37</p>
+                    <p>Complete each sentence with the correct ending, A-G, below</p>
+                    <p>Write the correct letter, A-G, in boxes 33-37 on your answer sheet.</p>
+                    
+                    <div class="sentence-match">
+                        <p>33. Traditionally astronomers have believed that</p>
+                        <select class="paragraph-select" data-number="33">
+                            <option value="">Select ending</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                            <option value="G">G</option>
+                        </select>
+                    </div>
+                    
+                    <div class="sentence-match">
+                        <p>34. Lucio Mayer physically observed that</p>
+                        <select class="paragraph-select" data-number="34">
+                            <option value="">Select ending</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                            <option value="G">G</option>
+                        </select>
+                    </div>
+                    
+                    <div class="sentence-match">
+                        <p>35. Thomas Quinn believes that</p>
+                        <select class="paragraph-select" data-number="35">
+                            <option value="">Select ending</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                            <option value="G">G</option>
+                        </select>
+                    </div>
+                    
+                    <div class="sentence-match">
+                        <p>36. Gerard Kuiper was the first to suggest that</p>
+                        <select class="paragraph-select" data-number="36">
+                            <option value="">Select ending</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                            <option value="G">G</option>
+                        </select>
+                    </div>
+                    
+                    <div class="sentence-match">
+                        <p>37. Alan P Boss discovered that</p>
+                        <select class="paragraph-select" data-number="37">
+                            <option value="">Select ending</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                            <option value="G">G</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <p class="question-title">Questions 38-40</p>
+                    <p>Complete the summary using the list of words, A-F, below</p>
+                    <p>Write the correct letter, A-F, in boxes 38-40 on your answer sheet.</p>
+                    
+                    <div class="question">
+                        <p><strong>The core-accretion model</strong></p>
+                        <p>A hard centre becomes larger and this produces enough gravity to draw gas from the <span class="answer-number">38</span> 
+                        <select class="paragraph-select" data-number="38">
+                            <option value="">Select word</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                        </select> around</p>
+                        
+                        <p><strong>The gravitational-instability model</strong></p>
+                        <p>Stars can break up the outer gaseous parts which surround objects in the sky because the attraction of the <span class="answer-number">39</span> 
+                        <select class="paragraph-select" data-number="39">
+                            <option value="">Select word</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                        </select> from stars is very powerful. Heat caused by <span class="answer-number">40</span> 
+                        <select class="paragraph-select" data-number="40">
+                            <option value="">Select word</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                        </select> can also destroy the material surrounding the objects in a relatively short time. Planet-sized segments may split away from the main body following several orbits of the parent star.</p>
+                        
+                        <div class="word-bank">
+                            <div class="word-option" data-value="A">A. gravitational pull</div>
+                            <div class="word-option" data-value="B">B. ice</div>
+                            <div class="word-option" data-value="C">C. solid core</div>
+                            <div class="word-option" data-value="D">D. ultraviolet light</div>
+                            <div class="word-option" data-value="E">E. Milky Way</div>
+                            <div class="word-option" data-value="F">F. disk</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="submit-container">
+            <button class="submit-btn" id="submit-btn">
+                <i class="fas fa-paper-plane"></i>
+                Submit Answers
+            </button>
+        </div>
+    </div>
+
+    <div class="result-container" id="result-container">
+        <div class="result-content">
+            <h2 class="result-header">Test Results</h2>
+            <div class="score" id="score">Score: 0/14</div>
+            
+            <div class="result-details">
+                <h3>Question Details:</h3>
+                <div id="result-items"></div>
+            </div>
+            
+            <button class="close-btn" id="close-btn">Close Results</button>
+        </div>
+    </div>
+
+    <div class="highlight-menu" id="highlight-menu">
+        <button class="highlight-btn yellow" title="Yellow Highlight"><i class="fas fa-highlighter"></i></button>
+        <button class="highlight-btn blue" title="Blue Highlight"><i class="fas fa-highlighter"></i></button>
+        <button class="highlight-btn clear" title="Clear Highlight">X</button>
+    </div>
+
+    <footer>
+        <p>IELTS Reading Practice Test &copy; 2023</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme switching
+            const dayThemeBtn = document.getElementById('day-theme');
+            const nightThemeBtn = document.getElementById('night-theme');
+            const sepiaThemeBtn = document.querySelector('[data-theme="sepia"]');
+            const body = document.body;
+            
+            dayThemeBtn.addEventListener('click', () => {
+                body.className = '';
+            });
+            
+            nightThemeBtn.addEventListener('click', () => {
+                body.className = 'night-theme';
+            });
+            
+            sepiaThemeBtn.addEventListener('click', () => {
+                body.className = 'sepia-theme';
+            });
+            
+            // Timer functionality
+            const timerElement = document.getElementById('timer');
+            let timeLeft = 20 * 60; // 20 minutes in seconds
+            let timerInterval;
+            
+            function startTimer() {
+                clearInterval(timerInterval);
+                timerInterval = setInterval(() => {
+                    const minutes = Math.floor(timeLeft / 60);
+                    const seconds = timeLeft % 60;
+                    
+                    timerElement.innerHTML = `<i class="fas fa-clock"></i><span>${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}</span>`;
+                    
+                    if (timeLeft === 5 * 60) {
+                        timerElement.classList.add('warning');
+                    }
+                    
+                    if (timeLeft === 0) {
+                        clearInterval(timerInterval);
+                        submitAnswers();
+                    } else {
+                        timeLeft--;
+                    }
+                }, 1000);
+            }
+            
+            startTimer();
+            
+            // Word bank selection
+            const wordOptions = document.querySelectorAll('.word-option');
+            wordOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    const value = option.getAttribute('data-value');
+                    const targetSelect = document.querySelector(`.paragraph-select[data-number="38"], .paragraph-select[data-number="39"], .paragraph-select[data-number="40"]`);
+                    
+                    if (targetSelect) {
+                        targetSelect.value = value;
+                    }
+                    
+                    // Visual feedback
+                    wordOptions.forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                });
+            });
+            
+            // Submit answers and show results
+            const submitBtn = document.getElementById('submit-btn');
+            const resultContainer = document.getElementById('result-container');
+            const scoreElement = document.getElementById('score');
+            const resultItemsContainer = document.getElementById('result-items');
+            const closeBtn = document.getElementById('close-btn');
+            
+            submitBtn.addEventListener('click', submitAnswers);
+            closeBtn.addEventListener('click', () => {
+                resultContainer.style.display = 'none';
+            });
+            
+            function submitAnswers() {
+                clearInterval(timerInterval);
+                
+                // Calculate score
+                let score = 0;
+                const results = [];
+                
+                // Check paragraph questions (27-32)
+                const paragraphSelects = document.querySelectorAll('.paragraph-select[data-number="27"], .paragraph-select[data-number="28"], .paragraph-select[data-number="29"], .paragraph-select[data-number="30"], .paragraph-select[data-number="31"], .paragraph-select[data-number="32"]');
+                const correctParagraphAnswers = [
+                    'E', 'B', 'H', 'I', 'A', 'D'
+                ];
+                
+                paragraphSelects.forEach((select, index) => {
+                    const userAnswer = select.value.toUpperCase();
+                    const correctAnswer = correctParagraphAnswers[index];
+                    const isCorrect = userAnswer === correctAnswer;
+                    
+                    if (isCorrect) score++;
+                    
+                    results.push({
+                        question: index + 27,
+                        userAnswer: userAnswer || 'Not answered',
+                        correctAnswer: correctParagraphAnswers[index],
+                        isCorrect
+                    });
+                });
+                
+                // Check sentence matching questions (33-37)
+                const sentenceSelects = document.querySelectorAll('.paragraph-select[data-number="33"], .paragraph-select[data-number="34"], .paragraph-select[data-number="35"], .paragraph-select[data-number="36"], .paragraph-select[data-number="37"]');
+                const correctSentenceAnswers = [
+                    'B', 'F', 'C', 'D', 'E'
+                ];
+                
+                sentenceSelects.forEach((select, index) => {
+                    const userAnswer = select.value.toUpperCase();
+                    const correctAnswer = correctSentenceAnswers[index];
+                    const isCorrect = userAnswer === correctAnswer;
+                    
+                    if (isCorrect) score++;
+                    
+                    results.push({
+                        question: index + 33,
+                        userAnswer: userAnswer || 'Not answered',
+                        correctAnswer: correctSentenceAnswers[index],
+                        isCorrect
+                    });
+                });
+                
+                // Check summary completion questions (38-40)
+                const summarySelects = document.querySelectorAll('.paragraph-select[data-number="38"], .paragraph-select[data-number="39"], .paragraph-select[data-number="40"]');
+                const correctSummaryAnswers = [
+                    'F', 'A', 'D'
+                ];
+                
+                summarySelects.forEach((select, index) => {
+                    const userAnswer = select.value.toUpperCase();
+                    const correctAnswer = correctSummaryAnswers[index];
+                    const isCorrect = userAnswer === correctAnswer;
+                    
+                    if (isCorrect) score++;
+                    
+                    results.push({
+                        question: index + 38,
+                        userAnswer: userAnswer || 'Not answered',
+                        correctAnswer: correctSummaryAnswers[index],
+                        isCorrect
+                    });
+                });
+                
+                // Display results
+                scoreElement.textContent = `Score: ${score}/14`;
+                
+                resultItemsContainer.innerHTML = '';
+                results.forEach(result => {
+                    const item = document.createElement('div');
+                    item.classList.add('result-item');
+                    item.classList.add(result.isCorrect ? 'correct' : 'incorrect');
+                    
+                    item.innerHTML = `
+                        <p><strong>Question ${result.question}:</strong> ${result.isCorrect ? 'Correct' : 'Incorrect'}</p>
+                        <p>Your answer: ${result.userAnswer}</p>
+                        <p>Correct answer: ${result.correctAnswer}</p>
+                    `;
+                    
+                    resultItemsContainer.appendChild(item);
+                });
+                
+                resultContainer.style.display = 'flex';
+            }
+        });
+    </script>
+</body>
+</html>

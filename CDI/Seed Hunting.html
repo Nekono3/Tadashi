@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Test - Seed Hunting</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --day-bg: #f8f9fa;
+            --day-text: #212529;
+            --day-primary: #4e73df;
+            --day-secondary: #eaecf4;
+            --day-highlight: #fffacd;
+            --day-highlight-blue: #e6f7ff;
+            
+            --night-bg: #1a1a2e;
+            --night-text: #e6e6e6;
+            --night-primary: #6c63ff;
+            --night-secondary: #16213e;
+            --night-highlight: #423d15;
+            --night-highlight-blue: #1e3a5f;
+            
+            --sepia-bg: #f5ecd7;
+            --sepia-text: #3b2c1e;
+            --sepia-primary: #8b5a2b;
+            --sepia-secondary: #e6d7c1;
+            --sepia-highlight: #d8c690;
+            --sepia-highlight-blue: #c3d6e6;
+            
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: var(--transition);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--day-bg);
+            color: var(--day-text);
+            overflow-x: hidden;
+        }
+
+        body.night-mode {
+            background-color: var(--night-bg);
+            color: var(--night-text);
+        }
+
+        body.sepia-mode {
+            background-color: var(--sepia-bg);
+            color: var(--sepia-text);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--day-primary);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        body.night-mode header {
+            background-color: var(--night-primary);
+        }
+
+        body.sepia-mode header {
+            background-color: var(--sepia-primary);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 0.5rem;
+        }
+
+        .theme-switcher {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .theme-btn {
+            background: none;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .theme-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .telegram-btn {
+            background-color: #0088cc;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .telegram-btn:hover {
+            background-color: #006da3;
+            transform: translateY(-2px);
+        }
+
+        .telegram-btn i {
+            margin-right: 0.5rem;
+        }
+
+        .timer-container {
+            background-color: var(--day-secondary);
+            padding: 0.5rem 1rem;
+            text-align: center;
+            font-weight: bold;
+            position: relative;
+        }
+
+        body.night-mode .timer-container {
+            background-color: var(--night-secondary);
+        }
+
+        body.sepia-mode .timer-container {
+            background-color: var(--sepia-secondary);
+        }
+
+        .timer {
+            font-size: 1.2rem;
+        }
+
+        .timer.warning {
+            color: #e74a3b;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .progress-bar {
+            height: 5px;
+            width: 100%;
+            background-color: #e9ecef;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+        .progress {
+            height: 100%;
+            width: 100%;
+            background-color: var(--day-primary);
+            transition: width 1s linear;
+        }
+
+        body.night-mode .progress {
+            background-color: var(--night-primary);
+        }
+
+        body.sepia-mode .progress {
+            background-color: var(--sepia-primary);
+        }
+
+        .content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        @media (max-width: 992px) {
+            .content {
+                flex-direction: column;
+            }
+        }
+
+        .passage-container {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            border-right: 1px solid #dee2e6;
+        }
+
+        body.night-mode .passage-container {
+            border-right-color: #343a40;
+        }
+
+        body.sepia-mode .passage-container {
+            border-right-color: #d6c7a8;
+        }
+
+        @media (max-width: 992px) {
+            .passage-container {
+                border-right: none;
+                border-bottom: 1px solid #dee2e6;
+            }
+
+            body.night-mode .passage-container {
+                border-bottom-color: #343a40;
+            }
+
+            body.sepia-mode .passage-container {
+                border-bottom-color: #d6c7a8;
+            }
+        }
+
+        .passage-title {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--day-primary);
+        }
+
+        body.night-mode .passage-title {
+            color: var(--night-primary);
+        }
+
+        body.sepia-mode .passage-title {
+            color: var(--sepia-primary);
+        }
+
+        .passage-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            text-align: justify;
+        }
+
+        .passage-content p {
+            margin-bottom: 1rem;
+        }
+
+        .passage-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .section-label {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--day-primary);
+        }
+
+        body.night-mode .section-label {
+            color: var(--night-primary);
+        }
+
+        body.sepia-mode .section-label {
+            color: var(--sepia-primary);
+        }
+
+        .highlight {
+            background-color: var(--day-highlight);
+            padding: 0 2px;
+            border-radius: 3px;
+        }
+
+        body.night-mode .highlight {
+            background-color: var(--night-highlight);
+        }
+
+        body.sepia-mode .highlight {
+            background-color: var(--sepia-highlight);
+        }
+
+        .highlight-blue {
+            background-color: var(--day-highlight-blue);
+            padding: 0 2px;
+            border-radius: 3px;
+        }
+
+        body.night-mode .highlight-blue {
+            background-color: var(--night-highlight-blue);
+        }
+
+        body.sepia-mode .highlight-blue {
+            background-color: var(--sepia-highlight-blue);
+        }
+
+        .highlight-menu {
+            position: absolute;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            padding: 0.5rem;
+            display: flex;
+            z-index: 1000;
+            transform: translateY(-100%);
+        }
+
+        body.night-mode .highlight-menu {
+            background: #2d3748;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        body.sepia-mode .highlight-menu {
+            background: #e6d7c1;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .highlight-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin: 0 0.2rem;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .highlight-btn.yellow {
+            background-color: #fffacd;
+        }
+
+        .highlight-btn.blue {
+            background-color: #e6f7ff;
+        }
+
+        .highlight-btn.clear {
+            background-color: #f8f9fa;
+        }
+
+        body.night-mode .highlight-btn.clear {
+            background-color: #4a5568;
+            color: white;
+        }
+
+        body.sepia-mode .highlight-btn.clear {
+            background-color: #d6c7a8;
+        }
+
+        .questions-container {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            background-color: var(--day-secondary);
+        }
+
+        body.night-mode .questions-container {
+            background-color: var(--night-secondary);
+        }
+
+        body.sepia-mode .questions-container {
+            background-color: var(--sepia-secondary);
+        }
+
+        .questions-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--day-primary);
+        }
+
+        body.night-mode .questions-title {
+            color: var(--night-primary);
+        }
+
+        body.sepia-mode .questions-title {
+            color: var(--sepia-primary);
+        }
+
+        .question {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        body.night-mode .question {
+            background-color: #2d3748;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        body.sepia-mode .question {
+            background-color: #e6d7c1;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .option:hover {
+            background-color: #f8f9fa;
+        }
+
+        body.night-mode .option:hover {
+            background-color: #4a5568;
+        }
+
+        body.sepia-mode .option:hover {
+            background-color: #d6c7a8;
+        }
+
+        .option input {
+            margin-right: 0.5rem;
+        }
+
+        .input-text {
+            padding: 0.5rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        body.night-mode .input-text {
+            background-color: #2d3748;
+            border-color: #4a5568;
+            color: white;
+        }
+
+        body.sepia-mode .input-text {
+            background-color: #e6d7c1;
+            border-color: #d6c7a8;
+            color: var(--sepia-text);
+        }
+
+        .submit-container {
+            padding: 1rem;
+            text-align: center;
+            background-color: var(--day-secondary);
+            border-top: 1px solid #dee2e6;
+        }
+
+        body.night-mode .submit-container {
+            background-color: var(--night-secondary);
+            border-top-color: #343a40;
+        }
+
+        body.sepia-mode .submit-container {
+            background-color: var(--sepia-secondary);
+            border-top-color: #d6c7a8;
+        }
+
+        .submit-btn {
+            background-color: var(--day-primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        body.night-mode .submit-btn {
+            background-color: var(--night-primary);
+        }
+
+        body.sepia-mode .submit-btn {
+            background-color: var(--sepia-primary);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .result-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .result-content {
+            background-color: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        body.night-mode .result-content {
+            background-color: #2d3748;
+            color: white;
+        }
+
+        body.sepia-mode .result-content {
+            background-color: #e6d7c1;
+            color: var(--sepia-text);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6c757d;
+        }
+
+        body.night-mode .close-btn {
+            color: #a0aec0;
+        }
+
+        body.sepia-mode .close-btn {
+            color: #8b5a2b;
+        }
+
+        .result-title {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--day-primary);
+        }
+
+        body.night-mode .result-title {
+            color: var(--night-primary);
+        }
+
+        body.sepia-mode .result-title {
+            color: var(--sepia-primary);
+        }
+
+        .score {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            font-weight: bold;
+        }
+
+        .result-details {
+            margin-bottom: 2rem;
+        }
+
+        .result-question {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+
+        body.night-mode .result-question {
+            background-color: #4a5568;
+        }
+
+        body.sepia-mode .result-question {
+            background-color: #d6c7a8;
+        }
+
+        .correct {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .incorrect {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .answer-location {
+            margin-top: 0.5rem;
+            font-style: italic;
+            color: #6c757d;
+        }
+
+        body.night-mode .answer-location {
+            color: #a0aec0;
+        }
+
+        body.sepia-mode .answer-location {
+            color: #8b5a2b;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .action-btn {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .action-btn i {
+            margin-right: 0.5rem;
+        }
+
+        .restart-btn {
+            background-color: var(--day-primary);
+            color: white;
+        }
+
+        body.night-mode .restart-btn {
+            background-color: var(--night-primary);
+        }
+
+        body.sepia-mode .restart-btn {
+            background-color: var(--sepia-primary);
+        }
+
+        .review-btn {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        @media (max-width: 576px) {
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .theme-switcher {
+                order: 3;
+            }
+            
+            .passage-title {
+                font-size: 1.5rem;
+            }
+            
+            .result-content {
+                padding: 1.5rem;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-seedling"></i>
+                <span>IELTS Reading Test</span>
+            </div>
+            <div class="theme-switcher">
+                <button class="theme-btn" id="day-theme" title="Day Mode"><i class="fas fa-sun"></i></button>
+                <button class="theme-btn" id="night-theme" title="Night Mode"><i class="fas fa-moon"></i></button>
+                <button class="theme-btn" id="sepia-theme" title="Sepia Mode"><i class="fas fa-book"></i></button>
+            </div>
+            <a href="tg://resolve?domain=aftum_8" class="telegram-btn">
+                <i class="fab fa-telegram"></i>
+                Телеграмм канал
+            </a>
+        </header>
+
+        <div class="timer-container">
+            <div class="timer" id="timer">20:00</div>
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="passage-container">
+                <h1 class="passage-title">Seed Hunting</h1>
+                <div class="passage-content" id="passage">
+                    <div class="passage-section">
+                        <div class="section-label">A</div>
+                        <p>With a quarter of the world's plants set to vanish within the next 50 years, Dough Alexander reports on the scientists working against the clock the preserve the Earth's botanical heritage. They travel the four corners of the globe, scouring jungles, forests and savannas. But they're not looking for ancient artefacts, lost treasure or undiscovered tombs. Just pods. It may lack the romantic allure of archaeology or the whiff of danger that accompanies going after a big game, but seed hunting is an increasingly serious business. Some seek seeds for profit-hunters in the employ of biotechnology firms, pharmaceutical companies and private corporations on the lookout for species that will yield the drugs or crops of the future. Others collect to conserve, working to halt the sad slide into extinction facing so many plant species.</p>
+                    </div>
+
+                    <div class="passage-section">
+                        <div class="section-label">B</div>
+                        <p>Among the pioneers of this botanical treasure hunt was John Tradescant, an English royal gardener who brought back plants and seeds from his journeys abroad in the early 1600s. Later, the English botanist Sir Joseph Banks – who was the first director of the Royal Botanic Gardens at Kew and travelled with Captain James Cook on his voyages near the end of the 18th century – was so driven to expand his collections that he sent botanists around the world at his own expense.</p>
+                    </div>
+
+                    <div class="passage-section">
+                        <div class="section-label">C</div>
+                        <p>Those heady days of exploration and discovery may be over, but they have been replaced by a pressing need to preserve our natural history for the future. This modern mission drives hunters such as Dr Michiel van Slageren, a good-natured Dutchman who often sports a wide-brimmed hat in the field – he could easily be mistaken for the cinematic hero Indiana Jones. He and three other seed hunters work at the Millennium Seed Bank, an 80 million [pounds sterling] international conservation project that aims to protect the world's most endangered wild plant species.</p>
+                    </div>
+
+                    <div class="passage-section">
+                        <div class="section-label">D</div>
+                        <p>The group's headquarters are in a modern glass-and-concrete structure on a 200-hectare Estate at Wakehurst Place in the West Sussex countryside. Within its underground vaults are 260 million dried seeds from 122 countries, all stored at -20 Celsius to survive for centuries. Among the 5,100 species represented are virtually all of Britain's 1,400 native seed-bearing plants, the most complete such collection of any country's flora.</p>
+                    </div>
+
+                    <div class="passage-section">
+                        <div class="section-label">E</div>
+                        <p>Overseen by the Royal botanic gardens, the Millennium Seed Bank is the world's largest wild-plant depository. It aims to collect 24,000 species by 2010. The reason is simple: thanks to humanity's effort, an estimated 25 per cent of the world's plants are on the verge of extinction and may vanish within 50 years. We're currently responsible for habitat destruction on an unprecedented scale, and during the past 400 years, plant species extinction rates have been about 70 times greater than those indicated by the geological record as being 'normal'. Experts predict that during the next 50 years further one billion hectares of wilderness will be converted to farmland in developing countries alone.</p>
+                    </div>
+
+                    <div class="passage-section">
+                        <div class="section-label">F</div>
+                        <p>The implications of this loss are enormous. Besides providing staple food crops, plants are a source of many machines and the principal supply of fuel and building materials in many parts of the world. They also protect soil and help regulate the climate. Yet, across the globe, plant species are being driven to extinction before their potential benefits are discovered.</p>
+                    </div>
+
+                    <div class="passage-section">
+                        <div class="section-label">G</div>
+                        <p>The world Conservation Union has listed 5,714 threatened species is sure to be much higher. In the UK alone, 300 wild plant species are classified as endangered. The Millennium Seed Bank aims to ensure that even if a plant becomes extinct in the wild, it won't be lost forever. Stored seeds can be used the help restore damaged or destroyed the environment or in scientific research to find new benefits for society- in medicine, agriculture or local industry- that would otherwise be lost.</p>
+                    </div>
+
+                    <div class="passage-section">
+                        <div class="section-label">H</div>
+                        <p>Seed banks are an insurance policy to protect the world's plant heritage for the future, explains Dr Paul Smith, another Kew seed hunter. "Seed conservation techniques were originally developed by farmers," he says. "Storage is the basis what we do, conserving seeds until you can use them just as in farming," Smith says there's no reason why any plant species should become extinct, given today's technology. But he admits that the biggest challenge is finding, naming and categorizing all the world's plants. And someone has to gather these seeds before it's too late. "There aren't a lot of people out there doing this," he says. "The key is to know the flora from a particular area, and that knowledge takes years to acquire."</p>
+                    </div>
+
+                    <div class="passage-section">
+                        <div class="section-label">I</div>
+                        <p>There are about 1,470 seedbanks scattered around the globe, with a combined total of 5.4 million samples, of which perhaps two million are distinct non-duplicates. Most preserve genetic material for agriculture use in order to ensure crop diversity; others aim to conserve wild species, although only 15 per cent of all banked plants is wild.</p>
+                    </div>
+
+                    <div class="passage-section">
+                        <div class="section-label">J</div>
+                        <p>Many seed banks are themselves under threat due to a lack of funds. Last year, Imperial College, London, examined crop collections from 151 countries and found that while the number of plant samples had increased in two-thirds of the countries, the budget had been cut in a quarter and remained static in another 35 per cent. The UN's Food and Agriculture Organization and the Consultative Group on International Agricultural Research has since set up the Global Conservation Trust, which aims to raise the US $260 million to protect seed banks in perpetuity.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="questions-container">
+                <h2 class="questions-title">Questions</h2>
+                
+                <div class="question">
+                    <div class="question-title">Questions 1-6</div>
+                    <p>Do the following statements agree with the information given in Reading Passage?</p>
+                    <p>In boxes <strong>1-6</strong> on your answer sheet, write</p>
+                    <p>
+                        <strong>TRUE</strong> - if the statement is true<br>
+                        <strong>FALSE</strong> - if the statement is false<br>
+                        <strong>NOT GIVEN</strong> - if the information is not given in the passage
+                    </p>
+                    
+                    <div class="question-title">1. The purpose of collecting seeds now is different from the past.</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q1" value="true"> TRUE
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q1" value="false"> FALSE
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q1" value="notgiven"> NOT GIVEN
+                        </label>
+                    </div>
+                    
+                    <div class="question-title">2. The millennium seed bank is the earliest seed bank.</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q2" value="true"> TRUE
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q2" value="false"> FALSE
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q2" value="notgiven"> NOT GIVEN
+                        </label>
+                    </div>
+                    
+                    <div class="question-title">3. One of the major threats for plant species extinction is farmland expansion into wildness.</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q3" value="true"> TRUE
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q3" value="false"> FALSE
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q3" value="notgiven"> NOT GIVEN
+                        </label>
+                    </div>
+                    
+                    <div class="question-title">4. The approach that scientists apply to store seeds is similar to that used by farmers.</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q4" value="true"> TRUE
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q4" value="false"> FALSE
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q4" value="notgiven"> NOT GIVEN
+                        </label>
+                    </div>
+                    
+                    <div class="question-title">5. technological development is the only hope to save plant species.</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q5" value="true"> TRUE
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q5" value="false"> FALSE
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q5" value="notgiven"> NOT GIVEN
+                        </label>
+                    </div>
+                    
+                    <div class="question-title">6. The works of seed conservation are often limited by financial problems.</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q6" value="true"> TRUE
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q6" value="false"> FALSE
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q6" value="notgiven"> NOT GIVEN
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <div class="question-title">Questions 7-11</div>
+                    <p>Complete the following summary of the paragraphs of Reading Passage,</p>
+                    <p>Using <strong>NO MORE THAN THREE WORDS</strong> from the Reading Passage for each answer.</p>
+                    
+                    <p>Some people collect seeds for the purpose of protecting certain species from <strong>7.</strong> 
+                    <input type="text" class="input-text" name="q7" maxlength="30">; others collect seeds for their ability to produce <strong>8.</strong> 
+                    <input type="text" class="input-text" name="q8" maxlength="30">. They are called seed hunters. The <strong>9.</strong> 
+                    <input type="text" class="input-text" name="q9" maxlength="30"> of them included both gardeners and botanists, such as <strong>10.</strong> 
+                    <input type="text" class="input-text" name="q10" maxlength="30">, who financially supported collectors out of his own pocket. The seeds collected are usually stored in seed banks, one of which is the famous millennium seed bank, where seeds are all stored in the <strong>11.</strong> 
+                    <input type="text" class="input-text" name="q11" maxlength="30"> at a low temperature.</p>
+                </div>
+                
+                <div class="question">
+                    <div class="question-title">Questions 12-13</div>
+                    <p>Choose the correct letter, <strong>A-E</strong>.</p>
+                    <p>Write your answers in boxes <strong>12-13</strong> on your answer sheet.</p>
+                    
+                    <p>Which <strong>TWO</strong> of the following are provided by plants to the human?</p>
+                    
+                    <div class="options">
+                        <label class="option">
+                            <input type="checkbox" name="q12" value="A"> A food
+                        </label>
+                        <label class="option">
+                            <input type="checkbox" name="q12" value="B"> B fuels
+                        </label>
+                        <label class="option">
+                            <input type="checkbox" name="q12" value="C"> C clothes
+                        </label>
+                        <label class="option">
+                            <input type="checkbox" name="q12" value="D"> D energy
+                        </label>
+                        <label class="option">
+                            <input type="checkbox" name="q12" value="E"> E commercial products
+                        </label>
+                    </div>
+                    
+                    <p class="question-title">(Note: Select TWO options only)</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="submit-container">
+            <button class="submit-btn" id="submit-btn">
+                <i class="fas fa-paper-plane"></i> Submit Answers
+            </button>
+        </div>
+    </div>
+
+    <div class="result-container" id="result-container">
+        <div class="result-content">
+            <button class="close-btn" id="close-btn">&times;</button>
+            <h2 class="result-title">Test Results</h2>
+            <div class="score" id="score">Score: 0/13</div>
+            
+            <div class="result-details" id="result-details">
+                <!-- Results will be inserted here -->
+            </div>
+            
+            <div class="actions">
+                <button class="action-btn restart-btn" id="restart-btn">
+                    <i class="fas fa-redo"></i> Try Again
+                </button>
+                <button class="action-btn review-btn" id="review-btn">
+                    <i class="fas fa-book"></i> Review Answers
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme switching functionality
+            const body = document.body;
+            const dayThemeBtn = document.getElementById('day-theme');
+            const nightThemeBtn = document.getElementById('night-theme');
+            const sepiaThemeBtn = document.getElementById('sepia-theme');
+            
+            dayThemeBtn.addEventListener('click', () => {
+                body.className = '';
+            });
+            
+            nightThemeBtn.addEventListener('click', () => {
+                body.className = 'night-mode';
+            });
+            
+            sepiaThemeBtn.addEventListener('click', () => {
+                body.className = 'sepia-mode';
+            });
+            
+            // Timer functionality
+            const timerDisplay = document.getElementById('timer');
+            const progressBar = document.getElementById('progress');
+            const totalTime = 20 * 60; // 20 minutes in seconds
+            let timeLeft = totalTime;
+            let timerInterval;
+            
+            function startTimer() {
+                clearInterval(timerInterval);
+                timeLeft = totalTime;
+                updateTimerDisplay();
+                progressBar.style.width = '100%';
+                
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    updateTimerDisplay();
+                    
+                    const progressWidth = (timeLeft / totalTime) * 100;
+                    progressBar.style.width = `${progressWidth}%`;
+                    
+                    if (timeLeft <= 5 * 60) { // 5 minutes left
+                        timerDisplay.classList.add('warning');
+                    }
+                    
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        submitAnswers();
+                    }
+                }, 1000);
+            }
+            
+            function updateTimerDisplay() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            // Text highlighting functionality
+            const passage = document.getElementById('passage');
+            let highlightMenu = null;
+            
+            function createHighlightMenu() {
+                if (highlightMenu) {
+                    document.body.removeChild(highlightMenu);
+                }
+                
+                highlightMenu = document.createElement('div');
+                highlightMenu.className = 'highlight-menu';
+                highlightMenu.innerHTML = `
+                    <button class="highlight-btn yellow" title="Yellow Highlight"><i class="fas fa-highlighter"></i></button>
+                    <button class="highlight-btn blue" title="Blue Highlight"><i class="fas fa-highlighter"></i></button>
+                    <button class="highlight-btn clear" title="Clear Highlight"><i class="fas fa-eraser"></i></button>
+                `;
+                
+                document.body.appendChild(highlightMenu);
+                
+                // Add event listeners to highlight buttons
+                highlightMenu.querySelector('.yellow').addEventListener('click', () => {
+                    applyHighlight('highlight');
+                    hideHighlightMenu();
+                });
+                
+                highlightMenu.querySelector('.blue').addEventListener('click', () => {
+                    applyHighlight('highlight-blue');
+                    hideHighlightMenu();
+                });
+                
+                highlightMenu.querySelector('.clear').addEventListener('click', () => {
+                    removeHighlight();
+                    hideHighlightMenu();
+                });
+                
+                return highlightMenu;
+            }
+            
+            function showHighlightMenu(x, y) {
+                if (!highlightMenu) {
+                    highlightMenu = createHighlightMenu();
+                }
+                
+                highlightMenu.style.display = 'flex';
+                highlightMenu.style.left = `${x}px`;
+                highlightMenu.style.top = `${y - 40}px`;
+            }
+            
+            function hideHighlightMenu() {
+                if (highlightMenu) {
+                    highlightMenu.style.display = 'none';
+                }
+            }
+            
+            function applyHighlight(className) {
+                const selection = window.getSelection();
+                if (selection.rangeCount > 0 && !selection.isCollapsed) {
+                    const range = selection.getRangeAt(0);
+                    const selectedText = range.toString();
+                    
+                    if (selectedText.trim().length > 0) {
+                        const span = document.createElement('span');
+                        span.className = className;
+                        span.textContent = selectedText;
+                        
+                        range.deleteContents();
+                        range.insertNode(span);
+                        
+                        // Clear selection
+                        selection.removeAllRanges();
+                    }
+                }
+            }
+            
+            function removeHighlight() {
+                const selection = window.getSelection();
+                if (selection.rangeCount > 0 && !selection.isCollapsed) {
+                    const range = selection.getRangeAt(0);
+                    const selectedText = range.toString();
+                    
+                    if (selectedText.trim().length > 0) {
+                        // Create a document fragment with just the text
+                        const textNode = document.createTextNode(selectedText);
+                        
+                        range.deleteContents();
+                        range.insertNode(textNode);
+                        
+                        // Clear selection
+                        selection.removeAllRanges();
+                    }
+                }
+            }
+            
+            // Event listeners for text selection
+            passage.addEventListener('mouseup', function(e) {
+                const selection = window.getSelection();
+                if (selection.toString().trim().length > 0) {
+                    const range = selection.getRangeAt(0);
+                    const rect = range.getBoundingClientRect();
+                    
+                    showHighlightMenu(rect.left + window.scrollX, rect.top + window.scrollY);
+                } else {
+                    hideHighlightMenu();
+                }
+            });
+            
+            document.addEventListener('mousedown', function(e) {
+                if (highlightMenu && !highlightMenu.contains(e.target)) {
+                    hideHighlightMenu();
+                }
+            });
+            
+            // Answer submission and evaluation
+            const submitBtn = document.getElementById('submit-btn');
+            const resultContainer = document.getElementById('result-container');
+            const scoreDisplay = document.getElementById('score');
+            const resultDetails = document.getElementById('result-details');
+            const closeBtn = document.getElementById('close-btn');
+            const restartBtn = document.getElementById('restart-btn');
+            const reviewBtn = document.getElementById('review-btn');
+            
+            // Correct answers
+            const correctAnswers = {
+                q1: 'true',
+                q2: 'notgiven',
+                q3: 'true',
+                q4: 'true',
+                q5: 'false',
+                q6: 'true',
+                q7: 'extinction',
+                q8: 'drugs',
+                q9: 'pioneers',
+                q10: 'Sir Joseph Banks',
+                q11: 'underground vaults',
+                q12: ['A', 'B'] // Food and Fuels
+            };
+            
+            // Answer locations in the text
+            const answerLocations = {
+                q1: "Some seek seeds for profit... Others collect to conserve",
+                q2: "No direct information about Millennium Seed Bank being the earliest",
+                q3: "Experts predict that during the next 50 years further one billion hectares of wilderness will be converted to farmland",
+                q4: "Seed conservation techniques were originally developed by farmers",
+                q5: "Smith says there's no reason why any plant species should become extinct, given today's technology. But he admits that the biggest challenge is finding, naming and categorizing all the world's plants",
+                q6: "Many seed banks are themselves under threat due to a lack of funds",
+                q7: "working to halt the sad slide into extinction facing so many plant species",
+                q8: "species that will yield the drugs or crops of the future",
+                q9: "Among the pioneers of this botanical treasure hunt was John Tradescant",
+                q10: "Sir Joseph Banks... was so driven to expand his collections that he sent botanists around the world at his own expense",
+                q11: "Within its underground vaults are 260 million dried seeds",
+                q12: "Besides providing staple food crops, plants are a source of many machines and the principal supply of fuel and building materials"
+            };
+            
+            function submitAnswers() {
+                clearInterval(timerInterval);
+                
+                let score = 0;
+                const results = [];
+                
+                // Check questions 1-6 (True/False/Not Given)
+                for (let i = 1; i <= 6; i++) {
+                    const questionName = `q${i}`;
+                    const selectedOption = document.querySelector(`input[name=${questionName}]:checked`);
+                    const userAnswer = selectedOption ? selectedOption.value : 'Not answered';
+                    const isCorrect = userAnswer === correctAnswers[questionName];
+                    
+                    if (isCorrect) score++;
+                    
+                    results.push({
+                        question: i,
+                        userAnswer: userAnswer,
+                        correctAnswer: correctAnswers[questionName],
+                        isCorrect: isCorrect,
+                        location: answerLocations[questionName]
+                    });
+                }
+                
+                // Check questions 7-11 (Text input)
+                for (let i = 7; i <= 11; i++) {
+                    const questionName = `q${i}`;
+                    const inputElement = document.querySelector(`input[name=${questionName}]`);
+                    const userAnswer = inputElement ? inputElement.value.trim().toLowerCase() : 'Not answered';
+                    const isCorrect = userAnswer === correctAnswers[questionName].toLowerCase();
+                    
+                    if (isCorrect) score++;
+                    
+                    results.push({
+                        question: i,
+                        userAnswer: userAnswer,
+                        correctAnswer: correctAnswers[questionName],
+                        isCorrect: isCorrect,
+                        location: answerLocations[questionName]
+                    });
+                }
+                
+                // Check question 12 (Multiple selection)
+                const selectedOptions = Array.from(document.querySelectorAll('input[name="q12"]:checked')).map(cb => cb.value);
+                const isCorrect = selectedOptions.length === 2 && 
+                                 selectedOptions.includes('A') && 
+                                 selectedOptions.includes('B') &&
+                                 selectedOptions.every(opt => ['A', 'B'].includes(opt));
+                
+                if (isCorrect) score++;
+                
+                results.push({
+                    question: '12-13',
+                    userAnswer: selectedOptions.join(', '),
+                    correctAnswer: 'A, B',
+                    isCorrect: isCorrect,
+                    location: answerLocations['q12']
+                });
+                
+                displayResults(score, results);
+            }
+            
+            function displayResults(score, results) {
+                scoreDisplay.textContent = `Score: ${score}/13`;
+                
+                let resultsHTML = '';
+                results.forEach(result => {
+                    resultsHTML += `
+                        <div class="result-question">
+                            <p><strong>Question ${result.question}:</strong> 
+                            Your answer: <span class="${result.isCorrect ? 'correct' : 'incorrect'}">${result.userAnswer}</span>
+                            ${!result.isCorrect ? `Correct answer: <span class="correct">${result.correctAnswer}</span>` : ''}
+                            </p>
+                            <p class="answer-location">Answer found in: "${result.location}"</p>
+                        </div>
+                    `;
+                });
+                
+                resultDetails.innerHTML = resultsHTML;
+                resultContainer.style.display = 'flex';
+            }
+            
+            submitBtn.addEventListener('click', submitAnswers);
+            
+            closeBtn.addEventListener('click', () => {
+                resultContainer.style.display = 'none';
+            });
+            
+            restartBtn.addEventListener('click', () => {
+                // Reset all radio buttons
+                document.querySelectorAll('input[type="radio"]').forEach(input => {
+                    input.checked = false;
+                });
+                
+                // Reset all text inputs
+                document.querySelectorAll('input[type="text"]').forEach(input => {
+                    input.value = '';
+                });
+                
+                // Reset all checkboxes
+                document.querySelectorAll('input[type="checkbox"]').forEach(input => {
+                    input.checked = false;
+                });
+                
+                // Remove all highlights
+                document.querySelectorAll('.highlight, .highlight-blue').forEach(el => {
+                    const parent = el.parentNode;
+                    parent.replaceChild(document.createTextNode(el.textContent), el);
+                    parent.normalize();
+                });
+                
+                resultContainer.style.display = 'none';
+                startTimer();
+            });
+            
+            reviewBtn.addEventListener('click', () => {
+                resultContainer.style.display = 'none';
+            });
+            
+            // Initialize the timer when the page loads
+            startTimer();
+        });
+    </script>
+</body>
+</html>

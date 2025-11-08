@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Test: Born to trade</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --day-bg: #f8f9fa;
+            --day-text: #212529;
+            --day-primary: #4e73df;
+            --day-secondary: #eaecf4;
+            --day-highlight-yellow: rgba(255, 255, 0, 0.3);
+            --day-highlight-blue: rgba(173, 216, 230, 0.3);
+            
+            --night-bg: #1a1a2e;
+            --night-text: #e6e6e6;
+            --night-primary: #6c8bce;
+            --night-secondary: #2d3748;
+            --night-highlight-yellow: rgba(255, 215, 0, 0.3);
+            --night-highlight-blue: rgba(100, 149, 237, 0.3);
+            
+            --sepia-bg: #f4ecd8;
+            --sepia-text: #5c4b37;
+            --sepia-primary: #8b4513;
+            --sepia-secondary: #e3d5bc;
+            --sepia-highlight-yellow: rgba(210, 180, 140, 0.3);
+            --sepia-highlight-blue: rgba(166, 123, 91, 0.3);
+            
+            --current-bg: var(--day-bg);
+            --current-text: var(--day-text);
+            --current-primary: var(--day-primary);
+            --current-secondary: var(--day-secondary);
+            --current-highlight-yellow: var(--day-highlight-yellow);
+            --current-highlight-blue: var(--day-highlight-blue);
+            
+            --transition: all 0.3s ease;
+        }
+
+        .night-theme {
+            --current-bg: var(--night-bg);
+            --current-text: var(--night-text);
+            --current-primary: var(--night-primary);
+            --current-secondary: var(--night-secondary);
+            --current-highlight-yellow: var(--night-highlight-yellow);
+            --current-highlight-blue: var(--night-highlight-blue);
+        }
+
+        .sepia-theme {
+            --current-bg: var(--sepia-bg);
+            --current-text: var(--sepia-text);
+            --current-primary: var(--sepia-primary);
+            --current-secondary: var(--sepia-secondary);
+            --current-highlight-yellow: var(--sepia-highlight-yellow);
+            --current-highlight-blue: var(--sepia-highlight-blue);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: var(--transition);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--current-bg);
+            color: var(--current-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--current-primary);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 100;
+        }
+
+        .theme-selector {
+            display: flex;
+            gap: 10px;
+        }
+
+        .theme-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .telegram-btn {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0088cc;
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .telegram-btn:hover {
+            background: #0077b5;
+            transform: translateX(-50%) scale(1.05);
+        }
+
+        .timer-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+        }
+
+        .timer {
+            font-size: 1.2rem;
+        }
+
+        .timer.warning {
+            color: #ff6b6b;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 130px);
+            overflow: hidden;
+        }
+
+        @media (max-width: 992px) {
+            .main-content {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .passage-container, .questions-container {
+                height: 50vh !important;
+            }
+        }
+
+        .passage-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            background-color: var(--current-secondary);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            height: 100%;
+        }
+
+        .passage-title {
+            margin-bottom: 1rem;
+            color: var(--current-primary);
+            border-bottom: 2px solid var(--current-primary);
+            padding-bottom: 0.5rem;
+            position: sticky;
+            top: 0;
+            background-color: var(--current-secondary);
+            z-index: 10;
+            padding: 1rem;
+            margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+        }
+
+        .passage-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .passage-content p {
+            margin-bottom: 1rem;
+        }
+
+        .highlight-yellow {
+            background-color: var(--current-highlight-yellow);
+        }
+
+        .highlight-blue {
+            background-color: var(--current-highlight-blue);
+        }
+
+        .highlight-menu {
+            position: absolute;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: flex;
+            gap: 5px;
+        }
+
+        .highlight-btn {
+            border: none;
+            border-radius: 4px;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .highlight-btn.yellow {
+            background-color: #ffeb3b;
+        }
+
+        .highlight-btn.blue {
+            background-color: #90caf9;
+        }
+
+        .highlight-btn.clear {
+            background-color: #f5f5f5;
+        }
+
+        .questions-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            background-color: var(--current-bg);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            height: 100%;
+        }
+
+        .questions-title {
+            margin-bottom: 1rem;
+            color: var(--current-primary);
+            border-bottom: 2px solid var(--current-primary);
+            padding-bottom: 0.5rem;
+            position: sticky;
+            top: 0;
+            background-color: var(--current-bg);
+            z-index: 10;
+            padding: 1rem;
+            margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+        }
+
+        .question {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: var(--current-secondary);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .question-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--current-primary);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+            background-color: var(--current-bg);
+            color: var(--current-text);
+        }
+
+        select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: var(--current-bg);
+            color: var(--current-text);
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .submit-btn {
+            display: block;
+            margin: 1rem auto;
+            padding: 12px 24px;
+            background-color: var(--current-primary);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: sticky;
+            bottom: 10px;
+            z-index: 10;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .results-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .results-content {
+            background-color: var(--current-bg);
+            color: var(--current-text);
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .results-title {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--current-primary);
+        }
+
+        .score {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            font-weight: bold;
+        }
+
+        .result-item {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            background-color: var(--current-secondary);
+        }
+
+        .correct {
+            border-left: 4px solid #4caf50;
+        }
+
+        .incorrect {
+            border-left: 4px solid #f44336;
+        }
+
+        .result-question {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .answer-reference {
+            font-style: italic;
+            color: var(--current-primary);
+            margin-top: 0.5rem;
+        }
+
+        .close-btn {
+            display: block;
+            margin: 1rem auto 0;
+            padding: 10px 20px;
+            background-color: var(--current-primary);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: var(--current-primary);
+            color: white;
+        }
+        
+        .headings-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+        
+        .heading-option {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .summary-options {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 10px;
+            margin-top: 0.5rem;
+        }
+        
+        .summary-option {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .summary-select {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="theme-selector">
+                <button class="theme-btn" id="day-theme" title="Day Mode"><i class="fas fa-sun"></i></button>
+                <button class="theme-btn" id="night-theme" title="Night Mode"><i class="fas fa-moon"></i></button>
+                <button class="theme-btn" id="sepia-theme" title="Sepia Mode"><i class="fas fa-seedling"></i></button>
+            </div>
+            
+            <a href="tg://resolve?domain=aftum_8" class="telegram-btn">
+                <i class="fab fa-telegram"></i> Телеграмм канал
+            </a>
+            
+            <div class="timer-container">
+                <i class="fas fa-clock"></i>
+                <div class="timer" id="timer">20:00</div>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <div class="passage-container">
+                <h2 class="passage-title">READING PASSAGE 2: Born to trade</h2>
+                <div class="passage-content" id="passage-content">
+                    <p><b>A</b> Humans are born to trade and we don't need shops or money to do it-the heart of commerce is an instinctive ability for what anthropologists call reciprocity. This is an ability to exchange goods of equal worth and it evolved as the brains of our ancient ancestors and societies became more complex, allowing individuals to keep a running tally their interactions with others. Evidence from modem hunter-gatherers leaves little doubt that the exchange of food and flavors is innate, as is the ability to keep track of the credits and debits that accrue as a result. Combine this skill for mental book-keeping with even the most basic material culture, and trade inevitably follows.</p>
+                    
+                    <p><b>B</b> Once trade gets off the ground, the economic benefits quickly make it irresistible, But exchanging tools, food and other essentials of life in a barter economy is a far cry from the shopping mall. Modern consumerism sway beyond subsistence and utilitarianism to encompass everything from Gucci handbags and BMW convertibles to valuable paintings dearly, the worth of such goods is not inherent but resides in certain intangible qualities that we invest in them. When did humans start holding these goods in such high esteem?</p>
+                    
+                    <p><b>C</b> All the archaeological evidence for the flowering of consumer culture has up to now pointed to a date of around 40,000 years ago. that's when early modern humans started making increasingly intricate bone and stone tools, carving patterns into rocks and creating representational art such as carved figurines, jewellery and cave painting. However, discoveries in Africa are pushing the origins of consumerism much further back into human prehistory. A few years ago, reports began to emerge of discoveries made at the Blombos cave, a site of ancient human habitation in South Africa. Christopher Henshilwood and colleagues from the University of Bergen in Norway dated thousands of pieces of ochre from the cave and many of them proved to be more than 100,000 years old -before the time that early humans moved out of Africa. Ochre, a coloured clay that comes in various shades from red to black, does not occur naturally around Blombos and must have been imported from quarries at least 30 kilometres away, either directly by Blombos residents or through trade. Although ochre can be used to dry and preserver cure'- animal hides, the researchers are convinced the Blombos ochre had a symbolic purpose. For a start, it is predominantly red-any of the other colours available would have done for curing -and the surfaces of the clay had been scraped in a way that indicates they were used to yield pigment for dyes.</p>
+                    
+                    <p><b>D</b> An even more intriguing discovery from Blombos was of 41 beads dating from 76,000 years ago, found in clusters and made from the shells of a tiny mollusc. These cannot be natural deposits, argue the researchers, as each cluster contains shells of a similar size and colour with consistently placed holes. What's more, all the beads display a pattern of wear suggesting friction from rubbing against thread, clothes or other beads. The previous oldest find of beads in Africa dates back to just 45,000 years ago. And it seems the Blombos people's taste for beautiful items was not an isolated phenomenon. Jessica Thompson of Arizona State University in Tempe has described finding shell fragments from a site in Tanzania that she believes may represent debris from bead manufacture. They are at least 45,000-and possibly 280, 000-years old. Although there is no evidence of how the ancient beads were used, their modern counterparts are often traded. So it looks as though our taste for jewellery and art is much older than we thought.</p>
+                    
+                    <p><b>E</b> But why did we come to value these objects in the first place? In many animal species, individuals signal their genetic fitness by showing off with attention-grabbing adornment. Some researchers think that in humans, consumer products play a similar role. Archaeologist Aimee Plourde, from the University of California, also argues that even in egalitarian societies, some people are more successful than others. Among our ancestors, superior skills in areas such as hunting, crafts, environmental knowledge and contact with neighbouring groups would have brought respect-in other words, prestige. And because prestige brings social benefits, people would want to show off their talents. The best way to do this would be through demonstrating possession of material items that are hard to fake "A good hunter, for instance, could advertise his skills by wearing the tooth of an animal that is elusive or dangerous, says Plourde. The benefits of prestige would also lead to competition to acquire it. As a result, the value and variety of prestige goods would spiral and there would be a parallel increase in the ranking of social systems. If Plourde is correct, prestige goods form a direct link between our innate drive for trade and the development of structured, hierarchical societies. They are arguably the first step on the road to modern civilisation, paving the way for agriculture and urbanisation. We may not be impressed by beads any more, but their modern equivalents have the same fascination Nobody believes the guy who spends E670,000 on a Bugatti Veyron car does so because he needs to travel at 250mph. We all know in today's consumer society he's buying an exclusive status symbol.</p>
+                </div>
+            </div>
+            
+            <div class="questions-container">
+                <h2 class="questions-title">Questions 14-26</h2>
+                
+                <div class="question">
+                    <div class="question-title">Questions 14-18</div>
+                    <p>Reading Passage 2 has five sections, A-E.</p>
+                    <p>Choose the correct heading for each section from the list of headings below.</p>
+                    <p>Write the correct letter, i-vii in boxes 14-18 on your answer sheet.</p>
+                    
+                    <div class="headings-list">
+                        <p><b>List of Headings</b></p>
+                        <p>i. The earliest evidence of consumerism</p>
+                        <p>ii. Evidence of ancient jewellery</p>
+                        <p>iii. The development of modern consumerism</p>
+                        <p>iv. The instinctive basis of trade</p>
+                        <p>v. The reasons why goods are valued</p>
+                        <p>vi. New discoveries about early consumerism</p>
+                        <p>vii. The role of social status in trade</p>
+                    </div>
+                    
+                    <div class="options">
+                        <div class="option">
+                            <label for="q14">14. Section A</label>
+                            <select id="q14">
+                                <option value="">Select heading</option>
+                                <option value="i">i</option>
+                                <option value="ii">ii</option>
+                                <option value="iii">iii</option>
+                                <option value="iv">iv</option>
+                                <option value="v">v</option>
+                                <option value="vi">vi</option>
+                                <option value="vii">vii</option>
+                            </select>
+                        </div>
+                        <div class="option">
+                            <label for="q15">15. Section B</label>
+                            <select id="q15">
+                                <option value="">Select heading</option>
+                                <option value="i">i</option>
+                                <option value="ii">ii</option>
+                                <option value="iii">iii</option>
+                                <option value="iv">iv</option>
+                                <option value="v">v</option>
+                                <option value="vi">vi</option>
+                                <option value="vii">vii</option>
+                            </select>
+                        </div>
+                        <div class="option">
+                            <label for="q16">16. Section C</label>
+                            <select id="q16">
+                                <option value="">Select heading</option>
+                                <option value="i">i</option>
+                                <option value="ii">ii</option>
+                                <option value="iii">iii</option>
+                                <option value="iv">iv</option>
+                                <option value="v">v</option>
+                                <option value="vi">vi</option>
+                                <option value="vii">vii</option>
+                            </select>
+                        </div>
+                        <div class="option">
+                            <label for="q17">17. Section D</label>
+                            <select id="q17">
+                                <option value="">Select heading</option>
+                                <option value="i">i</option>
+                                <option value="ii">ii</option>
+                                <option value="iii">iii</option>
+                                <option value="iv">iv</option>
+                                <option value="v">v</option>
+                                <option value="vi">vi</option>
+                                <option value="vii">vii</option>
+                            </select>
+                        </div>
+                        <div class="option">
+                            <label for="q18">18. Section E</label>
+                            <select id="q18">
+                                <option value="">Select heading</option>
+                                <option value="i">i</option>
+                                <option value="ii">ii</option>
+                                <option value="iii">iii</option>
+                                <option value="iv">iv</option>
+                                <option value="v">v</option>
+                                <option value="vi">vi</option>
+                                <option value="vii">vii</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <div class="question-title">Questions 19-21</div>
+                    <p>Choose the correct letter, A, B, C or D.</p>
+                    <p>Write the correct letter in boxes 19-21 on your answer sheet.</p>
+                    
+                    <div class="options">
+                        <div class="option">
+                            <label for="q19">19. In section A, 'reciprocity' refers to our ancestors ability to</label>
+                            <select id="q19">
+                                <option value="">Select answer</option>
+                                <option value="A">A keep written records of different goods traded</option>
+                                <option value="B">B monitor the balance between goods given and received</option>
+                                <option value="C">C produce more materials for trading purposes</option>
+                                <option value="D">D make money from trading goods and services</option>
+                            </select>
+                        </div>
+                        <div class="option">
+                            <label for="q20">20. What is said about the ochre found around Blombos?</label>
+                            <select id="q20">
+                                <option value="">Select answer</option>
+                                <option value="A">A It is of a type only found in this particular area.</option>
+                                <option value="B">B It has all been dyed to give the same shade of red.</option>
+                                <option value="C">C It has been perfectly preserved despite its age.</option>
+                                <option value="D">D It appears it was selected for its colour.</option>
+                            </select>
+                        </div>
+                        <div class="option">
+                            <label for="q21">21. What made the researchers realise the purpose of the beads found at the Blombos caves?</label>
+                            <select id="q21">
+                                <option value="">Select answer</option>
+                                <option value="A">A They are a great variety of shapes and sizes</option>
+                                <option value="B">B They were found in large numbers all grouped around each other.</option>
+                                <option value="C">C They have patterns in many different colours</option>
+                                <option value="D">D They have holes and markings suggesting they were joined together.</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <div class="question-title">Questions 22-26</div>
+                    <p>Complete the summary below.</p>
+                    <p>Choose <b>ONE WORD ONLY</b> from the passage for each answer.</p>
+                    <p>Write your answers in boxes 22-26 on your answer sheet.</p>
+                    
+                    <div class="options">
+                        <div class="option">
+                            <label for="q22">22. Some researchers argue that we may use ownership of desirable goods to demonstrate our strength and fitness as other ________ use their attractive physical features.</label>
+                            <input type="text" id="q22">
+                        </div>
+                        <div class="option">
+                            <label for="q23">23. Showing off one's superiority is not a new phenomenon and even in ancient times successful people would have gained ________ from this.</label>
+                            <input type="text" id="q23">
+                        </div>
+                        <div class="option">
+                            <label for="q24">24. A desire for status could have led to an increase in the worth of prestige goods and to ________ among people wishing to achieve this status.</label>
+                            <input type="text" id="q24">
+                        </div>
+                        <div class="option">
+                            <label for="q25">25. It is thought that our natural desire to trade provided a basis for organised farming and ________ development and finally resulted in the complex societies which can be seen today.</label>
+                            <input type="text" id="q25">
+                        </div>
+                        <div class="option">
+                            <label for="q26">26. Whilst we do not value things such as beads nowadays, other items hold the same appeal for us and bring the same status as owing beads did for our ________.</label>
+                            <input type="text" id="q26">
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="submit-btn" id="submit-btn">Submit Answers</button>
+            </div>
+        </div>
+        
+        <footer>
+            <p>IELTS Reading Practice Test &copy; 2023</p>
+        </footer>
+        
+        <div class="results-container" id="results-container">
+            <div class="results-content">
+                <h2 class="results-title">Test Results</h2>
+                <div class="score" id="score">Score: 0/13</div>
+                
+                <div id="results-details">
+                    <!-- Results will be inserted here -->
+                </div>
+                
+                <button class="close-btn" id="close-results">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme switching
+            const dayThemeBtn = document.getElementById('day-theme');
+            const nightThemeBtn = document.getElementById('night-theme');
+            const sepiaThemeBtn = document.getElementById('sepia-theme');
+            const body = document.body;
+            
+            dayThemeBtn.addEventListener('click', () => {
+                body.classList.remove('night-theme', 'sepia-theme');
+            });
+            
+            nightThemeBtn.addEventListener('click', () => {
+                body.classList.add('night-theme');
+                body.classList.remove('sepia-theme');
+            });
+            
+            sepiaThemeBtn.addEventListener('click', () => {
+                body.classList.add('sepia-theme');
+                body.classList.remove('night-theme');
+            });
+            
+            // Timer functionality
+            const timerElement = document.getElementById('timer');
+            let timeLeft = 20 * 60; // 20 minutes in seconds
+            let timerInterval;
+            
+            function startTimer() {
+                clearInterval(timerInterval);
+                timerInterval = setInterval(updateTimer, 1000);
+            }
+            
+            function updateTimer() {
+                const minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                seconds = seconds < 10 ? '0' + seconds : seconds;
+                
+                timerElement.textContent = `${minutes}:${seconds}`;
+                
+                if (timeLeft === 5 * 60) { // 5 minutes warning
+                    timerElement.classList.add('warning');
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitAnswers();
+                } else {
+                    timeLeft--;
+                }
+            }
+            
+            startTimer();
+            
+            // Text highlighting functionality
+            const passageContent = document.getElementById('passage-content');
+            let highlightMenu = null;
+            let currentSelection = null;
+            
+            passageContent.addEventListener('mouseup', function(e) {
+                const selection = window.getSelection();
+                if (selection.toString().length > 0) {
+                    showHighlightMenu(e, selection);
+                } else if (highlightMenu) {
+                    removeHighlightMenu();
+                }
+            });
+            
+            document.addEventListener('mousedown', function(e) {
+                if (highlightMenu && !highlightMenu.contains(e.target)) {
+                    removeHighlightMenu();
+                }
+            });
+            
+            function showHighlightMenu(e, selection) {
+                removeHighlightMenu();
+                currentSelection = selection;
+                
+                highlightMenu = document.createElement('div');
+                highlightMenu.className = 'highlight-menu';
+                
+                const yellowBtn = document.createElement('button');
+                yellowBtn.className = 'highlight-btn yellow';
+                yellowBtn.innerHTML = '<i class="fas fa-highlighter"></i>';
+                yellowBtn.title = 'Yellow Highlight';
+                yellowBtn.addEventListener('click', () => applyHighlight('yellow'));
+                
+                const blueBtn = document.createElement('button');
+                blueBtn.className = 'highlight-btn blue';
+                blueBtn.innerHTML = '<i class="fas fa-highlighter"></i>';
+                blueBtn.title = 'Blue Highlight';
+                blueBtn.addEventListener('click', () => applyHighlight('blue'));
+                
+                const clearBtn = document.createElement('button');
+                clearBtn.className = 'highlight-btn clear';
+                clearBtn.innerHTML = '<i class="fas fa-eraser"></i>';
+                clearBtn.title = 'Clear Highlight';
+                clearBtn.addEventListener('click', clearHighlight);
+                
+                highlightMenu.appendChild(yellowBtn);
+                highlightMenu.appendChild(blueBtn);
+                highlightMenu.appendChild(clearBtn);
+                
+                document.body.appendChild(highlightMenu);
+                
+                const rect = currentSelection.getRangeAt(0).getBoundingClientRect();
+                highlightMenu.style.top = (rect.bottom + window.scrollY + 5) + 'px';
+                highlightMenu.style.left = (rect.left + window.scrollX) + 'px';
+            }
+            
+            function removeHighlightMenu() {
+                if (highlightMenu) {
+                    highlightMenu.remove();
+                    highlightMenu = null;
+                    currentSelection = null;
+                }
+            }
+            
+            function applyHighlight(color) {
+                if (!currentSelection || currentSelection.toString().length === 0) {
+                    removeHighlightMenu();
+                    return;
+                }
+                
+                try {
+                    const range = currentSelection.getRangeAt(0);
+                    const selectedText = range.extractContents();
+                    
+                    const span = document.createElement('span');
+                    span.className = `highlight-${color}`;
+                    span.appendChild(selectedText);
+                    
+                    range.insertNode(span);
+                    
+                    // Clear selection
+                    currentSelection.removeAllRanges();
+                    removeHighlightMenu();
+                } catch (error) {
+                    console.error('Error applying highlight:', error);
+                    removeHighlightMenu();
+                }
+            }
+            
+            function clearHighlight() {
+                if (!currentSelection || currentSelection.toString().length === 0) {
+                    removeHighlightMenu();
+                    return;
+                }
+                
+                try {
+                    const range = currentSelection.getRangeAt(0);
+                    const parentElement = range.startContainer.parentElement;
+                    
+                    if (parentElement.classList.contains('highlight-yellow') || 
+                        parentElement.classList.contains('highlight-blue')) {
+                        
+                        const text = parentElement.textContent;
+                        parentElement.replaceWith(text);
+                    }
+                    
+                    // Clear selection
+                    currentSelection.removeAllRanges();
+                    removeHighlightMenu();
+                } catch (error) {
+                    console.error('Error clearing highlight:', error);
+                    removeHighlightMenu();
+                }
+            }
+            
+            // Answer submission and evaluation
+            const submitBtn = document.getElementById('submit-btn');
+            const resultsContainer = document.getElementById('results-container');
+            const scoreElement = document.getElementById('score');
+            const resultsDetails = document.getElementById('results-details');
+            const closeResultsBtn = document.getElementById('close-results');
+            
+            submitBtn.addEventListener('click', submitAnswers);
+            closeResultsBtn.addEventListener('click', () => {
+                resultsContainer.style.display = 'none';
+            });
+            
+            function submitAnswers() {
+                clearInterval(timerInterval);
+                
+                // Correct answers
+                const correctAnswers = {
+                    q14: 'iv',
+                    q15: 'iii',
+                    q16: 'vi',
+                    q17: 'ii',
+                    q18: 'v',
+                    q19: 'B',
+                    q20: 'D',
+                    q21: 'D',
+                    q22: 'species',
+                    q23: 'respect',
+                    q24: 'competition',
+                    q25: 'city',
+                    q26: 'ancestors'
+                };
+                
+                // Answer references
+                const answerReferences = {
+                    q14: "Section A: 'Humans are born to trade and we don't need shops or money to do it-the heart of commerce is an instinctive ability for what anthropologists call reciprocity.'",
+                    q15: "Section B: 'Modern consumerism sway beyond subsistence and utilitarianism to encompass everything from Gucci handbags and BMW convertibles to valuable paintings'",
+                    q16: "Section C: 'However, discoveries in Africa are pushing the origins of consumerism much further back into human prehistory.'",
+                    q17: "Section D: 'An even more intriguing discovery from Blombos was of 41 beads dating from 76,000 years ago'",
+                    q18: "Section E: 'But why did we come to value these objects in the first place?'",
+                    q19: "Section A: 'This is an ability to exchange goods of equal worth and it evolved as the brains of our ancient ancestors and societies became more complex, allowing individuals to keep a running tally their interactions with others.'",
+                    q20: "Section C: 'For a start, it is predominantly red-any of the other colours available would have done for curing'",
+                    q21: "Section D: 'each cluster contains shells of a similar size and colour with consistently placed holes. What's more, all the beads display a pattern of wear suggesting friction from rubbing against thread, clothes or other beads.'",
+                    q22: "Section E: 'In many animal species, individuals signal their genetic fitness by showing off with attention-grabbing adornment.'",
+                    q23: "Section E: 'Among our ancestors, superior skills in areas such as hunting, crafts, environmental knowledge and contact with neighbouring groups would have brought respect'",
+                    q24: "Section E: 'The benefits of prestige would also lead to competition to acquire it.'",
+                    q25: "Section E: 'paving the way for agriculture and urbanisation.'",
+                    q26: "Section E: 'Among our ancestors... We may not be impressed by beads any more, but their modern equivalents have the same fascination.'"
+                };
+                
+                let score = 0;
+                resultsDetails.innerHTML = '';
+                
+                // Check each answer
+                for (let i = 14; i <= 26; i++) {
+                    const qId = 'q' + i;
+                    let userAnswer;
+                    
+                    if (i >= 14 && i <= 21) {
+                        // For dropdown questions
+                        userAnswer = document.getElementById(qId).value;
+                    } else {
+                        // For text input questions
+                        userAnswer = document.getElementById(qId).value.trim().toLowerCase();
+                    }
+                    
+                    const correctAnswer = correctAnswers[qId].toLowerCase();
+                    
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'result-item';
+                    
+                    const questionText = document.createElement('div');
+                    questionText.className = 'result-question';
+                    
+                    if (i >= 14 && i <= 18) {
+                        questionText.textContent = `Question ${i}: ${document.querySelector(`label[for="${qId}"]`).textContent}`;
+                    } else {
+                        questionText.textContent = `Question ${i}: ${document.querySelector(`label[for="${qId}"]`).textContent}`;
+                    }
+                    
+                    const userAnswerText = document.createElement('div');
+                    userAnswerText.textContent = `Your answer: ${userAnswer || '(no answer)'}`;
+                    
+                    const correctAnswerText = document.createElement('div');
+                    correctAnswerText.textContent = `Correct answer: ${correctAnswer}`;
+                    
+                    const referenceText = document.createElement('div');
+                    referenceText.className = 'answer-reference';
+                    referenceText.innerHTML = answerReferences[qId];
+                    
+                    resultItem.appendChild(questionText);
+                    resultItem.appendChild(userAnswerText);
+                    resultItem.appendChild(correctAnswerText);
+                    resultItem.appendChild(referenceText);
+                    
+                    if (userAnswer.toLowerCase() === correctAnswer) {
+                        resultItem.classList.add('correct');
+                        score++;
+                    } else {
+                        resultItem.classList.add('incorrect');
+                    }
+                    
+                    resultsDetails.appendChild(resultItem);
+                }
+                
+                scoreElement.textContent = `Score: ${score}/13`;
+                resultsContainer.style.display = 'flex';
+            }
+        });
+    </script>
+</body>
+</html>

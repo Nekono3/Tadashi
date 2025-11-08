@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Test: The role of accidents in business</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --day-bg: #f8f9fa;
+            --day-text: #212529;
+            --day-primary: #6f42c1;
+            --day-secondary: #e9ecef;
+            --day-highlight-yellow: rgba(255, 255, 0, 0.3);
+            --day-highlight-blue: rgba(0, 191, 255, 0.3);
+            
+            --night-bg: #1a1a2e;
+            --night-text: #e6e6e6;
+            --night-primary: #8a2be2;
+            --night-secondary: #16213e;
+            --night-highlight-yellow: rgba(255, 215, 0, 0.4);
+            --night-highlight-blue: rgba(30, 144, 255, 0.4);
+            
+            --sepia-bg: #f4ecd8;
+            --sepia-text: #5c4b37;
+            --sepia-primary: #8b4513;
+            --sepia-secondary: #e3d5b8;
+            --sepia-highlight-yellow: rgba(210, 180, 140, 0.4);
+            --sepia-highlight-blue: rgba(101, 139, 165, 0.4);
+            
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            transition: var(--transition);
+            overflow: hidden;
+        }
+
+        body.day-mode {
+            --bg: var(--day-bg);
+            --text: var(--day-text);
+            --primary: var(--day-primary);
+            --secondary: var(--day-secondary);
+            --highlight-yellow: var(--day-highlight-yellow);
+            --highlight-blue: var(--day-highlight-blue);
+        }
+
+        body.night-mode {
+            --bg: var(--night-bg);
+            --text: var(--night-text);
+            --primary: var(--night-primary);
+            --secondary: var(--night-secondary);
+            --highlight-yellow: var(--night-highlight-yellow);
+            --highlight-blue: var(--night-highlight-blue);
+        }
+
+        body.sepia-mode {
+            --bg: var(--sepia-bg);
+            --text: var(--sepia-text);
+            --primary: var(--sepia-primary);
+            --secondary: var(--sepia-secondary);
+            --highlight-yellow: var(--sepia-highlight-yellow);
+            --highlight-blue: var(--sepia-highlight-blue);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .theme-selector {
+            display: flex;
+            gap: 10px;
+        }
+
+        .theme-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .telegram-btn {
+            background: #0088cc;
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .telegram-btn:hover {
+            background: #006da3;
+            transform: translateY(-2px);
+        }
+
+        .timer {
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        .timer.warning {
+            color: #ff6b6b;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        .content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+        }
+
+        .passage-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            border-right: 1px solid var(--secondary);
+        }
+
+        .questions-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: var(--secondary);
+        }
+
+        .passage {
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .passage h1 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+        }
+
+        .passage p {
+            margin-bottom: 16px;
+        }
+
+        .highlight-yellow {
+            background-color: var(--highlight-yellow);
+        }
+
+        .highlight-blue {
+            background-color: var(--highlight-blue);
+        }
+
+        .highlight-menu {
+            position: absolute;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: flex;
+            gap: 5px;
+        }
+
+        .highlight-menu button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 3px;
+            transition: var(--transition);
+        }
+
+        .highlight-menu button:hover {
+            background: #f0f0f0;
+        }
+
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: var(--bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .question h3 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+
+        .options {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            border: 1px solid var(--secondary);
+            border-radius: 4px;
+            background-color: var(--bg);
+            color: var(--text);
+            width: 200px;
+        }
+
+        .submit-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 30px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .results {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--bg);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 20px;
+            display: none;
+        }
+
+        .results.visible {
+            display: block;
+        }
+
+        .results-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .score {
+            text-align: center;
+            font-size: 2rem;
+            margin: 20px 0;
+            color: var(--primary);
+        }
+
+        .answer {
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: var(--secondary);
+        }
+
+        .correct {
+            border-left: 5px solid #4caf50;
+        }
+
+        .incorrect {
+            border-left: 5px solid #f44336;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .reference {
+            font-style: italic;
+            color: var(--primary);
+            margin-top: 5px;
+        }
+
+        select {
+            padding: 8px;
+            border: 1px solid var(--secondary);
+            border-radius: 4px;
+            background-color: var(--bg);
+            color: var(--text);
+            width: 100%;
+            max-width: 300px;
+        }
+    </style>
+</head>
+<body class="day-mode">
+    <div class="container">
+        <header>
+            <div class="theme-selector">
+                <button class="theme-btn" title="Day Mode" onclick="setTheme('day')"><i class="fas fa-sun"></i></button>
+                <button class="theme-btn" title="Night Mode" onclick="setTheme('night')"><i class="fas fa-moon"></i></button>
+                <button class="theme-btn" title="Sepia Mode" onclick="setTheme('sepia')"><i class="fas fa-seedling"></i></button>
+            </div>
+            <a href="tg://resolve?domain=aftum_8" class="telegram-btn">
+                <i class="fab fa-telegram"></i> Телеграмм канал
+            </a>
+            <div class="timer" id="timer">20:00</div>
+        </header>
+
+        <div class="content">
+            <div class="passage-container">
+                <div class="passage" id="reading-passage">
+                    <h1>The role of accidents in business</h1>
+
+                    <p>In 1894 Dr John Kellogg and his brother. Will, were supervising a hospital and health spa in Michigan. The patients were on a restricted diet. One day, the brothers left cooked wheat untended for more than 24 hours. When they returned, they saw what they had done. It was no good to eat, but they decided to run the stale wheat through rollers, just to see how it would turn out. Normally, the process produced long sheets, but they were surprised to discover that this time the rollers created flat flakes. They baked them, and then tried the same thing with corn. From this accidental discovery came the cornflakes that generations have now been eating for breakfast.</p>
+
+                    <p>Accidents happen; there is nothing predictable and orderly about innovation. Nobel laureate Sir Alan Hodgkin, who discovered how nerve cells transmit electrical impulses between the skin and the brain, commented: 'I believe that the record of my published papers conveys an impression of directedness and planning which does not at all coincide with the actual sequence of events.'</p>
+
+                    <p>The same rule applies in business. The mistake that gave US cornflakes keeps repeating itself in the history of disruptive innovation, the kind that transforms markets. Louis Daguerre, for, instance, discovered the technique that gave US photography in the 1830s, when drops of mercury from a shattered thermometer produced a photographic image. The microwave was discovered when Percy Spender, a scientist with Raytheon, was testing a new vacuum tube and discovered that the sweet in his pocket had melted. The artificial sweetener, saccharin, was the unintentional result of a medical scientist's work on a chemical treatment for gastric ulcers. While working for the firm 3M, researcher Art Fry had no idea he was taking the first steps towards Post- It Notes when he used bits of adhesive office paper that could be easily lifted off the page to replace the scrap paper bookmarks that kept falling out of his hymn book.</p>
+
+                    <p>Breakthrough and disruptive innovation are rarely driven by orderly process. Usually they come out of a chaotic, haphazard mess, which is why big companies, full of managers schooled in business programmes designed to eliminate random variation and mistakes, struggle with them. In these sorts of environments, accidents are called failures and are discouraged.</p>
+
+                    <p>It is no surprise then that research from the late British economist Paul Geroski and London Business School's Constantinos Markides found that companies that were skilled at innovation were usually not that skilled when it came to commercialisation, and vice versa. Their book, Fast Second, divides businesses into 'colonists' and 'consolidators'. Small and nimble, colonists are adept at creating market niches but are terrible institution builders. Consolidators, with their strong cultures of discipline and cost control, know how to take clever ideas from other firms and turn them into massmarket items. Microsoft is a prime instance of this.</p>
+
+                    <p>With companies spending hundreds of billions of dollars on research and development, US academics Robert Austin and Lee Devin examined how managers can encourage productive slip-ups. In their article Accident, Intention and Expectation in the Innovation Process, they argue that business processes actually prevent helpful mis-steps from occurring. According to their catalogue of accidents, not all false steps and mishaps are equal. Accidents, they say, come from unlikely mental associations such as memories and vague connections, looking for something and finding it in an unexpected way, looking for one thing and finding something else, and not looking for anything but finding something valuable.</p>
+
+                    <p>Accident-prone innovation, they say, requires companies to get outside the 'cone of expectation'. It means throwing together groups from diverse backgrounds, and combining ideas in unpredictable ways, other strategies also include having systems that watch out for accidents and examine them for value, generating them when they do not happen often enough, seizing oil the useful ones, capturing their valuable features, and building on them to add value and give potential for useful accidents.</p>
+
+                    <p>All this, however, requires thinking that is often counter-intuitive to the way businesses operate. In other words, it is the kind of thinking that goes against the beliefs of most business managers. It runs counter to the notion frequently pushes by consultants that you can 'harness' creativity and direct it to line up with intention. 'The cost of accidents business, people tend to call such efforts failure.'</p>
+
+                    <p>There are tentative signs that more companies are starting to realise that failure can lead to commercial gain, and that this is part of the risk-talking that underpins innovation. Australia's largest brewing company, for example, made a bad error when it launched a new beer called Empire Lager, pitched at younger consumers. Having spent a fortune creating a beer with a sweeter taste, designing a great-looking bottle and a television campaign, Foster's was left with a drink that no-one wanted to buy. The target market was more interested in brands built up by word of mouth.</p>
+
+                    <p>Instead of wiping the unsuccessful product launch, Fosters used this lesson learned to go on and develop other brands instead. One of them, Pure Blonde, is now ranked as Australia's fifth-largest beer brand. Unlike Empire Lager, there has been almost no promotion and its sales are generated more by word of mouth.</p>
+
+                    <p>Other companies are taking similar steps to study their own slip-ups. Intuit, the company behind financial tools such as Quicken, holds regular 'When Learning Hurts' sessions. But this sort of transformation is never easy. In a market that focuses on the short-term, convincing employees and shareholders to tolerate failure and not play it safe is a big thing to ask.</p>
+                </div>
+            </div>
+
+            <div class="questions-container">
+                <h2>Questions 1-5</h2>
+                <p>Do the following statements agree with the claims of the writer in Reading Passage?</p>
+                <p>In boxes <strong>1-5</strong> on your answer sheet, write</p>
+                <p><strong>YES</strong> if the statement agrees with the claims of the writer</p>
+                <p><strong>NO</strong> if the statement contradicts the claims of the writer</p>
+                <p><strong>NOT GIVEN</strong> if it is impossible to say what the writer thinks about this</p>
+
+                <div class="question">
+                    <h3>1. The delay in the process used by the Kellogg brothers affected the final product.</h3>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q1" value="yes"> YES</label>
+                        <label class="option"><input type="radio" name="q1" value="no"> NO</label>
+                        <label class="option"><input type="radio" name="q1" value="not-given"> NOT GIVEN</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>2. Sir Alan Hodgkin is an example of someone whose work proceeded in a logical and systematic way.</h3>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q2" value="yes"> YES</label>
+                        <label class="option"><input type="radio" name="q2" value="no"> NO</label>
+                        <label class="option"><input type="radio" name="q2" value="not-given"> NOT GIVEN</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>3. Daguerre is an exception to the general rule of innovation.</h3>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q3" value="yes"> YES</label>
+                        <label class="option"><input type="radio" name="q3" value="no"> NO</label>
+                        <label class="option"><input type="radio" name="q3" value="not-given"> NOT GIVEN</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>4. The discovery of saccharin occurred by accident during drug research.</h3>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q4" value="yes"> YES</label>
+                        <label class="option"><input type="radio" name="q4" value="no"> NO</label>
+                        <label class="option"><input type="radio" name="q4" value="not-given"> NOT GIVEN</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>5. The company 3M should have supported Art Fry by funding his idea of Post-It Notes.</h3>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q5" value="yes"> YES</label>
+                        <label class="option"><input type="radio" name="q5" value="no"> NO</label>
+                        <label class="option"><input type="radio" name="q5" value="not-given"> NOT GIVEN</label>
+                    </div>
+                </div>
+
+                <h2>Questions 6-9</h2>
+                <p>Complete each sentence with the correct ending, <strong>A-H</strong>, below.</p>
+                <p>Write the correct letter, <strong>A-H</strong>, in boxes <strong>6-9</strong> on your answer sheet.</p>
+
+                <div style="background: var(--bg); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <p><strong>A</strong> can be found in unusual thoughts and chance events.</p>
+                    <p><strong>B</strong> can be taught in business schools.</p>
+                    <p><strong>C</strong> has made a success from someone else's invention.</p>
+                    <p><strong>D</strong> is designed to nurture differences.</p>
+                    <p><strong>E</strong> is unlikely to lead to creative innovation</p>
+                    <p><strong>F</strong> says that all mistakes are the same.</p>
+                    <p><strong>G</strong> shows that businesses are good at either inventing of selling.</p>
+                    <p><strong>H</strong> suggests ways of increasing the number of mistakes</p>
+                </div>
+
+                <div class="question">
+                    <h3>6. The usual business environment</h3>
+                    <select id="q6">
+                        <option value="">Select ending</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                        <option value="G">G</option>
+                        <option value="H">H</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <h3>7. Geroki and Markides's book</h3>
+                    <select id="q7">
+                        <option value="">Select ending</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                        <option value="G">G</option>
+                        <option value="H">H</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <h3>8. Microsoft is an example of a company which</h3>
+                    <select id="q8">
+                        <option value="">Select ending</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                        <option value="G">G</option>
+                        <option value="H">H</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <h3>9. The origin of useful accidents</h3>
+                    <select id="q9">
+                        <option value="">Select ending</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                        <option value="G">G</option>
+                        <option value="H">H</option>
+                    </select>
+                </div>
+
+                <h2>Questions 10-14</h2>
+                <p>Choose the correct letter, <strong>A, B, C or D</strong></p>
+                <p>Write the correct letter in boxes <strong>10-14</strong> on your answer sheet.</p>
+
+                <div class="question">
+                    <h3>10. How do Austin and Devin advise companies to get out of the 'cone of expectation'?</h3>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q10" value="A"> A by decreasing the number of company systems</label>
+                        <label class="option"><input type="radio" name="q10" value="B"> B by forming teams of different types of people</label>
+                        <label class="option"><input type="radio" name="q10" value="C"> C by hiring new and creative people</label>
+                        <label class="option"><input type="radio" name="q10" value="D"> D by holding regular brainstorming meetings</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>11. In recommending 'counter-intuitive' thinking, what do Austin and Devin imply?</h3>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q11" value="A"> A that failing at business is bad for staff morale</label>
+                        <label class="option"><input type="radio" name="q11" value="B"> B that innovation cannot be planned for</label>
+                        <label class="option"><input type="radio" name="q11" value="C"> C that most businesses should be devoted to avoiding mistakes</label>
+                        <label class="option"><input type="radio" name="q11" value="D"> D that the cost of mistakes is an important consideration</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>12. The writer describes the Empire Lager disaster in order to show that</h3>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q12" value="A"> A success can come out of a business failure</label>
+                        <label class="option"><input type="radio" name="q12" value="B"> B the majority of companies now value risk-talking</label>
+                        <label class="option"><input type="radio" name="q12" value="C"> C TV advertising works better on older people</label>
+                        <label class="option"><input type="radio" name="q12" value="D"> D young beer drinkers do not like a sweet taste</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>13. Pure Blonde has been more successful than Empire Lager because</h3>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q13" value="A"> A digital media other than TV were used</label>
+                        <label class="option"><input type="radio" name="q13" value="B"> B it was advertised under a different brand name</label>
+                        <label class="option"><input type="radio" name="q13" value="C"> C it was launched with very little advertising</label>
+                        <label class="option"><input type="radio" name="q13" value="D"> D the advertising budget was larger</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>14. The writer concludes that creating a culture that learns from mistakes</h3>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q14" value="A"> A brings short-term financial gains</label>
+                        <label class="option"><input type="radio" name="q14" value="B"> B can be very difficult for some companies</label>
+                        <label class="option"><input type="radio" name="q14" value="C"> C holds no risk for workers</label>
+                        <label class="option"><input type="radio" name="q14" value="D"> D is a popular move with shareholders</label>
+                    </div>
+                </div>
+
+                <button class="submit-btn" onclick="submitAnswers()">Submit Answers</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="results" id="results">
+        <div class="results-content">
+            <h2>Your Results</h2>
+            <div class="score" id="score"></div>
+            
+            <div id="answers-review"></div>
+            
+            <button class="close-btn" onclick="closeResults()">&times;</button>
+        </div>
+    </div>
+
+    <script>
+        // Таймер
+        let timeLeft = 20 * 60; // 20 минут в секундах
+        const timerElement = document.getElementById('timer');
+        let timerInterval;
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            timerElement.textContent = `${minutes}:${seconds}`;
+            
+            if (timeLeft === 5 * 60) {
+                timerElement.classList.add('warning');
+            }
+            
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                submitAnswers();
+            } else {
+                timeLeft--;
+            }
+        }
+
+        // Система выделения текста
+        let highlightMenu = null;
+
+        document.getElementById('reading-passage').addEventListener('mouseup', function(e) {
+            const selection = window.getSelection();
+            if (selection.toString().length > 0) {
+                showHighlightMenu(e, selection);
+            }
+        });
+
+        document.addEventListener('mousedown', function(e) {
+            if (highlightMenu && !highlightMenu.contains(e.target)) {
+                document.body.removeChild(highlightMenu);
+                highlightMenu = null;
+            }
+        });
+
+        function showHighlightMenu(e, selection) {
+            if (highlightMenu) {
+                document.body.removeChild(highlightMenu);
+            }
+            
+            highlightMenu = document.createElement('div');
+            highlightMenu.className = 'highlight-menu';
+            
+            const yellowBtn = document.createElement('button');
+            yellowBtn.title = 'Yellow Highlight';
+            yellowBtn.innerHTML = '<i class="fas fa-highlighter" style="color: #ffeb3b;"></i>';
+            yellowBtn.onclick = function() {
+                highlightSelection(selection, 'yellow');
+                document.body.removeChild(highlightMenu);
+                highlightMenu = null;
+            };
+            
+            const blueBtn = document.createElement('button');
+            blueBtn.title = 'Blue Highlight';
+            blueBtn.innerHTML = '<i class="fas fa-highlighter" style="color: #00b0ff;"></i>';
+            blueBtn.onclick = function() {
+                highlightSelection(selection, 'blue');
+                document.body.removeChild(highlightMenu);
+                highlightMenu = null;
+            };
+            
+            const clearBtn = document.createElement('button');
+            clearBtn.title = 'Clear Highlight';
+            clearBtn.innerHTML = '<i class="fas fa-eraser"></i>';
+            clearBtn.onclick = function() {
+                removeHighlight(selection);
+                document.body.removeChild(highlightMenu);
+                highlightMenu = null;
+            };
+            
+            highlightMenu.appendChild(yellowBtn);
+            highlightMenu.appendChild(blueBtn);
+            highlightMenu.appendChild(clearBtn);
+            
+            document.body.appendChild(highlightMenu);
+            
+            const rect = selection.getRangeAt(0).getBoundingClientRect();
+            highlightMenu.style.top = (rect.bottom + window.scrollY - 40) + 'px';
+            highlightMenu.style.left = (rect.left + window.scrollX) + 'px';
+        }
+
+        function highlightSelection(selection, color) {
+            const range = selection.getRangeAt(0);
+            const selectedText = range.extractContents();
+            const span = document.createElement('span');
+            
+            span.appendChild(selectedText);
+            span.className = `highlight-${color}`;
+            
+            range.insertNode(span);
+            selection.removeAllRanges();
+        }
+
+        function removeHighlight(selection) {
+            const range = selection.getRangeAt(0);
+            const parentElement = range.startContainer.parentElement;
+            
+            if (parentElement.classList.contains('highlight-yellow') || 
+                parentElement.classList.contains('highlight-blue')) {
+                
+                const text = parentElement.textContent;
+                const textNode = document.createTextNode(text);
+                
+                parentElement.parentNode.replaceChild(textNode, parentElement);
+            }
+            
+            selection.removeAllRanges();
+        }
+
+        // Смена темы
+        function setTheme(theme) {
+            document.body.className = `${theme}-mode`;
+            localStorage.setItem('theme', theme);
+        }
+
+        // Проверка ответов
+        function submitAnswers() {
+            clearInterval(timerInterval);
+            
+            const answers = {
+                q1: getRadioValue('q1'),
+                q2: getRadioValue('q2'),
+                q3: getRadioValue('q3'),
+                q4: getRadioValue('q4'),
+                q5: getRadioValue('q5'),
+                q6: document.getElementById('q6').value,
+                q7: document.getElementById('q7').value,
+                q8: document.getElementById('q8').value,
+                q9: document.getElementById('q9').value,
+                q10: getRadioValue('q10'),
+                q11: getRadioValue('q11'),
+                q12: getRadioValue('q12'),
+                q13: getRadioValue('q13'),
+                q14: getRadioValue('q14')
+            };
+            
+            const correctAnswers = {
+                q1: 'yes',
+                q2: 'no',
+                q3: 'no',
+                q4: 'yes',
+                q5: 'not-given',
+                q6: 'E',
+                q7: 'G',
+                q8: 'C',
+                q9: 'A',
+                q10: 'B',
+                q11: 'B',
+                q12: 'A',
+                q13: 'C',
+                q14: 'B'
+            };
+            
+            const references = {
+                q1: 'Paragraph 1: "the brothers left cooked wheat untended for more than 24 hours... this time the rollers created flat flakes"',
+                q2: 'Paragraph 2: "the record of my published papers conveys an impression of directedness and planning which does not at all coincide with the actual sequence of events"',
+                q3: 'Paragraph 3: "The same rule applies in business. The mistake that gave US cornflakes keeps repeating itself"',
+                q4: 'Paragraph 3: "The artificial sweetener, saccharin, was the unintentional result of a medical scientist\'s work on a chemical treatment for gastric ulcers"',
+                q5: 'No information in the text about whether 3M should have supported Art Fry',
+                q6: 'Paragraph 4: "big companies, full of managers schooled in business programmes designed to eliminate random variation and mistakes, struggle with them"',
+                q7: 'Paragraph 5: "companies that were skilled at innovation were usually not that skilled when it came to commercialisation, and vice versa"',
+                q8: 'Paragraph 5: "Microsoft is a prime instance of this" (consolidators who take clever ideas from other firms)',
+                q9: 'Paragraph 6: "Accidents, they say, come from unlikely mental associations such as memories and vague connections"',
+                q10: 'Paragraph 7: "It means throwing together groups from diverse backgrounds, and combining ideas in unpredictable ways"',
+                q11: 'Paragraph 8: "All this, however, requires thinking that is often counter-intuitive to the way businesses operate"',
+                q12: 'Paragraph 9: "Instead of wiping the unsuccessful product launch, Fosters used this lesson learned to go on and develop other brands instead"',
+                q13: 'Paragraph 10: "Unlike Empire Lager, there has been almost no promotion and its sales are generated more by word of mouth"',
+                q14: 'Paragraph 11: "But this sort of transformation is never easy. In a market that focuses on the short-term, convincing employees and shareholders to tolerate failure and not play it safe is a big thing to ask"'
+            };
+            
+            let score = 0;
+            let resultsHTML = '';
+            
+            for (let i = 1; i <= 14; i++) {
+                const q = 'q' + i;
+                const userAnswer = answers[q];
+                const correctAnswer = correctAnswers[q];
+                const isCorrect = userAnswer === correctAnswer;
+                
+                if (isCorrect) score++;
+                
+                resultsHTML += `
+                    <div class="answer ${isCorrect ? 'correct' : 'incorrect'}">
+                        <p><strong>Question ${i}:</strong> ${isCorrect ? 'Correct' : 'Incorrect'}</p>
+                        <p>Your answer: ${userAnswer || 'No answer'}</p>
+                        <p>Correct answer: ${correctAnswer}</p>
+                        <p class="reference">${references[q]}</p>
+                    </div>
+                `;
+            }
+            
+            const percentage = Math.round((score / 14) * 100);
+            document.getElementById('score').textContent = `Score: ${score}/14 (${percentage}%)`;
+            document.getElementById('answers-review').innerHTML = resultsHTML;
+            document.getElementById('results').classList.add('visible');
+        }
+
+        function getRadioValue(name) {
+            const selected = document.querySelector(`input[name="${name}"]:checked`);
+            return selected ? selected.value : '';
+        }
+
+        function closeResults() {
+            document.getElementById('results').classList.remove('visible');
+        }
+
+        // Инициализация
+        window.onload = function() {
+            const savedTheme = localStorage.getItem('theme') || 'day';
+            setTheme(savedTheme);
+            startTimer();
+        };
+    </script>
+</body>
+</html>

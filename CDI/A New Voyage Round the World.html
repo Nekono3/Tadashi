@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Test</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --day-bg: #f8f9fa;
+            --day-text: #212529;
+            --day-primary: #4e7ae6;
+            --day-secondary: #e9ecef;
+            --day-accent: #ff6b6b;
+            --day-card: #ffffff;
+            
+            --night-bg: #1a1a2e;
+            --night-text: #e6e6e6;
+            --night-primary: #7b9acc;
+            --night-secondary: #2d3748;
+            --night-accent: #ff7f50;
+            --night-card: #242439;
+            
+            --sepia-bg: #f5efe0;
+            --sepia-text: #5c4b37;
+            --sepia-primary: #8b5a2b;
+            --sepia-secondary: #e3d5c8;
+            --sepia-accent: #c76c4a;
+            --sepia-card: #f8f2e4;
+            
+            --current-bg: var(--day-bg);
+            --current-text: var(--day-text);
+            --current-primary: var(--day-primary);
+            --current-secondary: var(--day-secondary);
+            --current-accent: var(--day-accent);
+            --current-card: var(--day-card);
+            
+            --transition: all 0.3s ease;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+        }
+
+        .theme-day {
+            --current-bg: var(--day-bg);
+            --current-text: var(--day-text);
+            --current-primary: var(--day-primary);
+            --current-secondary: var(--day-secondary);
+            --current-accent: var(--day-accent);
+            --current-card: var(--day-card);
+        }
+
+        .theme-night {
+            --current-bg: var(--night-bg);
+            --current-text: var(--night-text);
+            --current-primary: var(--night-primary);
+            --current-secondary: var(--night-secondary);
+            --current-accent: var(--night-accent);
+            --current-card: var(--night-card);
+        }
+
+        .theme-sepia {
+            --current-bg: var(--sepia-bg);
+            --current-text: var(--sepia-text);
+            --current-primary: var(--sepia-primary);
+            --current-secondary: var(--sepia-secondary);
+            --current-accent: var(--sepia-accent);
+            --current-card: var(--sepia-card);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: var(--transition);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--current-bg);
+            color: var(--current-text);
+            line-height: 1.6;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header {
+            background-color: var(--current-primary);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 0.5rem;
+        }
+
+        .theme-selector {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .theme-btn {
+            background: none;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .theme-btn.day { background-color: #4e7ae6; }
+        .theme-btn.night { background-color: #1a1a2e; }
+        .theme-btn.sepia { background-color: #8b5a2b; }
+
+        .telegram-btn {
+            background-color: #0088cc;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .telegram-btn:hover {
+            background-color: #006da3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .timer {
+            font-size: 1.2rem;
+            font-weight: bold;
+            background-color: var(--current-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .timer.warning {
+            color: var(--current-accent);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .passage-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--current-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .passage-header {
+            padding: 1rem;
+            background-color: var(--current-primary);
+            color: white;
+            border-top-left-radius: var(--radius);
+            border-top-right-radius: var(--radius);
+        }
+
+        .passage-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+
+        .questions-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--current-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .questions-header {
+            padding: 1rem;
+            background-color: var(--current-primary);
+            color: white;
+            border-top-left-radius: var(--radius);
+            border-top-right-radius: var(--radius);
+        }
+
+        .questions-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            margin: 1.5rem 0 1rem;
+            color: var(--current-primary);
+        }
+
+        .passage-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .passage-text p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        .highlight-menu {
+            position: absolute;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            padding: 0.5rem;
+            display: flex;
+            gap: 0.5rem;
+            z-index: 1000;
+            transform: translateY(-100%);
+        }
+
+        .highlight-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .yellow { background-color: #ffd43b; }
+        .blue { background-color: #4dabf7; }
+        .clear { background-color: #fa5252; }
+
+        .question {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: var(--current-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .question-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--current-primary);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .option:hover {
+            background-color: rgba(78, 122, 230, 0.1);
+        }
+
+        .option input {
+            cursor: pointer;
+        }
+
+        .summary-blanks {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .blank {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .blank-number {
+            font-weight: bold;
+        }
+
+        select {
+            padding: 0.5rem;
+            border-radius: 6px;
+            border: 1px solid var(--current-primary);
+            background-color: var(--current-bg);
+            color: var(--current-text);
+        }
+
+        .yes-no-options {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .submit-container {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .submit-btn {
+            background-color: var(--current-primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .result-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .result-content {
+            background-color: var(--current-card);
+            color: var(--current-text);
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .score {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--current-primary);
+            margin: 1rem 0;
+        }
+
+        .result-details {
+            margin: 1.5rem 0;
+        }
+
+        .result-item {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            background-color: var(--current-secondary);
+        }
+
+        .correct {
+            border-left: 4px solid #40c057;
+        }
+
+        .incorrect {
+            border-left: 4px solid #fa5252;
+        }
+
+        .result-question {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-answer {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-location {
+            font-style: italic;
+            color: var(--current-primary);
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .result-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .action-btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .restart-btn {
+            background-color: var(--current-primary);
+            color: white;
+        }
+
+        .close-btn {
+            background-color: var(--current-secondary);
+            color: var(--current-text);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 992px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .passage-container, .questions-container {
+                min-height: 400px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+            
+            .theme-selector {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .telegram-btn {
+                order: 2;
+            }
+            
+            .timer {
+                order: 1;
+            }
+            
+            .main-content {
+                padding: 0.5rem;
+            }
+            
+            .passage-content, .questions-content {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .passage-text {
+                font-size: 1rem;
+            }
+        }
+
+        .highlight-yellow {
+            background-color: rgba(255, 212, 59, 0.3);
+        }
+
+        .highlight-blue {
+            background-color: rgba(77, 171, 247, 0.3);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--current-primary);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            opacity: 0.8;
+            display: none;
+        }
+
+        .passage-container:hover .scroll-indicator,
+        .questions-container:hover .scroll-indicator {
+            display: block;
+        }
+    </style>
+</head>
+<body class="theme-day">
+    <header>
+        <div class="logo">
+            <i class="fas fa-book-reader"></i>
+            <span>IELTS Reading Test</span>
+        </div>
+        <div class="theme-selector">
+            <button class="theme-btn day" title="Day Mode" onclick="changeTheme('day')"><i class="fas fa-sun"></i></button>
+            <button class="theme-btn night" title="Night Mode" onclick="changeTheme('night')"><i class="fas fa-moon"></i></button>
+            <button class="theme-btn sepia" title="Sepia Mode" onclick="changeTheme('sepia')"><i class="fas fa-book"></i></button>
+        </div>
+        <a href="tg://resolve?domain=aftum_8" class="telegram-btn">
+            <i class="fab fa-telegram"></i>
+            Телеграмм канал
+        </a>
+        <div class="timer" id="timer">
+            <i class="fas fa-clock"></i>
+            <span id="time">20:00</span>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="passage-container">
+            <div class="passage-header">
+                <h1>A New Voyage Round the World</h1>
+            </div>
+            <div class="passage-content" id="passage-content">
+                <div class="passage-text" id="passage-text">
+                    <p><i>A very old travel hook that holds an unusual place in English literature</i></p>
+                    <p>Part travelogue, part historical record of the Caribbean pirates, part scientific treatise, <i>A New Voyage Round the World</i> was William Dampier's account of his twelve-year series of journeys around the globe from 1679 to 1691.</p>
+                    <p>The wealth and novelty of Dampier's descriptions, combined with the highly counts of his comrades', escapades, proved so popular with a public hungry for tales of discovery and adventure that A New Voyage went into its third reprint within a year of publication. So groundbreaking was Dampier's account that the writers Swift and Defoe were inspired to create two of the most famous books in the English language, Gulliver's Travels and Robinson Crusoe.</p>
+                    <p>Dampier's commentators have portrayed him as an unusual, not to say peculiar, man. Notwithstanding his undoubted qualities as an observer, he has been variously characterised as aloof, arrogant, hot-tempered and a weak leader of men. When he arrived on the western coast of Australia, he promptly elected to leave and head north out of dislike for the cold of more southerly latitudes. This physical sensitivity has often been seized on by his detractors, who point out that, as a result, Dampier missed out on becoming the name forever associated with the European discovery of Australia, that honour instead going to Captain James Cook some 80 years later. Yet it should be remembered that he was able to endure a never-ending plague of discomforts and ailments in the tropics. And once, wrecked off Ascension Island in the South Atlantic Ocean, he managed with his crew to survive for five weeks without help, living entirely on turtles and goats.</p>
+                    <p>What of his early life, then? Dampier was born in 1651 in Somerset, England, the son of a tenant farmer, George, and his wife Ann. His birthplace, Hyperford House, stands to this day. His parents died before he reached seniority and his guardians apprenticed the young William to a ship's captain, the boy having shown very early inclinations to see the world'. There was nothing in his childhood to set Dampier apart from the numerous other young boys who were sent to sea at this time.</p>
+                    <p>Having made brief passages to France and Newfoundland, he completed a more extended voyage to Java, where he began to learn the art of navigation. Returning briefly to Somerset, a neighbour offered Dampier a position overseeing his plantation in Jamaica, which he took up for a time, but he soon returned to sea on a trading voyage among the Caribbean islands. From the viewpoint of posterity, the most significant aspect of this time was that, as plantation manager, Dampier first started to keep a journal.</p>
+                    <p>Although Dampier wrote several books, A New Voyage Round the World is the most important and it is worth considering just why this text met with such success. Certainly, the book would not have done so well purely on the merits of Dampier's findings regarding meteorology and natural history, even though they broke new ground at the time. What appealed more to book buyers of this era was his narrative of life among the pirates of the Caribbean islands, whom he joined for several years after leaving Jamaica. These tales of adventure among rogues and villains who had no regard for the law sparked widespread interest among his countrymen back home. More important even than this, however, it is the superb nature of Dampier's prose, and his ability to communicate so vividly that raised the book above the common lot.</p>
+                    <p>Dampier himself admits in the book's preface that he received help with the writing of the book, and other evidence exists to suggest that he was assisted by an unknown source. But whatever outside assistance he may have had, the book still has certain problems. In particular, his observations about nature are sometimes roughly dropped into the narrative at very odd junctures and these asides can sometimes interrupt the flow of the story Dampier himself kept his observations about nature entirely separate from the main body of his travels, and we should therefore hold James Knapton responsible, as he was in charge of checking and revising Dampier's text, and his publishing company brought the finished book to a wider audience.</p>
+                    <p>Dampier's life has been chronicled in full by numerous biographers, and I refer the reader in particular to Clemell Wilkinson's excellent (and sadly out-of- print) 1929 biography, as well as the recent portrait by Anton Gill. In short, despite wide acclaim for his writing, Dampier was not blessed in the art of wealth accumulation Travelling with the pirates, while providing subsistence and adventure, never netted him the treasure chest that a more astute financial operative might have acquired. He died in 1715, aged sixty-three, in Colerman Street, London.</p>
+                    <p>We have then a man of myriad and colourful parts, and perhaps not always the easiest of sailors to get along with because of his arrogance and hot temper. But to dwell on these aspects today is to miss the point: it is A New Voyage Round the World that should provide the most illuminating and entertaining of Dampier's legacies. Above all, the text is studded with some wonderfully colourful expressions, and readers will enjoy some of the finest descriptions of storms in the English language, and the liberal wit throughout.</p>
+                </div>
+            </div>
+            <div class="scroll-indicator">Scroll independently</div>
+        </div>
+
+        <div class="questions-container">
+            <div class="questions-header">
+                <h1>Questions</h1>
+            </div>
+            <div class="questions-content">
+                <h2>Questions 1-5</h2>
+                <p>Choose the correct letter, A, B, C or D.</p>
+                <p>Write the correct letter in boxes 1-5 on your answer sheet.</p>
+
+                <div class="question">
+                    <div class="question-title">1. Which of the following best summarises the writer's point in the first paragraph?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q1" value="A">
+                            A Dampier's book does not fall into a single category.
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q1" value="B">
+                            B Readers were not interested in books on the subject of travel.
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q1" value="C">
+                            C Today's readers do not appreciate the style of Dampier's writing
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q1" value="D">
+                            D Dampier sailed round the world more quickly than anyone before.
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">2. The writer refers to Swift and Defoe in order to</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q2" value="A">
+                            A provide information regarding Dampier's sources.
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q2" value="B">
+                            B compare Dampier to two earlier writers.
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q2" value="C">
+                            C give an example of Dampier's influence
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q2" value="D">
+                            D highlight two of Dampier's critics
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">3. Dampier left the western coast of Australia because</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q3" value="A">
+                            A He wanted to get to the north before Cook arrived
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q3" value="B">
+                            B He found the temperature there unpleasant
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q3" value="C">
+                            C He had problems with his crews
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q3" value="D">
+                            D He requested medical attention
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">4. What does the writer say about Dampier in the second paragraph?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q4" value="A">
+                            A He could cope with physical hardship
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q4" value="B">
+                            B He was a more adventurous explorer than Cook was
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q4" value="C">
+                            C He had a kinder personality than he is given credit for
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q4" value="D">
+                            D He was calm in a crisis
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">5. What information is given about Dampier's early life?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q5" value="A">
+                            A He had a difficult relationship with the people looking after him
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q5" value="B">
+                            B He was different from other youths who went to sea
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q5" value="C">
+                            C He wanted to travel from a young age
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q5" value="D">
+                            D He came from a family of sailors
+                        </label>
+                    </div>
+                </div>
+
+                <h2>Questions 6-9</h2>
+                <p>Complete the summary using the list of words, A-I below.</p>
+                <p>Write the correct letter, A-I, in boxes 6-9 on your answer sheet.</p>
+
+                <div class="question">
+                    <div class="question-title">The Text of A New Voyage Round the World</div>
+                    <p>The success of the book cannot solely be attributed to the originality of Dampier's 
+                    <select name="q6" id="q6">
+                        <option value="">Select</option>
+                        <option value="A">A. Detailed illustrations</option>
+                        <option value="B">B. Traveller</option>
+                        <option value="C">C. Nature</option>
+                        <option value="D">D. Editor</option>
+                        <option value="E">E. Writer</option>
+                        <option value="F">F. Scientific observations</option>
+                        <option value="G">G. The crew</option>
+                        <option value="H">H. Artist</option>
+                        <option value="I">I. Plain language</option>
+                    </select>. Readers of the time were fascinated with his stories of the time he spent with outlaws and his colorful way of writing. It seems certain that Dampier worked on the book with a mystery 
+                    <select name="q7" id="q7">
+                        <option value="">Select</option>
+                        <option value="A">A. Detailed illustrations</option>
+                        <option value="B">B. Traveller</option>
+                        <option value="C">C. Nature</option>
+                        <option value="D">D. Editor</option>
+                        <option value="E">E. Writer</option>
+                        <option value="F">F. Scientific observations</option>
+                        <option value="G">G. The crew</option>
+                        <option value="H">H. Artist</option>
+                        <option value="I">I. Plain language</option>
+                    </select>. Some aspects of A New Voyage Round the World are problematic, descriptions of 
+                    <select name="q8" id="q8">
+                        <option value="">Select</option>
+                        <option value="A">A. Detailed illustrations</option>
+                        <option value="B">B. Traveller</option>
+                        <option value="C">C. Nature</option>
+                        <option value="D">D. Editor</option>
+                        <option value="E">E. Writer</option>
+                        <option value="F">F. Scientific observations</option>
+                        <option value="G">G. The crew</option>
+                        <option value="H">H. Artist</option>
+                        <option value="I">I. Plain language</option>
+                    </select> were inserted into the account of Dampier's adventures in a way that distracted the reader. It seems that the responsibility for the final version of the book lies with the 
+                    <select name="q9" id="q9">
+                        <option value="">Select</option>
+                        <option value="A">A. Detailed illustrations</option>
+                        <option value="B">B. Traveller</option>
+                        <option value="C">C. Nature</option>
+                        <option value="D">D. Editor</option>
+                        <option value="E">E. Writer</option>
+                        <option value="F">F. Scientific observations</option>
+                        <option value="G">G. The crew</option>
+                        <option value="H">H. Artist</option>
+                        <option value="I">I. Plain language</option>
+                    </select>.</p>
+                </div>
+
+                <h2>Questions 10-14</h2>
+                <p>Do the following statements agree with the claims of the writer in Reading Passage?</p>
+                <p>In the boxes 10-14 on your answer sheet, write</p>
+                <p><strong>YES</strong> if the statement agrees with the information</p>
+                <p><strong>NO</strong> if the statement contradicts the information</p>
+                <p><strong>NOT GIVEN</strong> if there is no information on this</p>
+
+                <div class="question">
+                    <div class="question-title">10. Many people wrote biographies of Dampier as a result of personal contact with him</div>
+                    <div class="yes-no-options">
+                        <label class="option">
+                            <input type="radio" name="q10" value="YES">
+                            YES
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q10" value="NO">
+                            NO
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q10" value="NOT GIVEN">
+                            NOT GIVEN
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">11. Dampier was skilled at making money</div>
+                    <div class="yes-no-options">
+                        <label class="option">
+                            <input type="radio" name="q11" value="YES">
+                            YES
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q11" value="NO">
+                            NO
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q11" value="NOT GIVEN">
+                            NOT GIVEN
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">12. Dampier's patience was represented by the writer</div>
+                    <div class="yes-no-options">
+                        <label class="option">
+                            <input type="radio" name="q12" value="YES">
+                            YES
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q12" value="NO">
+                            NO
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q12" value="NOT GIVEN">
+                            NOT GIVEN
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">13. A New Voyage Round the World is considered as one of the most modern books</div>
+                    <div class="yes-no-options">
+                        <label class="option">
+                            <input type="radio" name="q13" value="YES">
+                            YES
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q13" value="NO">
+                            NO
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q13" value="NOT GIVEN">
+                            NOT GIVEN
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">14. Dampier supervised his neighbour's plantation in Jamaica</div>
+                    <div class="yes-no-options">
+                        <label class="option">
+                            <input type="radio" name="q14" value="YES">
+                            YES
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q14" value="NO">
+                            NO
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q14" value="NOT GIVEN">
+                            NOT GIVEN
+                        </label>
+                    </div>
+                </div>
+
+                <div class="submit-container">
+                    <button class="submit-btn" id="submit-btn">
+                        <i class="fas fa-paper-plane"></i>
+                        Submit Answers
+                    </button>
+                </div>
+            </div>
+            <div class="scroll-indicator">Scroll independently</div>
+        </div>
+    </div>
+
+    <div class="result-overlay" id="result-overlay">
+        <div class="result-content">
+            <div class="result-header">
+                <h2>Test Results</h2>
+                <div class="score" id="score">0/14</div>
+                <p id="result-message">Check your answers below</p>
+            </div>
+
+            <div class="result-details" id="result-details">
+                <!-- Results will be inserted here -->
+            </div>
+
+            <div class="result-actions">
+                <button class="action-btn restart-btn" onclick="restartTest()">
+                    <i class="fas fa-redo"></i>
+                    Restart Test
+                </button>
+                <button class="action-btn close-btn" onclick="closeResults()">
+                    <i class="fas fa-times"></i>
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme switching
+        function changeTheme(theme) {
+            document.body.className = `theme-${theme}`;
+        }
+
+        // Timer functionality
+        let timeLeft = 20 * 60; // 20 minutes in seconds
+        const timerElement = document.getElementById('time');
+        const timerContainer = document.getElementById('timer');
+        let timerInterval;
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                submitAnswers();
+                return;
+            }
+
+            timeLeft--;
+
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            // Add warning class when 5 minutes left
+            if (timeLeft === 5 * 60) {
+                timerContainer.classList.add('warning');
+            }
+        }
+
+        // Text highlighting functionality
+        let highlightMenu = null;
+        let currentSelection = null;
+
+        function createHighlightMenu(x, y) {
+            // Remove existing menu if any
+            if (highlightMenu) {
+                highlightMenu.remove();
+            }
+
+            highlightMenu = document.createElement('div');
+            highlightMenu.className = 'highlight-menu';
+            highlightMenu.style.left = `${x}px`;
+            highlightMenu.style.top = `${y}px`;
+
+            const yellowBtn = document.createElement('button');
+            yellowBtn.className = 'highlight-btn yellow';
+            yellowBtn.innerHTML = '<i class="fas fa-highlighter"></i>';
+            yellowBtn.onclick = () => applyHighlight('yellow');
+            highlightMenu.appendChild(yellowBtn);
+
+            const blueBtn = document.createElement('button');
+            blueBtn.className = 'highlight-btn blue';
+            blueBtn.innerHTML = '<i class="fas fa-highlighter"></i>';
+            blueBtn.onclick = () => applyHighlight('blue');
+            highlightMenu.appendChild(blueBtn);
+
+            const clearBtn = document.createElement('button');
+            clearBtn.className = 'highlight-btn clear';
+            clearBtn.innerHTML = '<i class="fas fa-eraser"></i>';
+            clearBtn.onclick = () => applyHighlight('clear');
+            highlightMenu.appendChild(clearBtn);
+
+            document.body.appendChild(highlightMenu);
+        }
+
+        function applyHighlight(color) {
+            if (!currentSelection || currentSelection.rangeCount === 0) return;
+
+            const range = currentSelection.getRangeAt(0);
+            const selectedText = range.toString();
+            
+            if (!selectedText) return;
+
+            if (color === 'clear') {
+                // Remove any highlighting
+                const parent = range.commonAncestorContainer;
+                if (parent.nodeType !== 1) {
+                    parent.parentNode.replaceChild(
+                        document.createTextNode(parent.textContent),
+                        parent
+                    );
+                } else {
+                    const textContent = parent.textContent;
+                    parent.outerHTML = textContent;
+                }
+            } else {
+                // Apply highlighting
+                const span = document.createElement('span');
+                span.className = `highlight-${color}`;
+                span.textContent = selectedText;
+                
+                try {
+                    range.deleteContents();
+                    range.insertNode(span);
+                } catch (e) {
+                    console.error('Error applying highlight:', e);
+                }
+            }
+
+            // Clear selection and remove menu
+            window.getSelection().removeAllRanges();
+            if (highlightMenu) {
+                highlightMenu.remove();
+                highlightMenu = null;
+            }
+        }
+
+        // Event listeners for text selection
+        document.addEventListener('selectionchange', () => {
+            const selection = window.getSelection();
+            if (!selection.toString().trim()) return;
+
+            currentSelection = selection;
+            
+            const range = selection.getRangeAt(0);
+            const rect = range.getBoundingClientRect();
+            
+            createHighlightMenu(rect.left + window.scrollX, rect.top + window.scrollY - 40);
+        });
+
+        document.addEventListener('mousedown', (e) => {
+            if (highlightMenu && !highlightMenu.contains(e.target)) {
+                highlightMenu.remove();
+                highlightMenu = null;
+            }
+        });
+
+        // Answer checking
+        const correctAnswers = {
+            q1: 'A',
+            q2: 'C',
+            q3: 'B',
+            q4: 'A',
+            q5: 'C',
+            q6: 'F',
+            q7: 'E',
+            q8: 'C',
+            q9: 'D',
+            q10: 'NOT GIVEN',
+            q11: 'NO',
+            q12: 'NO',
+            q13: 'NOT GIVEN',
+            q14: 'YES'
+        };
+
+        const answerLocations = {
+            q1: "Part travelogue, part historical record of the Caribbean pirates, part scientific treatise",
+            q2: "So groundbreaking was Dampier's account that the writers Swift and Defoe were inspired to create two of the most famous books in the English language",
+            q3: "he promptly elected to leave and head north out of dislike for the cold of more southerly latitudes",
+            q4: "he was able to endure a never-ending plague of discomforts and ailments in the tropics",
+            q5: "the boy having shown very early inclinations to see the world",
+            q6: "the book would not have done so well purely on the merits of Dampier's findings regarding meteorology and natural history",
+            q7: "Dampier himself admits in the book's preface that he received help with the writing of the book, and other evidence exists to suggest that he was assisted by an unknown source",
+            q8: "his observations about nature are sometimes roughly dropped into the narrative at very odd junctures",
+            q9: "we should therefore hold James Knapton responsible, as he was in charge of checking and revising Dampier's text",
+            q10: "No specific information about personal contact with biographers",
+            q11: "Dampier was not blessed in the art of wealth accumulation",
+            q12: "No information about patience in the text",
+            q13: "No information about it being a modern book",
+            q14: "a neighbour offered Dampier a position overseeing his plantation in Jamaica, which he took up for a time"
+        };
+
+        function submitAnswers() {
+            clearInterval(timerInterval);
+            
+            let score = 0;
+            const results = [];
+            
+            for (let i = 1; i <= 14; i++) {
+                const questionName = `q${i}`;
+                let userAnswer = '';
+                
+                if (i <= 5) {
+                    // Multiple choice questions
+                    const selected = document.querySelector(`input[name="${questionName}"]:checked`);
+                    userAnswer = selected ? selected.value : '';
+                } else if (i <= 9) {
+                    // Dropdown questions
+                    const selected = document.getElementById(questionName);
+                    userAnswer = selected ? selected.value : '';
+                } else {
+                    // Yes/No/Not Given questions
+                    const selected = document.querySelector(`input[name="${questionName}"]:checked`);
+                    userAnswer = selected ? selected.value : '';
+                }
+                
+                const isCorrect = userAnswer === correctAnswers[questionName];
+                if (isCorrect) score++;
+                
+                results.push({
+                    question: i,
+                    userAnswer: userAnswer || 'Not answered',
+                    correctAnswer: correctAnswers[questionName],
+                    isCorrect: isCorrect,
+                    location: answerLocations[questionName]
+                });
+            }
+            
+            showResults(score, results);
+        }
+
+        function showResults(score, results) {
+            const scoreElement = document.getElementById('score');
+            const resultMessage = document.getElementById('result-message');
+            const resultDetails = document.getElementById('result-details');
+            
+            scoreElement.textContent = `${score}/14`;
+            
+            // Set message based on score
+            if (score >= 12) {
+                resultMessage.textContent = 'Excellent! You have a great understanding of the text.';
+            } else if (score >= 8) {
+                resultMessage.textContent = 'Good job! You understood most of the text.';
+            } else {
+                resultMessage.textContent = 'Keep practicing! Review the text and try again.';
+            }
+            
+            // Clear previous results
+            resultDetails.innerHTML = '';
+            
+            // Add result details
+            results.forEach(result => {
+                const resultItem = document.createElement('div');
+                resultItem.className = `result-item ${result.isCorrect ? 'correct' : 'incorrect'}`;
+                
+                resultItem.innerHTML = `
+                    <div class="result-question">Question ${result.question}: ${result.isCorrect ? '✓ Correct' : '✗ Incorrect'}</div>
+                    <div class="result-answer">
+                        <span>Your answer: ${result.userAnswer}</span>
+                        ${!result.isCorrect ? `<span>Correct answer: ${result.correctAnswer}</span>` : ''}
+                    </div>
+                    <div class="result-location">Location in text: ${result.location}</div>
+                `;
+                
+                resultDetails.appendChild(resultItem);
+            });
+            
+            // Show results overlay
+            document.getElementById('result-overlay').style.display = 'flex';
+        }
+
+        function restartTest() {
+            // Reset timer
+            timeLeft = 20 * 60;
+            timerContainer.classList.remove('warning');
+            updateTimer();
+            startTimer();
+            
+            // Clear all selections
+            const allInputs = document.querySelectorAll('input[type="radio"]');
+            allInputs.forEach(input => {
+                input.checked = false;
+            });
+            
+            const allSelects = document.querySelectorAll('select');
+            allSelects.forEach(select => {
+                select.selectedIndex = 0;
+            });
+            
+            // Remove highlights
+            const highlights = document.querySelectorAll('[class^="highlight-"]');
+            highlights.forEach(highlight => {
+                highlight.outerHTML = highlight.textContent;
+            });
+            
+            // Hide results
+            document.getElementById('result-overlay').style.display = 'none';
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        function closeResults() {
+            document.getElementById('result-overlay').style.display = 'none';
+        }
+
+        // Initialize the test
+        document.getElementById('submit-btn').addEventListener('click', submitAnswers);
+        window.addEventListener('load', () => {
+            startTimer();
+            updateTimer();
+        });
+    </script>
+</body>
+</html>

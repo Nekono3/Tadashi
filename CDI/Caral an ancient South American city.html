@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Practice - Caral: an ancient South American city</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --day-bg: #f8f9fa;
+            --day-text: #212529;
+            --day-primary: #4a6fa5;
+            --day-secondary: #e9ecef;
+            --day-highlight-yellow: rgba(255, 240, 140, 0.5);
+            --day-highlight-blue: rgba(173, 216, 230, 0.5);
+            
+            --night-bg: #1a1a2e;
+            --night-text: #e6e6e6;
+            --night-primary: #6f42c1;
+            --night-secondary: #2d3748;
+            --night-highlight-yellow: rgba(102, 77, 0, 0.7);
+            --night-highlight-blue: rgba(0, 68, 102, 0.7);
+            
+            --sepia-bg: #f5ecd7;
+            --sepia-text: #3b2c1a;
+            --sepia-primary: #8b5a2b;
+            --sepia-secondary: #e3d9c6;
+            --sepia-highlight-yellow: rgba(204, 173, 108, 0.5);
+            --sepia-highlight-blue: rgba(159, 191, 204, 0.5);
+            
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: var(--transition);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--day-bg);
+            color: var(--day-text);
+            overflow-x: hidden;
+        }
+
+        body.night-mode {
+            background-color: var(--night-bg);
+            color: var(--night-text);
+        }
+
+        body.sepia-mode {
+            background-color: var(--sepia-bg);
+            color: var(--sepia-text);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 1rem;
+            background-color: var(--day-primary);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            position: relative;
+        }
+
+        body.night-mode header {
+            background-color: var(--night-primary);
+        }
+
+        body.sepia-mode header {
+            background-color: var(--sepia-primary);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .theme-switcher {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .theme-btn {
+            background: none;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .telegram-btn {
+            background-color: #0088cc;
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .telegram-btn:hover {
+            background-color: #006da3;
+            transform: translateY(-2px);
+        }
+
+        .timer-container {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background-color: var(--day-secondary);
+            padding: 0.5rem;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        body.night-mode .timer-container {
+            background-color: var(--night-secondary);
+        }
+
+        body.sepia-mode .timer-container {
+            background-color: var(--sepia-secondary);
+        }
+
+        .timer {
+            font-size: 1.2rem;
+        }
+
+        .timer.warning {
+            color: #ff6b6b;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        @media (max-width: 992px) {
+            .content {
+                flex-direction: column;
+            }
+        }
+
+        .passage-container {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            border-right: 1px solid #ddd;
+            height: calc(100vh - 150px);
+        }
+
+        body.night-mode .passage-container {
+            border-right-color: #444;
+        }
+
+        body.sepia-mode .passage-container {
+            border-right-color: #c4b59a;
+        }
+
+        .questions-container {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            height: calc(100vh - 150px);
+        }
+
+        .passage-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--day-primary);
+            text-align: center;
+        }
+
+        body.night-mode .passage-title {
+            color: var(--night-primary);
+        }
+
+        body.sepia-mode .passage-title {
+            color: var(--sepia-primary);
+        }
+
+        .passage-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .passage-text p {
+            margin-bottom: 1rem;
+        }
+
+        .highlight-menu {
+            position: absolute;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: flex;
+            gap: 5px;
+        }
+
+        .highlight-menu button {
+            width: 30px;
+            height: 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .highlight-yellow {
+            background-color: var(--day-highlight-yellow);
+        }
+
+        .highlight-blue {
+            background-color: var(--day-highlight-blue);
+        }
+
+        body.night-mode .highlight-yellow {
+            background-color: var(--night-highlight-yellow);
+        }
+
+        body.night-mode .highlight-blue {
+            background-color: var(--night-highlight-blue);
+        }
+
+        body.sepia-mode .highlight-yellow {
+            background-color: var(--sepia-highlight-yellow);
+        }
+
+        body.sepia-mode .highlight-blue {
+            background-color: var(--sepia-highlight-blue);
+        }
+
+        .question-section {
+            margin-bottom: 2rem;
+        }
+
+        .question-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--day-primary);
+        }
+
+        body.night-mode .question-title {
+            color: var(--night-primary);
+        }
+
+        body.sepia-mode .question-title {
+            color: var(--sepia-primary);
+        }
+
+        .question {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: var(--day-secondary);
+            border-radius: 8px;
+        }
+
+        body.night-mode .question {
+            background-color: var(--night-secondary);
+        }
+
+        body.sepia-mode .question {
+            background-color: var(--sepia-secondary);
+        }
+
+        .question-text {
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .option:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
+
+        body.night-mode .option:hover {
+            background-color: rgba(255,255,255,0.05);
+        }
+
+        body.sepia-mode .option:hover {
+            background-color: rgba(0,0,0,0.03);
+        }
+
+        .option input {
+            cursor: pointer;
+        }
+
+        .submit-btn {
+            display: block;
+            margin: 2rem auto;
+            padding: 1rem 2rem;
+            background-color: var(--day-primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        body.night-mode .submit-btn {
+            background-color: var(--night-primary);
+        }
+
+        body.sepia-mode .submit-btn {
+            background-color: var(--sepia-primary);
+        }
+
+        .results-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .results-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            width: 800px;
+        }
+
+        body.night-mode .results-content {
+            background-color: var(--night-bg);
+            color: var(--night-text);
+        }
+
+        body.sepia-mode .results-content {
+            background-color: var(--sepia-bg);
+            color: var(--sepia-text);
+        }
+
+        .results-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--day-primary);
+        }
+
+        body.night-mode .results-title {
+            color: var(--night-primary);
+        }
+
+        body.sepia-mode .results-title {
+            color: var(--sepia-primary);
+        }
+
+        .score {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .result-item {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .correct {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+        }
+
+        body.night-mode .correct {
+            background-color: rgba(0, 100, 0, 0.3);
+            border-color: rgba(0, 80, 0, 0.5);
+        }
+
+        body.sepia-mode .correct {
+            background-color: rgba(0, 100, 0, 0.2);
+            border-color: rgba(0, 80, 0, 0.4);
+        }
+
+        .incorrect {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+
+        body.night-mode .incorrect {
+            background-color: rgba(139, 0, 0, 0.3);
+            border-color: rgba(120, 0, 0, 0.5);
+        }
+
+        body.sepia-mode .incorrect {
+            background-color: rgba(139, 0, 0, 0.2);
+            border-color: rgba(120, 0, 0, 0.4);
+        }
+
+        .result-question {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-answer {
+            margin-bottom: 0.5rem;
+        }
+
+        .result-reference {
+            font-style: italic;
+            color: #6c757d;
+        }
+
+        body.night-mode .result-reference {
+            color: #aaa;
+        }
+
+        body.sepia-mode .result-reference {
+            color: #7a6a57;
+        }
+
+        .close-results {
+            display: block;
+            margin: 1rem auto 0;
+            padding: 0.5rem 1.5rem;
+            background-color: var(--day-primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        body.night-mode .close-results {
+            background-color: var(--night-primary);
+        }
+
+        body.sepia-mode .close-results {
+            background-color: var(--sepia-primary);
+        }
+
+        /* Styles for True/False/Not Given questions */
+        .tfng-container {
+            margin-bottom: 2rem;
+        }
+
+        .tfng-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0.8rem;
+            background-color: var(--day-secondary);
+            border-radius: 8px;
+        }
+
+        body.night-mode .tfng-item {
+            background-color: var(--night-secondary);
+        }
+
+        body.sepia-mode .tfng-item {
+            background-color: var(--sepia-secondary);
+        }
+
+        .tfng-number {
+            font-weight: bold;
+            min-width: 30px;
+        }
+
+        .tfng-select {
+            margin: 0 1rem;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: white;
+            width: 120px;
+        }
+
+        body.night-mode .tfng-select {
+            background-color: var(--night-secondary);
+            color: var(--night-text);
+            border-color: #555;
+        }
+
+        body.sepia-mode .tfng-select {
+            background-color: var(--sepia-secondary);
+            color: var(--sepia-text);
+            border-color: #b8a98b;
+        }
+
+        .tfng-text {
+            flex: 1;
+        }
+
+        /* Styles for notes completion questions */
+        .notes-container {
+            margin-bottom: 2rem;
+        }
+
+        .notes-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .notes-number {
+            font-weight: bold;
+            min-width: 30px;
+        }
+
+        .notes-input {
+            margin-left: 0.5rem;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 200px;
+        }
+
+        body.night-mode .notes-input {
+            background-color: var(--night-secondary);
+            color: var(--night-text);
+            border-color: #555;
+        }
+
+        body.sepia-mode .notes-input {
+            background-color: var(--sepia-secondary);
+            color: var(--sepia-text);
+            border-color: #b8a98b;
+        }
+
+        .instruction {
+            font-style: italic;
+            color: #6c757d;
+            margin-bottom: 1rem;
+        }
+
+        body.night-mode .instruction {
+            color: #aaa;
+        }
+
+        body.sepia-mode .instruction {
+            color: #7a6a57;
+        }
+
+        .notes-heading {
+            font-weight: bold;
+            margin: 1rem 0 0.5rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">IELTS Reading Practice</div>
+            <div class="theme-switcher">
+                <button class="theme-btn" id="day-theme" title="Day Mode"><i class="fas fa-sun"></i></button>
+                <button class="theme-btn" id="night-theme" title="Night Mode"><i class="fas fa-moon"></i></button>
+                <button class="theme-btn" id="sepia-theme" title="Sepia Mode"><i class="fas fa-book"></i></button>
+            </div>
+            <a href="tg://resolve?domain=aftum_8" class="telegram-btn">
+                <i class="fab fa-telegram"></i> Телеграмм канал
+            </a>
+        </header>
+
+        <div class="timer-container">
+            <div class="timer" id="timer">20:00</div>
+        </div>
+
+        <div class="content">
+            <div class="passage-container">
+                <h2 class="passage-title">Caral: an ancient South American city</h2>
+                <div class="passage-text" id="passage-text">
+                    <p>Huge earth and rock mounds rise out of the desert of the Supe Valley near the coast of Peru in South America. These immense mounds appear simply to be part of the geographical landscape in this arid region squeezed between the Pacific Ocean and the Andes mountains. But looks deceive. These are actually human-made pyramids strong evidence indicates they are the remains of a city known as Caral that flourished nearly 5,000 years ago. It true, it would be the oldest known urban center in the America and among the most ancient in the world.</p>
+                    
+                    <p>Research undertaken by Peruvian archaeologist Ruth Shady suggests that the 150-acre plex of pyramids, plazas and residential buildings was a thriving metropolis when Egypt's great pyramids were still being built. Though discovered in 1905, for years Caral attracted little attention, largely because archaeologists believed the structures were rainy recent. But the monumental scale of the pyramids had long interested Shady, who began excavations at the site in 1996, about 22 kilometers from the coast and 190 kilometers north of Peru's capital city of Lima.</p>
+                    
+                    <p>Shady and her crew searched for broken remains of the pots and containers that most such sites contain. Not finding any only made her more excited: it meant Caral could be what archaeologists term pre-ceramic, that is, existing before the advent in the area of pot-firing techniques. Shady's team undertook the task of excavating Piramide Mayor, the largest of the pyramids. After carefully clearing away many hundreds of years' worth of rubble and sand, they identified staircases, walls covered with remnants of colored plaster, and brickwork. In the foundations, they found the remains of grass-like reeds woven into bags. The original workers, she surmised, must have filled these bags with stones from a nearby quarry and laid them atop one another inside retaining walls, gradually giving rise to the pyramid's immense structure. Shady had samples of the reeds subjected to radiocarbon dating and found that the reeds were 4,600 years old. This evidence indicated that Caral was, in fact, more than 1,000 years older than what had previously been thought to be the oldest urban center in the Americas.</p>
+                    
+                    <p>What amazed archaeologists was not just the age, but the complexity and scope of Caral. Piramide Mayor alone covers an area nearly the size of four football fields and is 18 meters tall. A nine-meter-wide staircase rises from a circular plaza at the foot of the pyramid, passing over three terraced levels until it reaches the top. Thousands of manual laborers would have been needed to build such a project, not counting the many architects, craftsmen, and managers. Shady's team found the remains of a large amphitheater, containing almost 70 musical instruments made of bird and deer bones Clearly music played an important role in Caral's society. Around the perimeter of Caral are a series of smaller mounds and various buildings. These indicate a hierarchy of living arrangements: large, well-kept rooms atop pyramids for the elite, ground-level quarters for shabbier outlying dwellings for workers.</p>
+                    
+                    <p>But why had Caral been built in the first place? Her excavations convinced Shady that Caral once served as a trade center for the region, which extends from the rainforests of the Amazon to the high forests of the Andes. Shady found evidence of a rich trading environment, including seeds of the cocoa bush and necklaces of shells, neither of which was native to the immediate Caral area. This environment gave rise to people who did not take part in the production of food, allowing them to become priests and planners, builders and designers. Thus occupational specialization, elemental to an urban society, emerged.</p>
+                    
+                    <p>But what sustained such a trading center and drew travelers to it? Was it food? Shady and her team found the bones of small edible fish, which must have come from the Pacific coast to the west, in the excavations. But they also found evidence of squash, sweet potatoes and beans having been grown locally. Shady theorized that Caral's early farmers diverted the area's rivers into canals, which still cross the Supe Valley today, to irrigate their fields.But because she found no traces of maize, which can be traded or stored and used in times of crop failure, she concluded that Caral's trade leverage was not based on stockpiling food supplies.</p>
+                    
+                    <p>It was evidence of another crop in the excavations that gave Shady the best clue to Caral's success. In nearly every excavated building, her team discovered evidence of cotton seeds, fibers and textiles. Her theory fell into place when a large fishing net made of those fibers, unearthed in an unrelated dig on Peru's coast, turned out to be as old as Caral. 'The farmers of Caral grew the cotton that the fishermen needed to make their nets, Shady speculates. And the fishermen gave them shellfish and dried fish in exchange for these nets.' In essence, the people of Caral enabled fishermen to work with larger and more effective nets, which made the resources of the sea more readily available, and the fishermen probably used dried squash grown by the Caral people as flotation devices for their nets.</p>
+                </div>
+            </div>
+
+            <div class="questions-container">
+                <div class="question-section">
+                    <h3 class="question-title">Questions 1-6</h3>
+                    <p>Do the following statements agree with the information given in Reading Passage?</p>
+                    <p>In boxes 1-6 on your answer sheet, write</p>
+                    <p><strong>TRUE</strong> if the statement agrees with the information</p>
+                    <p><strong>FALSE</strong> if the statement contradicts the information</p>
+                    <p><strong>NOT GIVEN</strong> if there is no information on this</p>
+                    
+                    <div class="tfng-container">
+                        <div class="tfng-item">
+                            <div class="tfng-number">1.</div>
+                            <select class="tfng-select" name="q1">
+                                <option value="">Select</option>
+                                <option value="TRUE">TRUE</option>
+                                <option value="FALSE">FALSE</option>
+                                <option value="NOT GIVEN">NOT GIVEN</option>
+                            </select>
+                            <div class="tfng-text">Caral was built at the same time as the construction of the Egyptian pyramids.</div>
+                        </div>
+                        
+                        <div class="tfng-item">
+                            <div class="tfng-number">2.</div>
+                            <select class="tfng-select" name="q2">
+                                <option value="">Select</option>
+                                <option value="TRUE">TRUE</option>
+                                <option value="FALSE">FALSE</option>
+                                <option value="NOT GIVEN">NOT GIVEN</option>
+                            </select>
+                            <div class="tfng-text">The absence of pottery at the archaeological dig gave Shady a significant clue to the age of the site.</div>
+                        </div>
+                        
+                        <div class="tfng-item">
+                            <div class="tfng-number">3.</div>
+                            <select class="tfng-select" name="q3">
+                                <option value="">Select</option>
+                                <option value="TRUE">TRUE</option>
+                                <option value="FALSE">FALSE</option>
+                                <option value="NOT GIVEN">NOT GIVEN</option>
+                            </select>
+                            <div class="tfng-text">The stones used to build Piramide Mayor came from a location far away.</div>
+                        </div>
+                        
+                        <div class="tfng-item">
+                            <div class="tfng-number">4.</div>
+                            <select class="tfng-select" name="q4">
+                                <option value="">Select</option>
+                                <option value="TRUE">TRUE</option>
+                                <option value="FALSE">FALSE</option>
+                                <option value="NOT GIVEN">NOT GIVEN</option>
+                            </select>
+                            <div class="tfng-text">The huge and complicated structures of Piramide Mayor suggest that its construction required an organised team of builders.</div>
+                        </div>
+                        
+                        <div class="tfng-item">
+                            <div class="tfng-number">5.</div>
+                            <select class="tfng-select" name="q5">
+                                <option value="">Select</option>
+                                <option value="TRUE">TRUE</option>
+                                <option value="FALSE">FALSE</option>
+                                <option value="NOT GIVEN">NOT GIVEN</option>
+                            </select>
+                            <div class="tfng-text">Archaeological evidence shows that the residents of Caral were highly skilled musicians.</div>
+                        </div>
+                        
+                        <div class="tfng-item">
+                            <div class="tfng-number">6.</div>
+                            <select class="tfng-select" name="q6">
+                                <option value="">Select</option>
+                                <option value="TRUE">TRUE</option>
+                                <option value="FALSE">FALSE</option>
+                                <option value="NOT GIVEN">NOT GIVEN</option>
+                            </select>
+                            <div class="tfng-text">The remains of housing areas at Caral suggest that there were no class distinctions in residential areas.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-section">
+                    <h3 class="question-title">Questions 7-13</h3>
+                    <p class="instruction">Complete the notes below.</p>
+                    <p class="instruction">Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.</p>
+                    <p>Write your answers in boxes 7-13 on your answer sheet.</p>
+                    
+                    <div class="notes-container">
+                        <div class="notes-heading">Caral as a trading centre</div>
+                        <div class="notes-heading">Items discovered at Caral but not naturally occurring in the area</div>
+                        
+                        <div class="notes-item">
+                            <div class="notes-number">7.</div>
+                            <div>the</div>
+                            <input type="text" class="notes-input" name="q7">
+                            <div>of a certain plant</div>
+                        </div>
+                        
+                        <div class="notes-item">
+                            <div class="notes-number">8.</div>
+                            <div></div>
+                            <input type="text" class="notes-input" name="q8">
+                            <div>used to make jewellery</div>
+                        </div>
+                        
+                        <div class="notes-item">
+                            <div class="notes-number">9.</div>
+                            <div>the remains of certain food such as</div>
+                            <input type="text" class="notes-input" name="q9">
+                        </div>
+                        
+                        <div class="notes-heading">Clues to farming around Caral</div>
+                        
+                        <div class="notes-item">
+                            <div class="notes-number">10.</div>
+                            <div></div>
+                            <input type="text" class="notes-input" name="q10">
+                            <div>still in existence today indicate water diverted from rivers</div>
+                        </div>
+                        
+                        <div class="notes-item">
+                            <div class="notes-number">11.</div>
+                            <div>no evidence that</div>
+                            <input type="text" class="notes-input" name="q11">
+                            <div>was grown</div>
+                        </div>
+                        
+                        <div class="notes-heading">Evidence of relationship with fishing communities</div>
+                        
+                        <div class="notes-item">
+                            <div class="notes-number">12.</div>
+                            <div>the excavation findings and fishing nets found on the coast suggest Caral farmers traded</div>
+                            <input type="text" class="notes-input" name="q12">
+                        </div>
+                        
+                        <div class="notes-item">
+                            <div class="notes-number">13.</div>
+                            <div>dried squash may have been used to aid</div>
+                            <input type="text" class="notes-input" name="q13">
+                        </div>
+                    </div>
+                </div>
+
+                <button class="submit-btn" id="submit-btn">Submit Answers</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="results-container" id="results-container">
+        <div class="results-content">
+            <h2 class="results-title">Test Results</h2>
+            <div class="score" id="score">Score: 0/13</div>
+            
+            <div id="results-details">
+                <!-- Results will be inserted here -->
+            </div>
+            
+            <button class="close-results" id="close-results">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Theme switching functionality
+        document.getElementById('day-theme').addEventListener('click', () => {
+            document.body.classList.remove('night-mode', 'sepia-mode');
+        });
+
+        document.getElementById('night-theme').addEventListener('click', () => {
+            document.body.classList.add('night-mode');
+            document.body.classList.remove('sepia-mode');
+        });
+
+        document.getElementById('sepia-theme').addEventListener('click', () => {
+            document.body.classList.add('sepia-mode');
+            document.body.classList.remove('night-mode');
+        });
+
+        // Timer functionality
+        const timerElement = document.getElementById('timer');
+        let timeLeft = 20 * 60; // 20 minutes in seconds
+        let timerInterval;
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                submitAnswers();
+                return;
+            }
+
+            timeLeft--;
+
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            if (timeLeft <= 5 * 60) { // 5 minutes left
+                timerElement.classList.add('warning');
+            }
+        }
+
+        // Text highlighting functionality
+        let highlightMenu = null;
+
+        function createHighlightMenu(x, y) {
+            if (highlightMenu) {
+                document.body.removeChild(highlightMenu);
+            }
+
+            highlightMenu = document.createElement('div');
+            highlightMenu.className = 'highlight-menu';
+            highlightMenu.style.left = `${x}px`;
+            highlightMenu.style.top = `${y}px`;
+
+            const yellowBtn = document.createElement('button');
+            yellowBtn.innerHTML = '<i class="fas fa-highlighter" style="color: #ffd700;"></i>';
+            yellowBtn.title = 'Yellow Highlight';
+            yellowBtn.addEventListener('click', () => applyHighlight('yellow'));
+            highlightMenu.appendChild(yellowBtn);
+
+            const blueBtn = document.createElement('button');
+            blueBtn.innerHTML = '<i class="fas fa-highlighter" style="color: #87ceeb;"></i>';
+            blueBtn.title = 'Blue Highlight';
+            blueBtn.addEventListener('click', () => applyHighlight('blue'));
+            highlightMenu.appendChild(blueBtn);
+
+            const clearBtn = document.createElement('button');
+            clearBtn.innerHTML = '<i class="fas fa-eraser"></i>';
+            clearBtn.title = 'Clear Highlight';
+            clearBtn.addEventListener('click', clearHighlight);
+            highlightMenu.appendChild(clearBtn);
+
+            document.body.appendChild(highlightMenu);
+        }
+
+        function applyHighlight(color) {
+            const selection = window.getSelection();
+            if (!selection.rangeCount) return;
+
+            const range = selection.getRangeAt(0);
+            const selectedText = range.toString();
+            if (!selectedText.trim()) return;
+
+            const span = document.createElement('span');
+            span.className = `highlight-${color}`;
+            span.textContent = selectedText;
+
+            range.deleteContents();
+            range.insertNode(span);
+
+            selection.removeAllRanges();
+            removeHighlightMenu();
+        }
+
+        function clearHighlight() {
+            const selection = window.getSelection();
+            if (!selection.rangeCount) return;
+
+            const range = selection.getRangeAt(0);
+            const selectedText = range.toString();
+            if (!selectedText.trim()) return;
+
+            // Find if the selection is inside a highlight
+            let parent = selection.anchorNode;
+            while (parent && parent !== document) {
+                if (parent.classList && (parent.classList.contains('highlight-yellow') || parent.classList.contains('highlight-blue'))) {
+                    // Replace the highlighted span with just text
+                    const textNode = document.createTextNode(parent.textContent);
+                    parent.parentNode.replaceChild(textNode, parent);
+                    break;
+                }
+                parent = parent.parentNode;
+            }
+
+            selection.removeAllRanges();
+            removeHighlightMenu();
+        }
+
+        function removeHighlightMenu() {
+            if (highlightMenu) {
+                document.body.removeChild(highlightMenu);
+                highlightMenu = null;
+            }
+        }
+
+        // Event listeners for text selection
+        document.addEventListener('selectionchange', () => {
+            if (highlightMenu) {
+                removeHighlightMenu();
+            }
+        });
+
+        document.getElementById('passage-text').addEventListener('mouseup', (e) => {
+            const selection = window.getSelection();
+            const selectedText = selection.toString().trim();
+            
+            if (selectedText.length > 0) {
+                const range = selection.getRangeAt(0);
+                const rect = range.getBoundingClientRect();
+                
+                createHighlightMenu(rect.left + window.scrollX, rect.bottom + window.scrollY + 5);
+            }
+        });
+
+        document.addEventListener('mousedown', (e) => {
+            if (highlightMenu && !highlightMenu.contains(e.target)) {
+                removeHighlightMenu();
+            }
+        });
+
+        // Answer checking functionality
+        const correctAnswers = {
+            q1: 'FALSE',
+            q2: 'TRUE',
+            q3: 'FALSE',
+            q4: 'TRUE',
+            q5: 'NOT GIVEN',
+            q6: 'FALSE',
+            q7: 'seeds',
+            q8: 'shells',
+            q9: 'fish',
+            q10: 'canals',
+            q11: 'maize',
+            q12: 'cotton',
+            q13: 'flotation'
+        };
+
+        const answerReferences = {
+            q1: "Paragraph 2: 'Research undertaken by Peruvian archaeologist Ruth Shady suggests that the 150-acre plex of pyramids, plazas and residential buildings was a thriving metropolis when Egypt's great pyramids were still being built.' (Caral was thriving when Egyptian pyramids were being built, not necessarily built at the same time)",
+            q2: "Paragraph 3: 'Not finding any only made her more excited: it meant Caral could be what archaeologists term pre-ceramic'",
+            q3: "Paragraph 3: 'The original workers, she surmised, must have filled these bags with stones from a nearby quarry'",
+            q4: "Paragraph 4: 'Thousands of manual laborers would have been needed to build such a project, not counting the many architects, craftsmen, and managers.'",
+            q5: "Paragraph 4: 'Shady's team found the remains of a large amphitheater, containing almost 70 musical instruments... Clearly music played an important role in Caral's society.' (No information about residents being highly skilled musicians)",
+            q6: "Paragraph 4: 'These indicate a hierarchy of living arrangements: large, well-kept rooms atop pyramids for the elite, ground-level quarters for shabbier outlying dwellings for workers.' (Shows class distinctions, not absence of them)",
+            q7: "Paragraph 5: 'Shady found evidence of a rich trading environment, including seeds of the cocoa bush...'",
+            q8: "Paragraph 5: '...and necklaces of shells, neither of which was native to the immediate Caral area.'",
+            q9: "Paragraph 6: 'Shady and her team found the bones of small edible fish, which must have come from the Pacific coast to the west...'",
+            q10: "Paragraph 6: 'Shady theorized that Caral's early farmers diverted the area's rivers into canals, which still cross the Supe Valley today...'",
+            q11: "Paragraph 6: 'But because she found no traces of maize...'",
+            q12: "Paragraph 7: 'The farmers of Caral grew the cotton that the fishermen needed to make their nets...'",
+            q13: "Paragraph 7: '...the fishermen probably used dried squash grown by the Caral people as flotation devices for their nets.'"
+        };
+
+        function submitAnswers() {
+            clearInterval(timerInterval);
+            
+            let score = 0;
+            const resultsDetails = document.getElementById('results-details');
+            resultsDetails.innerHTML = '';
+            
+            // Check True/False/Not Given questions (1-6)
+            for (let i = 1; i <= 6; i++) {
+                const questionName = `q${i}`;
+                const selectedOption = document.querySelector(`select[name="${questionName}"]`);
+                const isCorrect = selectedOption && selectedOption.value === correctAnswers[questionName];
+                
+                if (isCorrect) score++;
+                
+                const resultItem = document.createElement('div');
+                resultItem.className = `result-item ${isCorrect ? 'correct' : 'incorrect'}`;
+                resultItem.innerHTML = `
+                    <div class="result-question">Question ${i}</div>
+                    <div class="result-answer">Your answer: ${selectedOption.value || 'Not answered'} | Correct answer: ${correctAnswers[questionName]}</div>
+                    <div class="result-reference">${answerReferences[questionName]}</div>
+                `;
+                
+                resultsDetails.appendChild(resultItem);
+            }
+            
+            // Check notes completion questions (7-13)
+            for (let i = 7; i <= 13; i++) {
+                const questionName = `q${i}`;
+                const inputElement = document.querySelector(`input[name="${questionName}"]`);
+                const userAnswer = inputElement ? inputElement.value.trim().toLowerCase() : '';
+                const isCorrect = userAnswer === correctAnswers[questionName];
+                
+                if (isCorrect) score++;
+                
+                const resultItem = document.createElement('div');
+                resultItem.className = `result-item ${isCorrect ? 'correct' : 'incorrect'}`;
+                resultItem.innerHTML = `
+                    <div class="result-question">Question ${i}</div>
+                    <div class="result-answer">Your answer: ${userAnswer || 'Not answered'} | Correct answer: ${correctAnswers[questionName]}</div>
+                    <div class="result-reference">${answerReferences[questionName]}</div>
+                `;
+                
+                resultsDetails.appendChild(resultItem);
+            }
+            
+            document.getElementById('score').textContent = `Score: ${score}/13`;
+            document.getElementById('results-container').style.display = 'flex';
+        }
+
+        document.getElementById('submit-btn').addEventListener('click', submitAnswers);
+        document.getElementById('close-results').addEventListener('click', () => {
+            document.getElementById('results-container').style.display = 'none';
+        });
+
+        // Start the timer when the page loads
+        window.addEventListener('load', () => {
+            startTimer();
+        });
+    </script>
+</body>
+</html>

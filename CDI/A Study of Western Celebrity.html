@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Study of Western Celebrity - IELTS Reading Test</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --day-bg: #f8f9fa;
+            --day-text: #212529;
+            --day-primary: #e91e63;
+            --day-secondary: #e9ecef;
+            --day-highlight: #fff9c4;
+            --day-highlight-blue: #bbdefb;
+            --day-card: #ffffff;
+            --day-shadow: rgba(0, 0, 0, 0.08);
+            
+            --night-bg: #1a1a2e;
+            --night-text: #e6e6e6;
+            --night-primary: #ff4081;
+            --night-secondary: #2d3748;
+            --night-highlight: #5a4c08;
+            --night-highlight-blue: #1e3a5f;
+            --night-card: #252947;
+            --night-shadow: rgba(0, 0, 0, 0.3);
+            
+            --sepia-bg: #f5ecd7;
+            --sepia-text: #3c2f2f;
+            --sepia-primary: #c2185b;
+            --sepia-secondary: #e4d5b7;
+            --sepia-highlight: #d9c7a5;
+            --sepia-highlight-blue: #c3d0e0;
+            --sepia-card: #f0e5cf;
+            --sepia-shadow: rgba(118, 93, 63, 0.15);
+            
+            --transition: all 0.3s ease;
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--day-bg);
+            color: var(--day-text);
+            transition: var(--transition);
+            line-height: 1.6;
+        }
+
+        body.night-mode {
+            background-color: var(--night-bg);
+            color: var(--night-text);
+        }
+
+        body.sepia-mode {
+            background-color: var(--sepia-bg);
+            color: var(--sepia-text);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        @media (max-width: 992px) {
+            .container {
+                flex-direction: column;
+            }
+        }
+
+        .passage-container, .questions-container {
+            overflow-y: auto;
+            padding: 20px;
+            height: 100%;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        .passage-container {
+            width: 50%;
+            border-right: 2px solid;
+            border-color: var(--day-secondary);
+            background-color: var(--day-card);
+            box-shadow: 4px 0 10px var(--day-shadow);
+        }
+
+        .night-mode .passage-container {
+            border-color: var(--night-secondary);
+            background-color: var(--night-card);
+            box-shadow: 4px 0 10px var(--night-shadow);
+        }
+
+        .sepia-mode .passage-container {
+            border-color: var(--sepia-secondary);
+            background-color: var(--sepia-card);
+            box-shadow: 4px 0 10px var(--sepia-shadow);
+        }
+
+        .questions-container {
+            width: 50%;
+            padding: 25px;
+        }
+
+        @media (max-width: 992px) {
+            .passage-container, .questions-container {
+                width: 100%;
+                height: 50%;
+                border-right: none;
+                border-bottom: 2px solid var(--day-secondary);
+            }
+            
+            .night-mode .passage-container, .night-mode .questions-container {
+                border-color: var(--night-secondary);
+            }
+            
+            .sepia-mode .passage-container, .sepia-mode .questions-container {
+                border-color: var(--sepia-secondary);
+            }
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            background: linear-gradient(135deg, var(--day-primary) 0%, #ad1457 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .night-mode header {
+            background: linear-gradient(135deg, var(--night-primary) 0%, #c2185b 100%);
+        }
+
+        .sepia-mode header {
+            background: linear-gradient(135deg, var(--sepia-primary) 0%, #8c0c3f 100%);
+        }
+
+        .theme-switcher {
+            display: flex;
+            gap: 10px;
+        }
+
+        .theme-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .theme-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .timer {
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 8px 18px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .timer i {
+            font-size: 1.1rem;
+        }
+
+        .timer.warning {
+            color: #ff6b6b;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .telegram-btn {
+            background: #0088cc;
+            color: white;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .telegram-btn:hover {
+            background: #0077b5;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin: 0 0 15px 0;
+            text-align: center;
+            color: var(--day-primary);
+        }
+
+        .night-mode h1 {
+            color: var(--night-primary);
+        }
+
+        .sepia-mode h1 {
+            color: var(--sepia-primary);
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            color: var(--day-primary);
+            padding-bottom: 8px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--day-primary);
+        }
+
+        .night-mode h2 {
+            color: var(--night-primary);
+            border-color: var(--night-primary);
+        }
+
+        .sepia-mode h2 {
+            color: var(--sepia-primary);
+            border-color: var(--sepia-primary);
+        }
+
+        .passage-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .passage-content p {
+            margin-bottom: 18px;
+        }
+
+        .paragraph-label {
+            font-weight: bold;
+            color: var(--day-primary);
+            margin-bottom: 5px;
+        }
+
+        .night-mode .paragraph-label {
+            color: var(--night-primary);
+        }
+
+        .sepia-mode .paragraph-label {
+            color: var(--sepia-primary);
+        }
+
+        .highlight-menu {
+            position: absolute;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: var(--radius-sm);
+            padding: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            z-index: 1000;
+            gap: 5px;
+        }
+
+        .highlight-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+
+        .highlight-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .yellow-highlight {
+            background-color: #fff9c4;
+        }
+
+        .blue-highlight {
+            background-color: #bbdefb;
+        }
+
+        .clear-highlight {
+            background-color: #f8f9fa;
+        }
+
+        .question-block {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: var(--radius);
+            background-color: var(--day-card);
+            box-shadow: 0 4px 12px var(--day-shadow);
+            transition: var(--transition);
+        }
+
+        .night-mode .question-block {
+            background-color: var(--night-card);
+            box-shadow: 0 4px 12px var(--night-shadow);
+        }
+
+        .sepia-mode .question-block {
+            background-color: var(--sepia-card);
+            box-shadow: 0 4px 12px var(--sepia-shadow);
+        }
+
+        .question-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            color: var(--day-primary);
+        }
+
+        .night-mode .question-title {
+            color: var(--night-primary);
+        }
+
+        .sepia-mode .question-title {
+            color: var(--sepia-primary);
+        }
+
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 10px;
+        }
+
+        .option-item {
+            padding: 14px 16px;
+            border-radius: var(--radius-sm);
+            background-color: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .night-mode .option-item {
+            background-color: rgba(0, 0, 0, 0.15);
+        }
+
+        .sepia-mode .option-item {
+            background-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .option-item:hover {
+            background-color: rgba(233, 30, 99, 0.1);
+            border-color: var(--day-primary);
+            transform: translateY(-2px);
+        }
+
+        .night-mode .option-item:hover {
+            background-color: rgba(255, 64, 129, 0.2);
+            border-color: var(--night-primary);
+        }
+
+        .sepia-mode .option-item:hover {
+            background-color: rgba(194, 24, 91, 0.1);
+            border-color: var(--sepia-primary);
+        }
+
+        .option-item.selected {
+            background-color: var(--day-primary);
+            color: white;
+            border-color: var(--day-primary);
+            box-shadow: 0 4px 8px rgba(233, 30, 99, 0.3);
+        }
+
+        .night-mode .option-item.selected {
+            background-color: var(--night-primary);
+            border-color: var(--night-primary);
+            box-shadow: 0 4px 8px rgba(255, 64, 129, 0.3);
+        }
+
+        .sepia-mode .option-item.selected {
+            background-color: var(--sepia-primary);
+            border-color: var(--sepia-primary);
+            box-shadow: 0 4px 8px rgba(194, 24, 91, 0.3);
+        }
+
+        .option-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            font-weight: bold;
+        }
+
+        .input-answer {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #ddd;
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: var(--day-text);
+            transition: var(--transition);
+            margin-top: 8px;
+        }
+
+        .night-mode .input-answer {
+            background-color: rgba(0, 0, 0, 0.15);
+            border-color: #444;
+            color: var(--night-text);
+        }
+
+        .sepia-mode .input-answer {
+            background-color: rgba(255, 255, 255, 0.6);
+            color: var(--sepia-text);
+        }
+
+        .input-answer:focus {
+            outline: none;
+            border-color: var(--day-primary);
+            box-shadow: 0 0 0 3px rgba(233, 30, 99, 0.2);
+        }
+
+        .night-mode .input-answer:focus {
+            border-color: var(--night-primary);
+            box-shadow: 0 0 0 3px rgba(255, 64, 129, 0.2);
+        }
+
+        .sepia-mode .input-answer:focus {
+            border-color: var(--sepia-primary);
+            box-shadow: 0 0 0 3px rgba(194, 24, 91, 0.2);
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--day-primary) 0%, #ad1457 100%);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(233, 30, 99, 0.3);
+        }
+
+        .night-mode .submit-btn {
+            background: linear-gradient(135deg, var(--night-primary) 0%, #c2185b 100%);
+            box-shadow: 0 4px 12px rgba(255, 64, 129, 0.3);
+        }
+
+        .sepia-mode .submit-btn {
+            background: linear-gradient(135deg, var(--sepia-primary) 0%, #8c0c3f 100%);
+            box-shadow: 0 4px 12px rgba(194, 24, 91, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .results-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--day-bg);
+            color: var(--day-text);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 30px;
+            box-sizing: border-box;
+            display: none;
+        }
+
+        .night-mode .results-container {
+            background-color: var(--night-bg);
+            color: var(--night-text);
+        }
+
+        .sepia-mode .results-container {
+            background-color: var(--sepia-bg);
+            color: var(--sepia-text);
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .score-display {
+            font-size: 2.8rem;
+            font-weight: bold;
+            color: var(--day-primary);
+            margin: 25px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .night-mode .score-display {
+            color: var(--night-primary);
+        }
+
+        .sepia-mode .score-display {
+            color: var(--sepia-primary);
+        }
+
+        .result-item {
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: var(--radius);
+            background-color: var(--day-card);
+            box-shadow: 0 4px 12px var(--day-shadow);
+        }
+
+        .night-mode .result-item {
+            background-color: var(--night-card);
+            box-shadow: 0 4px 12px var(--night-shadow);
+        }
+
+        .sepia-mode .result-item {
+            background-color: var(--sepia-card);
+            box-shadow: 0 4px 12px var(--sepia-shadow);
+        }
+
+        .correct {
+            color: #28a745;
+        }
+
+        .incorrect {
+            color: #dc3545;
+        }
+
+        .close-results {
+            display: block;
+            margin: 30px auto;
+            padding: 12px 30px;
+            background: var(--day-primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(233, 30, 99, 0.3);
+        }
+
+        .night-mode .close-results {
+            background: var(--night-primary);
+            box-shadow: 0 4px 12px rgba(255, 64, 129, 0.3);
+        }
+
+        .sepia-mode .close-results {
+            background: var(--sepia-primary);
+            box-shadow: 0 4px 12px rgba(194, 24, 91, 0.3);
+        }
+
+        .close-results:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+
+        .answer-reference {
+            font-style: italic;
+            margin-top: 10px;
+            font-size: 0.95rem;
+            color: #6c757d;
+            padding: 12px;
+            border-left: 3px solid var(--day-primary);
+            background-color: rgba(233, 30, 99, 0.05);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        }
+
+        .night-mode .answer-reference {
+            color: #a0aec0;
+            border-left-color: var(--night-primary);
+            background-color: rgba(255, 64, 129, 0.05);
+        }
+
+        .sepia-mode .answer-reference {
+            color: #8b7d6b;
+            border-left-color: var(--sepia-primary);
+            background-color: rgba(194, 24, 91, 0.05);
+        }
+
+        .drag-handle {
+            position: absolute;
+            width: 5px;
+            background: linear-gradient(to bottom, var(--day-primary), #ad1457);
+            cursor: col-resize;
+            height: 100%;
+            right: 0;
+            top: 0;
+            border-radius: 0 3px 3px 0;
+        }
+
+        .night-mode .drag-handle {
+            background: linear-gradient(to bottom, var(--night-primary), #c2185b);
+        }
+
+        .sepia-mode .drag-handle {
+            background: linear-gradient(to bottom, var(--sepia-primary), #8c0c3f);
+        }
+
+        @media (max-width: 992px) {
+            .drag-handle {
+                display: none;
+            }
+        }
+
+        .period-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .period-option {
+            padding: 15px;
+            border-radius: var(--radius-sm);
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .night-mode .period-option {
+            background: #2a2f4c;
+            border-color: #444;
+        }
+
+        .sepia-mode .period-option {
+            background: #f0e5cf;
+            border-color: #d6c6a5;
+        }
+
+        .period-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .period-option.selected {
+            background: var(--day-primary);
+            color: white;
+            border-color: var(--day-primary);
+            box-shadow: 0 4px 8px rgba(233, 30, 99, 0.3);
+        }
+
+        .night-mode .period-option.selected {
+            background: var(--night-primary);
+            border-color: var(--night-primary);
+        }
+
+        .sepia-mode .period-option.selected {
+            background: var(--sepia-primary);
+            border-color: var(--sepia-primary);
+        }
+
+        .summary-text {
+            line-height: 2;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: var(--radius);
+            margin-top: 15px;
+        }
+
+        .night-mode .summary-text {
+            background: #2a2f4c;
+        }
+
+        .sepia-mode .summary-text {
+            background: #f0e5cf;
+        }
+
+        .summary-input {
+            width: 120px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: var(--radius-sm);
+            margin: 0 8px;
+            background: white;
+        }
+
+        .night-mode .summary-input {
+            background: #1a1a2e;
+            border-color: #444;
+            color: var(--night-text);
+        }
+
+        .sepia-mode .summary-input {
+            background: #f5ecd7;
+            color: var(--sepia-text);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="theme-switcher">
+            <button class="theme-btn" id="day-theme" title="Day Mode"><i class="fas fa-sun"></i></button>
+            <button class="theme-btn" id="night-theme" title="Night Mode"><i class="fas fa-moon"></i></button>
+            <button class="theme-btn" id="sepia-theme" title="Sepia Mode"><i class="fas fa-book"></i></button>
+        </div>
+        <div class="timer" id="timer"><i class="fas fa-clock"></i> <span>20:00</span></div>
+        <a href="tg://resolve?domain=aftum_8" class="telegram-btn">
+            <i class="fab fa-telegram"></i> Телеграмм канал
+        </a>
+    </header>
+
+    <div class="container">
+        <div class="passage-container">
+            <div class="drag-handle" id="drag-handle"></div>
+            <h1>A Study of Western Celebrity</h1>
+            <div class="passage-content" id="passage-content">
+                <p><strong>READING PASSAGE 2</strong></p>
+                <p><em>You should spend about 20 minutes on Questions 14–26, which are based on Reading Passage 2.</em></p>
+                
+                <p><strong>A study of western celebrity</strong></p>
+                <p><em>In our celebrity-obsessed culture, TV shows, internet blogs, and even newspapers are often full of the latest news, gossip and scandals about current celebrities</em></p>
+                
+                <div class="paragraph-label">Paragraph A</div>
+                <p>It seems that our current society cannot get enough information about the daily lives of celebrities. But how did celebrities become so much an important force in our culture? While people have always had shared a certain obsession for the fantastic and the famous, the notion of celebrity, as well as the types of people termed 'celebrities', has evolved greatly throughout the ages. The word 'celebrity' has its roots in the language of the ancient Roman civilization. The word we now know to mean 'a condition of being famous' or 'a famous person' is derived from the Latin word 'celeber', meaning 'frequented or populous'.</p>
+                
+                <div class="paragraph-label">Paragraph B</div>
+                <p>The celebrities of the ancient world were the powerful and awesome deities of Greece and Rome, and the citizens of these civilizations believed in a vast number of immortals who had a direct impact on their lives. It was, therefore, important to know about these figures' personal lives. This need to know led to the creation of myths, which personalized the gods and involved them in ancient celebrity scandals that thrilled and excited the common people.</p>
+                
+                <div class="paragraph-label">Paragraph C</div>
+                <p>During ancient times, amateur and professional athletes also began to make an impact on the celebrity culture. Victors in the ancient Olympic Games were treated as heroes and were often elevated to god-like status. In the ancient Roman civilization, gladiators – the equivalent of today's professional athletes – were also revered by the common people for their heroics and seemingly superhuman strength.</p>
+                
+                <div class="paragraph-label">Paragraph D</div>
+                <p>As Europe moved into the Dark Ages (the years spanning approximately 400–1300 AD) and a time when athletics and the arts were largely forgotten, monarchs and rulers continued to maintain celebrity status, while religious figures took on newfound fame. The miraculous lives and fascinating deaths of spiritual figures lent excitement to the lives of common people when there was often little else to be excited about, as they faced war, disease and food shortages.</p>
+                
+                <div class="paragraph-label">Paragraph E</div>
+                <p>During the period 1300–1600 AD, or the Renaissance period as it is known, interest in ruling figures faded. As Europe emerged from its long neglect of the arts, there was greater appreciation for portraits, statues and stone carvings. This period of appreciation for the arts lent a sense of celebrity to artists who were noted for their works and their personal achievements. It was a time when artists began to surpass political and religious individuals for supreme celebrity – a trend that would continue into later centuries.</p>
+                
+                <div class="paragraph-label">Paragraph F</div>
+                <p>While the figures of the ancient and early modern civilizations were able to achieve moderate and sometimes lasting celebrity within particular cultures, the global reach of their fame was limited. It was not until the 1700s, when technological advances made publishing commercially viable, that the extent of a person's fame could spread further. The increase in the availability of the written word was accompanied by a huge rise in the number of common people who could read, allowing a mass audience to find out about celebrities for the first time. Suddenly, the lives of authors, politicians, war heroes, and other celebrities could now be read about in newspapers around the world. These gave ordinary people the opportunity to become intimately knowledgeable about the figures they most admired.</p>
+                
+                <div class="paragraph-label">Paragraph G</div>
+                <p>In the modern age, particularly as radio and film took off in the 1900s, things really began to change. First, radio began to make its way into the average home in the 1920s and 1930s. Professional athletes also began to be regarded as stars, as their games and exploits could be broadcast over the air for an entirely new audience. Then, the rise of television in the 1950s only cemented the premier level of celebrity that film stars, athletes and television actors were beginning to share. This also meant a huge increase in the individual salaries of these celebrities. Even a few animals gained fame through children's TV shows. The emergence of reality television shows in the late 1990s allowed all kinds of people with little ability to enjoy a short burst of fame on the television screen. All you needed, it seemed, was an attractive appearance. Today, reality television programmes make it possible to be famous nor for doing anything in particular, but simply for being, with the audience deciding whether someone deserves to become a celebrity or not. As the meaning of celebrity continues to evolve and redefine itself in a quickly changing world, there is no telling who will become of interest next.</p>
+            </div>
+        </div>
+
+        <div class="questions-container">
+            <h2>Questions 14-20</h2>
+            <p>Reading Passage 2 has seven paragraphs, A–G.</p>
+            <p>Choose the correct heading for each paragraph from the list of headings below.</p>
+            <p>Write the correct number, i-x, in boxes 14–20 on your answer sheet.</p>
+
+            <div class="question-block">
+                <div class="question-title">List of Headings</div>
+                <ol type="i" class="options-list">
+                    <li>Why it is necessary to explain the meaning of the word celebrity</li>
+                    <li>The influence of non-human celebrities on societies</li>
+                    <li>The impact of broadcasting on concepts of celebrity</li>
+                    <li>Creativity having greater value</li>
+                    <li>Admiration for physical achievement</li>
+                    <li>The advantages of celebrity status in the ancient world</li>
+                    <li>A result of hardship</li>
+                    <li>Literacy and widespread celebrity</li>
+                    <li>Attitudes of celebrities towards the media</li>
+                    <li>The original definition of celebrity</li>
+                </ol>
+            </div>
+
+            <div class="question-block">
+                <div class="question-title">14. Paragraph A</div>
+                <ul class="options-list" id="q14">
+                    <li class="option-item" data-value="i">i</li>
+                    <li class="option-item" data-value="ii">ii</li>
+                    <li class="option-item" data-value="iii">iii</li>
+                    <li class="option-item" data-value="iv">iv</li>
+                    <li class="option-item" data-value="v">v</li>
+                    <li class="option-item" data-value="vi">vi</li>
+                    <li class="option-item" data-value="vii">vii</li>
+                    <li class="option-item" data-value="viii">viii</li>
+                    <li class="option-item" data-value="ix">ix</li>
+                    <li class="option-item" data-value="x">x</li>
+                </ul>
+            </div>
+
+            <div class="question-block">
+                <div class="question-title">15. Paragraph B</div>
+                <ul class="options-list" id="q15">
+                    <li class="option-item" data-value="i">i</li>
+                    <li class="option-item" data-value="ii">ii</li>
+                    <li class="option-item" data-value="iii">iii</li>
+                    <li class="option-item" data-value="iv">iv</li>
+                    <li class="option-item" data-value="v">v</li>
+                    <li class="option-item" data-value="vi">vi</li>
+                    <li class="option-item" data-value="vii">vii</li>
+                    <li class="option-item" data-value="viii">viii</li>
+                    <li class="option-item" data-value="ix">ix</li>
+                    <li class="option-item" data-value="x">x</li>
+                </ul>
+            </div>
+
+            <div class="question-block">
+                <div class="question-title">16. Paragraph C</div>
+                <ul class="options-list" id="q16">
+                    <li class="option-item" data-value="i">i</li>
+                    <li class="option-item" data-value="ii">ii</li>
+                    <li class="option-item" data-value="iii">iii</li>
+                    <li class="option-item" data-value="iv">iv</li>
+                    <li class="option-item" data-value="v">v</li>
+                    <li class="option-item" data-value="vi">vi</li>
+                    <li class="option-item" data-value="vii">vii</li>
+                    <li class="option-item" data-value="viii">viii</li>
+                    <li class="option-item" data-value="ix">ix</li>
+                    <li class="option-item" data-value="x">x</li>
+                </ul>
+            </div>
+
+            <div class="question-block">
+                <div class="question-title">17. Paragraph D</div>
+                <ul class="options-list" id="q17">
+                    <li class="option-item" data-value="i">i</li>
+                    <li class="option-item" data-value="ii">ii</li>
+                    <li class="option-item" data-value="iii">iii</li>
+                    <li class="option-item" data-value="iv">iv</li>
+                    <li class="option-item" data-value="v">v</li>
+                    <li class="option-item" data-value="vi">vi</li>
+                    <li class="option-item" data-value="vii">vii</li>
+                    <li class="option-item" data-value="viii">viii</li>
+                    <li class="option-item" data-value="ix">ix</li>
+                    <li class="option-item" data-value="x">x</li>
+                </ul>
+            </div>
+
+            <div class="question-block">
+                <div class="question-title">18. Paragraph E</div>
+                <ul class="options-list" id="q18">
+                    <li class="option-item" data-value="i">i</li>
+                    <li class="option-item" data-value="ii">ii</li>
+                    <li class="option-item" data-value="iii">iii</li>
+                    <li class="option-item" data-value="iv">iv</li>
+                    <li class="option-item" data-value="v">v</li>
+                    <li class="option-item" data-value="vi">vi</li>
+                    <li class="option-item" data-value="vii">vii</li>
+                    <li class="option-item" data-value="viii">viii</li>
+                    <li class="option-item" data-value="ix">ix</li>
+                    <li class="option-item" data-value="x">x</li>
+                </ul>
+            </div>
+
+            <div class="question-block">
+                <div class="question-title">19. Paragraph F</div>
+                <ul class="options-list" id="q19">
+                    <li class="option-item" data-value="i">i</li>
+                    <li class="option-item" data-value="ii">ii</li>
+                    <li class="option-item" data-value="iii">iii</li>
+                    <li class="option-item" data-value="iv">iv</li>
+                    <li class="option-item" data-value="v">v</li>
+                    <li class="option-item" data-value="vi">vi</li>
+                    <li class="option-item" data-value="vii">vii</li>
+                    <li class="option-item" data-value="viii">viii</li>
+                    <li class="option-item" data-value="ix">ix</li>
+                    <li class="option-item" data-value="x">x</li>
+                </ul>
+            </div>
+
+            <div class="question-block">
+                <div class="question-title">20. Paragraph G</div>
+                <ul class="options-list" id="q20">
+                    <li class="option-item" data-value="i">i</li>
+                    <li class="option-item" data-value="ii">ii</li>
+                    <li class="option-item" data-value="iii">iii</li>
+                    <li class="option-item" data-value="iv">iv</li>
+                    <li class="option-item" data-value="v">v</li>
+                    <li class="option-item" data-value="vi">vi</li>
+                    <li class="option-item" data-value="vii">vii</li>
+                    <li class="option-item" data-value="viii">viii</li>
+                    <li class="option-item" data-value="ix">ix</li>
+                    <li class="option-item" data-value="x">x</li>
+                </ul>
+            </div>
+
+            <h2>Questions 21-23</h2>
+            <p>Look at the following statements (Questions 21-23) and the list of historical periods in Europe below.</p>
+            <p>Match each statement with the correct historical period, A, B, C or D.</p>
+            <p>Write the correct letter, A, B, C or D, in boxes 21-23 on your answer sheet.</p>
+
+            <div class="question-block">
+                <div class="question-title">21. A wide variety of people achieve a brief period of fame.</div>
+                <div class="period-options" id="q21">
+                    <div class="period-option" data-value="A">A Ancient times</div>
+                    <div class="period-option" data-value="B">B Dark Ages</div>
+                    <div class="period-option" data-value="C">C Renaissance</div>
+                    <div class="period-option" data-value="D">D Modern era</div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <div class="question-title">22. Stories are invented about celebrities' lives.</div>
+                <div class="period-options" id="q22">
+                    <div class="period-option" data-value="A">A Ancient times</div>
+                    <div class="period-option" data-value="B">B Dark Ages</div>
+                    <div class="period-option" data-value="C">C Renaissance</div>
+                    <div class="period-option" data-value="D">D Modern era</div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <div class="question-title">23. The fame of rulers is starting to diminish.</div>
+                <div class="period-options" id="q23">
+                    <div class="period-option" data-value="A">A Ancient times</div>
+                    <div class="period-option" data-value="B">B Dark Ages</div>
+                    <div class="period-option" data-value="C">C Renaissance</div>
+                    <div class="period-option" data-value="D">D Modern era</div>
+                </div>
+            </div>
+
+            <h2>Questions 24-26</h2>
+            <p>Complete the summary below.</p>
+            <p>Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.</p>
+            <p>Write your answers in boxes 24-26 on your answer sheet.</p>
+
+            <div class="question-block">
+                <div class="question-title">Celebrities achieve a global status</div>
+                <div class="summary-text">
+                    The development of the publishing industry in the 1700s signalled the beginning of international fame. A growing number of people could read, which meant they had the chance to become informed about their favourite figures by reading <input type="text" class="summary-input" id="q24">. This exposure to celebrities expanded further when radio and television became popular, and it was mass media attention that resulted in higher status and fame for some celebrities. The recent rise of reality television has also meant that a person's <input type="text" class="summary-input" id="q25"> rather than their talent can bring fame. With this type of television programme, fame may be entirely dependent on the response of the <input type="text" class="summary-input" id="q26">.
+                </div>
+            </div>
+
+            <button class="submit-btn" id="submit-btn">Submit Answers</button>
+        </div>
+    </div>
+
+    <div class="results-container" id="results-container">
+        <div class="results-header">
+            <h2>Test Results</h2>
+            <div class="score-display" id="score-display">Score: 0/13</div>
+        </div>
+        
+        <div id="results-content">
+            <!-- Results will be inserted here -->
+        </div>
+        
+        <button class="close-results" id="close-results">Close Results</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme switching
+            const body = document.body;
+            const dayThemeBtn = document.getElementById('day-theme');
+            const nightThemeBtn = document.getElementById('night-theme');
+            const sepiaThemeBtn = document.getElementById('sepia-theme');
+            
+            dayThemeBtn.addEventListener('click', () => {
+                body.className = '';
+            });
+            
+            nightThemeBtn.addEventListener('click', () => {
+                body.className = 'night-mode';
+            });
+            
+            sepiaThemeBtn.addEventListener('click', () => {
+                body.className = 'sepia-mode';
+            });
+            
+            // Timer functionality
+            const timerElement = document.getElementById('timer');
+            let timeLeft = 20 * 60; // 20 minutes in seconds
+            let timerInterval;
+            
+            function startTimer() {
+                clearInterval(timerInterval);
+                timerInterval = setInterval(updateTimer, 1000);
+            }
+            
+            function updateTimer() {
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitAnswers();
+                    return;
+                }
+                
+                timeLeft--;
+                
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                
+                timerElement.querySelector('span').textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft === 5 * 60) { // 5 minutes warning
+                    timerElement.classList.add('warning');
+                }
+            }
+            
+            startTimer();
+            
+            // Answer selection for heading questions
+            const headingOptionItems = document.querySelectorAll('#q14 .option-item, #q15 .option-item, #q16 .option-item, #q17 .option-item, #q18 .option-item, #q19 .option-item, #q20 .option-item');
+            headingOptionItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const parentList = this.parentElement;
+                    const questionId = parentList.id;
+                    
+                    // Remove selected class from all options in this question
+                    parentList.querySelectorAll('.option-item').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                    
+                    // Store the answer
+                    sessionStorage.setItem(questionId, this.getAttribute('data-value'));
+                });
+            });
+            
+            // Answer selection for period questions
+            const periodOptions = document.querySelectorAll('.period-option');
+            periodOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const parentContainer = this.parentElement;
+                    const questionId = parentContainer.id;
+                    
+                    // Remove selected class from all options in this question
+                    parentContainer.querySelectorAll('.period-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                    
+                    // Store the answer
+                    sessionStorage.setItem(questionId, this.getAttribute('data-value'));
+                });
+            });
+            
+            // Text input answers
+            const inputAnswers = document.querySelectorAll('.summary-input');
+            inputAnswers.forEach(input => {
+                input.addEventListener('input', function() {
+                    sessionStorage.setItem(this.id, this.value.trim().toLowerCase());
+                });
+            });
+            
+            // Load saved answers if any
+            function loadSavedAnswers() {
+                // Load heading answers
+                headingOptionItems.forEach(item => {
+                    const parentList = item.parentElement;
+                    const questionId = parentList.id;
+                    const savedAnswer = sessionStorage.getItem(questionId);
+                    
+                    if (savedAnswer && item.getAttribute('data-value') === savedAnswer) {
+                        item.classList.add('selected');
+                    }
+                });
+                
+                // Load period answers
+                periodOptions.forEach(option => {
+                    const parentContainer = option.parentElement;
+                    const questionId = parentContainer.id;
+                    const savedAnswer = sessionStorage.getItem(questionId);
+                    
+                    if (savedAnswer && option.getAttribute('data-value') === savedAnswer) {
+                        option.classList.add('selected');
+                    }
+                });
+                
+                // Load text input answers
+                inputAnswers.forEach(input => {
+                    const savedAnswer = sessionStorage.getItem(input.id);
+                    if (savedAnswer) {
+                        input.value = savedAnswer;
+                    }
+                });
+            }
+            
+            loadSavedAnswers();
+            
+            // Submit button
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.addEventListener('click', submitAnswers);
+            
+            // Close results button
+            const closeResultsBtn = document.getElementById('close-results');
+            closeResultsBtn.addEventListener('click', function() {
+                document.getElementById('results-container').style.display = 'none';
+            });
+            
+            // Correct answers
+            const correctAnswers = {
+                q14: 'x',
+                q15: 'vi',
+                q16: 'v',
+                q17: 'vii',
+                q18: 'iv',
+                q19: 'viii',
+                q20: 'iii',
+                q21: 'D',
+                q22: 'A',
+                q23: 'C',
+                q24: 'newspapers',
+                q25: 'appearance',
+                q26: 'audience'
+            };
+            
+            // Answer references
+            const answerReferences = {
+                q14: "Reference: Paragraph A - 'The word 'celebrity' has its roots in the language of the ancient Roman civilization... derived from the Latin word 'celeber''",
+                q15: "Reference: Paragraph B - 'The celebrities of the ancient world were the powerful and awesome deities of Greece and Rome'",
+                q16: "Reference: Paragraph C - 'Victors in the ancient Olympic Games were treated as heroes... gladiators were also revered by the common people for their heroics and seemingly superhuman strength'",
+                q17: "Reference: Paragraph D - 'as they faced war, disease and food shortages... lent excitement to the lives of common people when there was often little else to be excited about'",
+                q18: "Reference: Paragraph E - 'greater appreciation for portraits, statues and stone carvings... artists began to surpass political and religious individuals for supreme celebrity'",
+                q19: "Reference: Paragraph F - 'The increase in the availability of the written word was accompanied by a huge rise in the number of common people who could read'",
+                q20: "Reference: Paragraph G - 'radio began to make its way into the average home... the rise of television in the 1950s only cemented the premier level of celebrity'",
+                q21: "Reference: Paragraph G - 'The emergence of reality television shows in the late 1990s allowed all kinds of people with little ability to enjoy a short burst of fame'",
+                q22: "Reference: Paragraph B - 'This need to know led to the creation of myths, which personalized the gods and involved them in ancient celebrity scandals'",
+                q23: "Reference: Paragraph E - 'During the period 1300–1600 AD... interest in ruling figures faded'",
+                q24: "Reference: Paragraph F - 'the lives of authors, politicians, war heroes, and other celebrities could now be read about in newspapers around the world'",
+                q25: "Reference: Paragraph G - 'All you needed, it seemed, was an attractive appearance'",
+                q26: "Reference: Paragraph G - 'with the audience deciding whether someone deserves to become a celebrity or not'"
+            };
+            
+            // Submit answers function
+            function submitAnswers() {
+                clearInterval(timerInterval);
+                
+                let score = 0;
+                const results = [];
+                
+                // Check heading questions
+                for (let i = 14; i <= 20; i++) {
+                    const questionId = 'q' + i;
+                    const userAnswer = sessionStorage.getItem(questionId) || '';
+                    const isCorrect = userAnswer === correctAnswers[questionId];
+                    
+                    if (isCorrect) score++;
+                    
+                    results.push({
+                        question: i,
+                        userAnswer: userAnswer,
+                        correctAnswer: correctAnswers[questionId],
+                        isCorrect: isCorrect,
+                        reference: answerReferences[questionId]
+                    });
+                }
+                
+                // Check period questions
+                for (let i = 21; i <= 23; i++) {
+                    const questionId = 'q' + i;
+                    const userAnswer = sessionStorage.getItem(questionId) || '';
+                    const isCorrect = userAnswer === correctAnswers[questionId];
+                    
+                    if (isCorrect) score++;
+                    
+                    results.push({
+                        question: i,
+                        userAnswer: userAnswer,
+                        correctAnswer: correctAnswers[questionId],
+                        isCorrect: isCorrect,
+                        reference: answerReferences[questionId]
+                    });
+                }
+                
+                // Check text input questions
+                for (let i = 24; i <= 26; i++) {
+                    const questionId = 'q' + i;
+                    const userAnswer = sessionStorage.getItem(questionId) || '';
+                    const isCorrect = userAnswer === correctAnswers[questionId];
+                    
+                    if (isCorrect) score++;
+                    
+                    results.push({
+                        question: i,
+                        userAnswer: userAnswer,
+                        correctAnswer: correctAnswers[questionId],
+                        isCorrect: isCorrect,
+                        reference: answerReferences[questionId]
+                    });
+                }
+                
+                // Display results
+                displayResults(score, results);
+            }
+            
+            // Display results function
+            function displayResults(score, results) {
+                const scoreDisplay = document.getElementById('score-display');
+                const resultsContent = document.getElementById('results-content');
+                
+                scoreDisplay.textContent = `Score: ${score}/13`;
+                resultsContent.innerHTML = '';
+                
+                results.forEach(result => {
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'result-item';
+                    
+                    const statusClass = result.isCorrect ? 'correct' : 'incorrect';
+                    const statusIcon = result.isCorrect ? '✓' : '✗';
+                    
+                    resultItem.innerHTML = `
+                        <div><strong>Question ${result.question}:</strong> 
+                        <span class="${statusClass}">${statusIcon} Your answer: ${result.userAnswer || 'Not answered'} 
+                        ${!result.isCorrect ? ` | Correct answer: ${result.correctAnswer}` : ''}</span></div>
+                        <div class="answer-reference">${result.reference}</div>
+                    `;
+                    
+                    resultsContent.appendChild(resultItem);
+                });
+                
+                document.getElementById('results-container').style.display = 'block';
+            }
+            
+            // Text highlighting functionality
+            const passageContent = document.getElementById('passage-content');
+            let highlightMenu = null;
+            
+            function createHighlightMenu() {
+                if (highlightMenu) {
+                    document.body.removeChild(highlightMenu);
+                }
+                
+                highlightMenu = document.createElement('div');
+                highlightMenu.className = 'highlight-menu';
+                highlightMenu.style.display = 'none';
+                
+                const yellowBtn = document.createElement('button');
+                yellowBtn.className = 'highlight-btn yellow-highlight';
+                yellowBtn.title = 'Yellow Highlight';
+                yellowBtn.innerHTML = '<i class="fas fa-highlighter"></i>';
+                yellowBtn.addEventListener('click', () => applyHighlight('#fff9c4'));
+                
+                const blueBtn = document.createElement('button');
+                blueBtn.className = 'highlight-btn blue-highlight';
+                blueBtn.title = 'Blue Highlight';
+                blueBtn.innerHTML = '<i class="fas fa-highlighter"></i>';
+                blueBtn.addEventListener('click', () => applyHighlight('#bbdefb'));
+                
+                const clearBtn = document.createElement('button');
+                clearBtn.className = 'highlight-btn clear-highlight';
+                clearBtn.title = 'Clear Highlight';
+                clearBtn.innerHTML = '<i class="fas fa-eraser"></i>';
+                clearBtn.addEventListener('click', clearHighlight);
+                
+                highlightMenu.appendChild(yellowBtn);
+                highlightMenu.appendChild(blueBtn);
+                highlightMenu.appendChild(clearBtn);
+                
+                document.body.appendChild(highlightMenu);
+            }
+            
+            function showHighlightMenu(x, y) {
+                if (!highlightMenu) createHighlightMenu();
+                
+                highlightMenu.style.display = 'flex';
+                highlightMenu.style.left = `${x}px`;
+                highlightMenu.style.top = `${y}px`;
+            }
+            
+            function hideHighlightMenu() {
+                if (highlightMenu) {
+                    highlightMenu.style.display = 'none';
+                }
+            }
+            
+            function applyHighlight(color) {
+                const selection = window.getSelection();
+                if (!selection.rangeCount) return;
+                
+                const range = selection.getRangeAt(0);
+                const selectedText = range.toString();
+                
+                if (!selectedText.trim()) return;
+                
+                const span = document.createElement('span');
+                span.style.backgroundColor = color;
+                span.textContent = selectedText;
+                
+                range.deleteContents();
+                range.insertNode(span);
+                
+                selection.removeAllRanges();
+                hideHighlightMenu();
+            }
+            
+            function clearHighlight() {
+                const selection = window.getSelection();
+                if (!selection.rangeCount) return;
+                
+                const range = selection.getRangeAt(0);
+                const selectedText = range.toString();
+                
+                if (!selectedText.trim()) return;
+                
+                // Create a text node to replace the highlighted content
+                const textNode = document.createTextNode(selectedText);
+                
+                range.deleteContents();
+                range.insertNode(textNode);
+                
+                selection.removeAllRanges();
+                hideHighlightMenu();
+            }
+            
+            // Event listeners for text highlighting
+            passageContent.addEventListener('mouseup', function(e) {
+                const selection = window.getSelection();
+                const selectedText = selection.toString();
+                
+                if (selectedText.trim()) {
+                    const range = selection.getRangeAt(0);
+                    const rect = range.getBoundingClientRect();
+                    
+                    showHighlightMenu(e.pageX, rect.top + window.scrollY - 40);
+                } else {
+                    hideHighlightMenu();
+                }
+            });
+            
+            document.addEventListener('mousedown', function(e) {
+                if (highlightMenu && !highlightMenu.contains(e.target)) {
+                    hideHighlightMenu();
+                }
+            });
+            
+            // Panel resizing
+            const dragHandle = document.getElementById('drag-handle');
+            const passageContainer = document.querySelector('.passage-container');
+            const questionsContainer = document.querySelector('.questions-container');
+            let isResizing = false;
+            
+            dragHandle.addEventListener('mousedown', function(e) {
+                isResizing = true;
+                document.body.style.cursor = 'col-resize';
+                e.preventDefault();
+            });
+            
+            document.addEventListener('mousemove', function(e) {
+                if (!isResizing) return;
+                
+                const containerWidth = document.querySelector('.container').offsetWidth;
+                const newPassageWidth = (e.pageX / containerWidth) * 100;
+                
+                if (newPassageWidth > 20 && newPassageWidth < 80) {
+                    passageContainer.style.width = `${newPassageWidth}%`;
+                    questionsContainer.style.width = `${100 - newPassageWidth}%`;
+                }
+            });
+            
+            document.addEventListener('mouseup', function() {
+                isResizing = false;
+                document.body.style.cursor = 'default';
+            });
+            
+            // Mobile touch events for resizing
+            dragHandle.addEventListener('touchstart', function(e) {
+                isResizing = true;
+                e.preventDefault();
+            });
+            
+            document.addEventListener('touchmove', function(e) {
+                if (!isResizing) return;
+                
+                const touch = e.touches[0];
+                const containerWidth = document.querySelector('.container').offsetWidth;
+                const newPassageWidth = (touch.pageX / containerWidth) * 100;
+                
+                if (newPassageWidth > 20 && newPassageWidth < 80) {
+                    passageContainer.style.width = `${newPassageWidth}%`;
+                    questionsContainer.style.width = `${100 - newPassageWidth}%`;
+                }
+                
+                e.preventDefault();
+            });
+            
+            document.addEventListener('touchend', function() {
+                isResizing = false;
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Test: Egypt's ancient boat-builders</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --day-bg: #f8f9fa;
+            --day-text: #212529;
+            --day-primary: #4e73df;
+            --day-secondary: #eaecf4;
+            --day-highlight-yellow: rgba(255, 255, 0, 0.3);
+            --day-highlight-blue: rgba(173, 216, 230, 0.3);
+            
+            --night-bg: #1a1a2e;
+            --night-text: #e6e6e6;
+            --night-primary: #6c8bce;
+            --night-secondary: #2d3748;
+            --night-highlight-yellow: rgba(255, 215, 0, 0.3);
+            --night-highlight-blue: rgba(100, 149, 237, 0.3);
+            
+            --sepia-bg: #f4ecd8;
+            --sepia-text: #5c4b37;
+            --sepia-primary: #8b4513;
+            --sepia-secondary: #e3d5bc;
+            --sepia-highlight-yellow: rgba(210, 180, 140, 0.3);
+            --sepia-highlight-blue: rgba(166, 123, 91, 0.3);
+            
+            --current-bg: var(--day-bg);
+            --current-text: var(--day-text);
+            --current-primary: var(--day-primary);
+            --current-secondary: var(--day-secondary);
+            --current-highlight-yellow: var(--day-highlight-yellow);
+            --current-highlight-blue: var(--day-highlight-blue);
+            
+            --transition: all 0.3s ease;
+        }
+
+        .night-theme {
+            --current-bg: var(--night-bg);
+            --current-text: var(--night-text);
+            --current-primary: var(--night-primary);
+            --current-secondary: var(--night-secondary);
+            --current-highlight-yellow: var(--night-highlight-yellow);
+            --current-highlight-blue: var(--night-highlight-blue);
+        }
+
+        .sepia-theme {
+            --current-bg: var(--sepia-bg);
+            --current-text: var(--sepia-text);
+            --current-primary: var(--sepia-primary);
+            --current-secondary: var(--sepia-secondary);
+            --current-highlight-yellow: var(--sepia-highlight-yellow);
+            --current-highlight-blue: var(--sepia-highlight-blue);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: var(--transition);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--current-bg);
+            color: var(--current-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--current-primary);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 100;
+        }
+
+        .theme-selector {
+            display: flex;
+            gap: 10px;
+        }
+
+        .theme-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .telegram-btn {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0088cc;
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .telegram-btn:hover {
+            background: #0077b5;
+            transform: translateX(-50%) scale(1.05);
+        }
+
+        .timer-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+        }
+
+        .timer {
+            font-size: 1.2rem;
+        }
+
+        .timer.warning {
+            color: #ff6b6b;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 130px);
+            overflow: hidden;
+        }
+
+        @media (max-width: 992px) {
+            .main-content {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .passage-container, .questions-container {
+                height: 50vh !important;
+            }
+        }
+
+        .passage-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            background-color: var(--current-secondary);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            height: 100%;
+        }
+
+        .passage-title {
+            margin-bottom: 1rem;
+            color: var(--current-primary);
+            border-bottom: 2px solid var(--current-primary);
+            padding-bottom: 0.5rem;
+            position: sticky;
+            top: 0;
+            background-color: var(--current-secondary);
+            z-index: 10;
+            padding: 1rem;
+            margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+        }
+
+        .passage-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .passage-content p {
+            margin-bottom: 1rem;
+        }
+
+        .highlight-yellow {
+            background-color: var(--current-highlight-yellow);
+        }
+
+        .highlight-blue {
+            background-color: var(--current-highlight-blue);
+        }
+
+        .highlight-menu {
+            position: absolute;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: flex;
+            gap: 5px;
+        }
+
+        .highlight-btn {
+            border: none;
+            border-radius: 4px;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .highlight-btn.yellow {
+            background-color: #ffeb3b;
+        }
+
+        .highlight-btn.blue {
+            background-color: #90caf9;
+        }
+
+        .highlight-btn.clear {
+            background-color: #f5f5f5;
+        }
+
+        .questions-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            background-color: var(--current-bg);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            height: 100%;
+        }
+
+        .questions-title {
+            margin-bottom: 1rem;
+            color: var(--current-primary);
+            border-bottom: 2px solid var(--current-primary);
+            padding-bottom: 0.5rem;
+            position: sticky;
+            top: 0;
+            background-color: var(--current-bg);
+            z-index: 10;
+            padding: 1rem;
+            margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+        }
+
+        .question {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: var(--current-secondary);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .question-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--current-primary);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+            background-color: var(--current-bg);
+            color: var(--current-text);
+        }
+
+        select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: var(--current-bg);
+            color: var(--current-text);
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .submit-btn {
+            display: block;
+            margin: 1rem auto;
+            padding: 12px 24px;
+            background-color: var(--current-primary);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: sticky;
+            bottom: 10px;
+            z-index: 10;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .results-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .results-content {
+            background-color: var(--current-bg);
+            color: var(--current-text);
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .results-title {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--current-primary);
+        }
+
+        .score {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            font-weight: bold;
+        }
+
+        .result-item {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            background-color: var(--current-secondary);
+        }
+
+        .correct {
+            border-left: 4px solid #4caf50;
+        }
+
+        .incorrect {
+            border-left: 4px solid #f44336;
+        }
+
+        .result-question {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .answer-reference {
+            font-style: italic;
+            color: var(--current-primary);
+            margin-top: 0.5rem;
+        }
+
+        .close-btn {
+            display: block;
+            margin: 1rem auto 0;
+            padding: 10px 20px;
+            background-color: var(--current-primary);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: var(--current-primary);
+            color: white;
+        }
+        
+        .paragraph-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+        
+        .paragraph-option {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .archaeologist-selector {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+        
+        .archaeologist-option {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="theme-selector">
+                <button class="theme-btn" id="day-theme" title="Day Mode"><i class="fas fa-sun"></i></button>
+                <button class="theme-btn" id="night-theme" title="Night Mode"><i class="fas fa-moon"></i></button>
+                <button class="theme-btn" id="sepia-theme" title="Sepia Mode"><i class="fas fa-seedling"></i></button>
+            </div>
+            
+            <a href="tg://resolve?domain=aftum_8" class="telegram-btn">
+                <i class="fab fa-telegram"></i> Телеграмм канал
+            </a>
+            
+            <div class="timer-container">
+                <i class="fas fa-clock"></i>
+                <div class="timer" id="timer">20:00</div>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <div class="passage-container">
+                <h2 class="passage-title">READING PASSAGE 2: Egypt's ancient boat-builders</h2>
+                <div class="passage-content" id="passage-content">
+                    <p><b>A</b> The scenes carved into a wall of an Egyptian temple dating from the 15th century BC, tell of a remarkable sea voyage from a mysterious land known as Punt, or 'Land of God'. They show a fleet of ships bearing exotic cargo, navigating through high-crested waves on a journey. The exact meaning of these detailed carvings has divided Egyptologists ever since they were discovered in the mid-19th century. Some people have argued that Punt was not on the sea, or a fictitious place altogether, 'says Oxford University Egyptologist John Baines. However, a series of remarkable discoveries on a desolate stretch of Egypt's Red Sea coast has settled the debate. 'These finds remove all doubt that you reach Punt by sea.' Baines says. The Egyptians must have had considerable seagoing experience.</p>
+                    
+                    <p><b>B</b> The archaeologists behind these discoveries are Kathryn Bard of Boston University, USA, and Rodolfo Fattovich of Orientale University, Italy. From 2002 they spent several weeks each year examining a dried-up lagoon known in Egypt as Mersa Gawasis, and the coastal cliffs nearby. They were searching for signs of a harbour that might have sheltered merchant ships like those depicted in the wall carvings. Finally, in December 2004, Bard was clearing what she thought was the back wall of a rock shelter when she put her hand through the sand into an open space, and uncovered a hemispherical cave about 5 metres across and 2 metres high. The cave's entrance was carved into an exact rectangle and was clearly not a natural formation. Inside, the archaeologists found shattered storage jars, broken boxes made from cedar planks, and five grinding stones. A pottery fragment inscribed with the name of Amenemhat III, a pharaoh who ruled Egypt around 1800 BC, helped the team pinpoint the cave's age.</p>
+                    
+                    <p><b>C</b> Not long afterwards, Bard and Fattovich came across a larger cave, reinforced with old wooden timbers and stone anchors, the first conclusive evidence of large-scale Egyptian seafaring ever discovered. Over the next few years, they uncovered the hidden remnants of an ancient boat-building and seafaring community. Many of the artefacts found were full of holes-the work of tiny marine animals known as shipworms. In addition to eight caves, Bard and Fattovich found remains of five mud-brick ramps that might have been used to ease ships into the water. One cave contained hundreds of metres of rope, expertly coiled and stacked.</p>
+                    
+                    <p><b>D</b> Material connecting Mersa Gawasis to Punt accumulated both inside and outside the caves. A few hundred metres from the cliffs lie piles of crumbled stone and conch shells - most probable the remains of altars. Among these are stones carved with inscriptions that specifically mention missions to Punt. As if that weren't enough, among the remnants found outside one cave were two planks marked with directions for assembling a ship. One of them bore an inscription still partly legible after 3,800 years: Year 8 under his majesty the king of Upper and Lower Egypt……given life forever…of wonderful things of Punt.</p>
+                    
+                    <p><b>E</b> While the Mersa Gawasis artefacts have answered some questions, they have raised others. For instance, how did the expeditions to Punt actually work, and how did the Egyptians construct vessels that could make a round-trip voyage of over 3,000 kilometres? Cheryl Ward, a maritime archaeologist at Coastal Carolina University in South Carolina, USA, has gone some way to answering these questions. She spent three years building a full-scale reconstruction of a ship that would have docked in the lagoon of Mersa Gawasis. Ward has determined that unlike modern vessels, the Egyptian ship was essentially one giant hull. The Egyptian ships were also unique in that they were held together with fittings that needed no metal fasteners, and could be taken apart and put back together again. From the very beginning, the Egyptians were building boats that could be disassembled, and that makes them different from anyone else, 'Ward says.</p>
+                    
+                    <p><b>F</b> For all the skill and craftsmanship evident in the Mersa Gawasis caves, ancient Egypt's ocean voyages were most likely an exception to the usual modes of trade, born out of a necessity to obtain precious materials, such as incense and aromatic resins. For most of Egypt's history these goods had moved along established routes across the eastern desert and through modern-day Sudan. But around the time Mersa Gawasis came into use, it seems a hostile new kingdom to the south cut Egypt off from its supply of exotic materials. "If they could have gone overland, it would have been much easier than bringing timbers from Lebanon, building ships on the upper Nile, taking them apart and carrying them across the desert Bard says. 'They weren't stupid-no one wants to do things the hard way. But geopolitically, they had no other choice'. Fattovich suggests that there were probably only 15 to 20 expeditions over some 400 years, about one every two decades. After that Mersa Gawasis fell out of use, probably because either there was no longer enough water in the lagoon to float ships, or overland links improved, or alternative sites were found. The last sailors to use the lagoon sealed up their equipment and shelters behind mud bricks and sand to await expeditions that never came.</p>
+                </div>
+            </div>
+            
+            <div class="questions-container">
+                <h2 class="questions-title">Questions 14-26</h2>
+                
+                <div class="question">
+                    <div class="question-title">Questions 14-17</div>
+                    <p>Reading Passage 2 has six paragraphs, A-F.</p>
+                    <p>Which paragraph contains the following information?</p>
+                    <p>Write the correct letter, A-F in boxes 14-17 on your answer sheet.</p>
+                    <p><b>NB</b> You may use any letter more than once.</p>
+                    
+                    <div class="options">
+                        <div class="option">
+                            <label for="q14">14. possible reasons why the site of Mersa Gawasis was abandoned</label>
+                            <select id="q14">
+                                <option value="">Select paragraph</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                            </select>
+                        </div>
+                        <div class="option">
+                            <label for="q15">15. mention of a lack of agreement about an archaeological discovery</label>
+                            <select id="q15">
+                                <option value="">Select paragraph</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                            </select>
+                        </div>
+                        <div class="option">
+                            <label for="q16">16. reference to a study which involved copying ancient Egyptian boat-building techniques</label>
+                            <select id="q16">
+                                <option value="">Select paragraph</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                            </select>
+                        </div>
+                        <div class="option">
+                            <label for="q17">17. a reason why the ancient Egyptians needed to import goods by sea</label>
+                            <select id="q17">
+                                <option value="">Select paragraph</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <div class="question-title">Questions 18-21</div>
+                    <p>Complete the sentences below.</p>
+                    <p>Choose <b>ONE WORD ONLY</b> from the passage for each answer.</p>
+                    <p>Write your answers in boxes 18-21 on your answer sheet.</p>
+                    
+                    <div class="options">
+                        <div class="option">
+                            <label for="q18">18. Illustrations of merchant ships sailing from Punt were found on wall carvings in an ancient ________ in Egypt.</label>
+                            <input type="text" id="q18">
+                        </div>
+                        <div class="option">
+                            <label for="q19">19. Bard and Fattovich hoped to find evidence of a ________ in the area of Mersa Gawasis.</label>
+                            <input type="text" id="q19">
+                        </div>
+                        <div class="option">
+                            <label for="q20">20. When Bard first discovered a cave at Mersa Gawasis, the shape of its ________ indicated that it was man-made.</label>
+                            <input type="text" id="q20">
+                        </div>
+                        <div class="option">
+                            <label for="q21">21. Bard and Fattovich discovered a considerable number of objects that had ________ made by small sea creatures.</label>
+                            <input type="text" id="q21">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <div class="question-title">Questions 22-26</div>
+                    <p>Look at the following statements (Questions 22-26) and the list of archaeologists below.</p>
+                    <p>Match each statement with the correct archaeologist A, B, C or D.</p>
+                    <p>Write the correct letter, A, B, C or D, in boxes 22-26 on your answer sheet.</p>
+                    <p><b>NB</b> You may use any letter more than once.</p>
+                    
+                    <p><b>List of archaeologists</b></p>
+                    <p>A John Baines</p>
+                    <p>B Kathryn Bard</p>
+                    <p>C Rodolfo Fattovich</p>
+                    <p>D Cheryl Ward</p>
+                    
+                    <div class="options">
+                        <div class="option">
+                            <label for="q22">22. Ancient Egyptian sea voyages were probably relatively infrequent.</label>
+                            <select id="q22">
+                                <option value="">Select archaeologist</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                            </select>
+                        </div>
+                        <div class="option">
+                            <label for="q23">23. It is now certain that the ancient Egyptians sailed to Punt.</label>
+                            <select id="q23">
+                                <option value="">Select archaeologist</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                            </select>
+                        </div>
+                        <div class="option">
+                            <label for="q24">24. During a certain period, Egyptians were forced to use sea rather than overland trade routes.</label>
+                            <select id="q24">
+                                <option value="">Select archaeologist</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                            </select>
+                        </div>
+                        <div class="option">
+                            <label for="q25">25. It has been suggested that Punt never existed.</label>
+                            <select id="q25">
+                                <option value="">Select archaeologist</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                            </select>
+                        </div>
+                        <div class="option">
+                            <label for="q26">26. The construction of ancient Egyptian ships was unlike any other.</label>
+                            <select id="q26">
+                                <option value="">Select archaeologist</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="submit-btn" id="submit-btn">Submit Answers</button>
+            </div>
+        </div>
+        
+        <footer>
+            <p>IELTS Reading Practice Test &copy; 2023</p>
+        </footer>
+        
+        <div class="results-container" id="results-container">
+            <div class="results-content">
+                <h2 class="results-title">Test Results</h2>
+                <div class="score" id="score">Score: 0/13</div>
+                
+                <div id="results-details">
+                    <!-- Results will be inserted here -->
+                </div>
+                
+                <button class="close-btn" id="close-results">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme switching
+            const dayThemeBtn = document.getElementById('day-theme');
+            const nightThemeBtn = document.getElementById('night-theme');
+            const sepiaThemeBtn = document.getElementById('sepia-theme');
+            const body = document.body;
+            
+            dayThemeBtn.addEventListener('click', () => {
+                body.classList.remove('night-theme', 'sepia-theme');
+            });
+            
+            nightThemeBtn.addEventListener('click', () => {
+                body.classList.add('night-theme');
+                body.classList.remove('sepia-theme');
+            });
+            
+            sepiaThemeBtn.addEventListener('click', () => {
+                body.classList.add('sepia-theme');
+                body.classList.remove('night-theme');
+            });
+            
+            // Timer functionality
+            const timerElement = document.getElementById('timer');
+            let timeLeft = 20 * 60; // 20 minutes in seconds
+            let timerInterval;
+            
+            function startTimer() {
+                clearInterval(timerInterval);
+                timerInterval = setInterval(updateTimer, 1000);
+            }
+            
+            function updateTimer() {
+                const minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                seconds = seconds < 10 ? '0' + seconds : seconds;
+                
+                timerElement.textContent = `${minutes}:${seconds}`;
+                
+                if (timeLeft === 5 * 60) { // 5 minutes warning
+                    timerElement.classList.add('warning');
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitAnswers();
+                } else {
+                    timeLeft--;
+                }
+            }
+            
+            startTimer();
+            
+            // Text highlighting functionality
+            const passageContent = document.getElementById('passage-content');
+            let highlightMenu = null;
+            let currentSelection = null;
+            
+            passageContent.addEventListener('mouseup', function(e) {
+                const selection = window.getSelection();
+                if (selection.toString().length > 0) {
+                    showHighlightMenu(e, selection);
+                } else if (highlightMenu) {
+                    removeHighlightMenu();
+                }
+            });
+            
+            document.addEventListener('mousedown', function(e) {
+                if (highlightMenu && !highlightMenu.contains(e.target)) {
+                    removeHighlightMenu();
+                }
+            });
+            
+            function showHighlightMenu(e, selection) {
+                removeHighlightMenu();
+                currentSelection = selection;
+                
+                highlightMenu = document.createElement('div');
+                highlightMenu.className = 'highlight-menu';
+                
+                const yellowBtn = document.createElement('button');
+                yellowBtn.className = 'highlight-btn yellow';
+                yellowBtn.innerHTML = '<i class="fas fa-highlighter"></i>';
+                yellowBtn.title = 'Yellow Highlight';
+                yellowBtn.addEventListener('click', () => applyHighlight('yellow'));
+                
+                const blueBtn = document.createElement('button');
+                blueBtn.className = 'highlight-btn blue';
+                blueBtn.innerHTML = '<i class="fas fa-highlighter"></i>';
+                blueBtn.title = 'Blue Highlight';
+                blueBtn.addEventListener('click', () => applyHighlight('blue'));
+                
+                const clearBtn = document.createElement('button');
+                clearBtn.className = 'highlight-btn clear';
+                clearBtn.innerHTML = '<i class="fas fa-eraser"></i>';
+                clearBtn.title = 'Clear Highlight';
+                clearBtn.addEventListener('click', clearHighlight);
+                
+                highlightMenu.appendChild(yellowBtn);
+                highlightMenu.appendChild(blueBtn);
+                highlightMenu.appendChild(clearBtn);
+                
+                document.body.appendChild(highlightMenu);
+                
+                const rect = currentSelection.getRangeAt(0).getBoundingClientRect();
+                highlightMenu.style.top = (rect.bottom + window.scrollY + 5) + 'px';
+                highlightMenu.style.left = (rect.left + window.scrollX) + 'px';
+            }
+            
+            function removeHighlightMenu() {
+                if (highlightMenu) {
+                    highlightMenu.remove();
+                    highlightMenu = null;
+                    currentSelection = null;
+                }
+            }
+            
+            function applyHighlight(color) {
+                if (!currentSelection || currentSelection.toString().length === 0) {
+                    removeHighlightMenu();
+                    return;
+                }
+                
+                try {
+                    const range = currentSelection.getRangeAt(0);
+                    const selectedText = range.extractContents();
+                    
+                    const span = document.createElement('span');
+                    span.className = `highlight-${color}`;
+                    span.appendChild(selectedText);
+                    
+                    range.insertNode(span);
+                    
+                    // Clear selection
+                    currentSelection.removeAllRanges();
+                    removeHighlightMenu();
+                } catch (error) {
+                    console.error('Error applying highlight:', error);
+                    removeHighlightMenu();
+                }
+            }
+            
+            function clearHighlight() {
+                if (!currentSelection || currentSelection.toString().length === 0) {
+                    removeHighlightMenu();
+                    return;
+                }
+                
+                try {
+                    const range = currentSelection.getRangeAt(0);
+                    const parentElement = range.startContainer.parentElement;
+                    
+                    if (parentElement.classList.contains('highlight-yellow') || 
+                        parentElement.classList.contains('highlight-blue')) {
+                        
+                        const text = parentElement.textContent;
+                        parentElement.replaceWith(text);
+                    }
+                    
+                    // Clear selection
+                    currentSelection.removeAllRanges();
+                    removeHighlightMenu();
+                } catch (error) {
+                    console.error('Error clearing highlight:', error);
+                    removeHighlightMenu();
+                }
+            }
+            
+            // Answer submission and evaluation
+            const submitBtn = document.getElementById('submit-btn');
+            const resultsContainer = document.getElementById('results-container');
+            const scoreElement = document.getElementById('score');
+            const resultsDetails = document.getElementById('results-details');
+            const closeResultsBtn = document.getElementById('close-results');
+            
+            submitBtn.addEventListener('click', submitAnswers);
+            closeResultsBtn.addEventListener('click', () => {
+                resultsContainer.style.display = 'none';
+            });
+            
+            function submitAnswers() {
+                clearInterval(timerInterval);
+                
+                // Correct answers
+                const correctAnswers = {
+                    q14: 'F',
+                    q15: 'A',
+                    q16: 'E',
+                    q17: 'F',
+                    q18: 'temple',
+                    q19: 'harbour',
+                    q20: 'entrance',
+                    q21: 'holes',
+                    q22: 'C',
+                    q23: 'B',
+                    q24: 'C',
+                    q25: 'A',
+                    q26: 'D'
+                };
+                
+                // Answer references
+                const answerReferences = {
+                    q14: "Paragraph F: 'After that Mersa Gawasis fell out of use, probably because either there was no longer enough water in the lagoon to float ships, or overland links improved, or alternative sites were found.'",
+                    q15: "Paragraph A: 'Some people have argued that Punt was not on the sea, or a fictitious place altogether, 'says Oxford University Egyptologist John Baines.'",
+                    q16: "Paragraph E: 'She spent three years building a full-scale reconstruction of a ship that would have docked in the lagoon of Mersa Gawasis.'",
+                    q17: "Paragraph F: 'ancient Egypt's ocean voyages were most likely an exception to the usual modes of trade, born out of a necessity to obtain precious materials, such as incense and aromatic resins.'",
+                    q18: "Paragraph A: 'The scenes carved into a wall of an Egyptian temple dating from the 15th century BC'",
+                    q19: "Paragraph B: 'They were searching for signs of a harbour that might have sheltered merchant ships like those depicted in the wall carvings.'",
+                    q20: "Paragraph B: 'The cave's entrance was carved into an exact rectangle and was clearly not a natural formation.'",
+                    q21: "Paragraph C: 'Many of the artefacts found were full of holes-the work of tiny marine animals known as shipworms.'",
+                    q22: "Paragraph F: 'Fattovich suggests that there were probably only 15 to 20 expeditions over some 400 years, about one every two decades.'",
+                    q23: "Paragraph B and D: Material evidence found by Bard and Fattovich confirms Egyptian voyages to Punt",
+                    q24: "Paragraph F: 'But geopolitically, they had no other choice'. Fattovich suggests...",
+                    q25: "Paragraph A: 'Some people have argued that Punt was not on the sea, or a fictitious place altogether, 'says Oxford University Egyptologist John Baines.'",
+                    q26: "Paragraph E: 'From the very beginning, the Egyptians were building boats that could be disassembled, and that makes them different from anyone else, 'Ward says.'"
+                };
+                
+                let score = 0;
+                resultsDetails.innerHTML = '';
+                
+                // Check each answer
+                for (let i = 14; i <= 26; i++) {
+                    const qId = 'q' + i;
+                    let userAnswer;
+                    
+                    if (i >= 14 && i <= 17 || i >= 22 && i <= 26) {
+                        // For dropdown questions
+                        userAnswer = document.getElementById(qId).value;
+                    } else {
+                        // For text input questions
+                        userAnswer = document.getElementById(qId).value.trim().toLowerCase();
+                    }
+                    
+                    const correctAnswer = correctAnswers[qId].toLowerCase();
+                    
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'result-item';
+                    
+                    const questionText = document.createElement('div');
+                    questionText.className = 'result-question';
+                    
+                    if (i >= 14 && i <= 17 || i >= 22 && i <= 26) {
+                        questionText.textContent = `Question ${i}: ${document.querySelector(`label[for="${qId}"]`).textContent}`;
+                    } else {
+                        questionText.textContent = `Question ${i}: ${document.querySelector(`label[for="${qId}"]`).textContent}`;
+                    }
+                    
+                    const userAnswerText = document.createElement('div');
+                    userAnswerText.textContent = `Your answer: ${userAnswer || '(no answer)'}`;
+                    
+                    const correctAnswerText = document.createElement('div');
+                    correctAnswerText.textContent = `Correct answer: ${correctAnswer}`;
+                    
+                    const referenceText = document.createElement('div');
+                    referenceText.className = 'answer-reference';
+                    referenceText.innerHTML = answerReferences[qId];
+                    
+                    resultItem.appendChild(questionText);
+                    resultItem.appendChild(userAnswerText);
+                    resultItem.appendChild(correctAnswerText);
+                    resultItem.appendChild(referenceText);
+                    
+                    if (userAnswer.toLowerCase() === correctAnswer) {
+                        resultItem.classList.add('correct');
+                        score++;
+                    } else {
+                        resultItem.classList.add('incorrect');
+                    }
+                    
+                    resultsDetails.appendChild(resultItem);
+                }
+                
+                scoreElement.textContent = `Score: ${score}/13`;
+                resultsContainer.style.display = 'flex';
+            }
+        });
+    </script>
+</body>
+</html>

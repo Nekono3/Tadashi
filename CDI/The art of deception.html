@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Test - The art of deception</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --day-bg: #f8f9fa;
+            --day-text: #212529;
+            --day-primary: #4e73df;
+            --day-secondary: #eaecf4;
+            --day-highlight: #fffacd;
+            --day-highlight-blue: #e6f7ff;
+            
+            --night-bg: #1a1a2e;
+            --night-text: #e6e6e6;
+            --night-primary: #6c63ff;
+            --night-secondary: #16213e;
+            --night-highlight: #423d15;
+            --night-highlight-blue: #1e3a5f;
+            
+            --sepia-bg: #f5ecd7;
+            --sepia-text: #3b2c1e;
+            --sepia-primary: #8b5a2b;
+            --sepia-secondary: #e6d7c1;
+            --sepia-highlight: #d8c690;
+            --sepia-highlight-blue: #c3d6e6;
+            
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: var(--transition);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--day-bg);
+            color: var(--day-text);
+            overflow-x: hidden;
+        }
+
+        body.night-mode {
+            background-color: var(--night-bg);
+            color: var(--night-text);
+        }
+
+        body.sepia-mode {
+            background-color: var(--sepia-bg);
+            color: var(--sepia-text);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--day-primary);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        body.night-mode header {
+            background-color: var(--night-primary);
+        }
+
+        body.sepia-mode header {
+            background-color: var(--sepia-primary);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 0.5rem;
+        }
+
+        .theme-switcher {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .theme-btn {
+            background: none;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .theme-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .telegram-btn {
+            background-color: #0088cc;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .telegram-btn:hover {
+            background-color: #006da3;
+            transform: translateY(-2px);
+        }
+
+        .telegram-btn i {
+            margin-right: 0.5rem;
+        }
+
+        .timer-container {
+            background-color: var(--day-secondary);
+            padding: 0.5rem 1rem;
+            text-align: center;
+            font-weight: bold;
+            position: relative;
+            position: sticky;
+            top: 68px;
+            z-index: 90;
+        }
+
+        body.night-mode .timer-container {
+            background-color: var(--night-secondary);
+        }
+
+        body.sepia-mode .timer-container {
+            background-color: var(--sepia-secondary);
+        }
+
+        .timer {
+            font-size: 1.2rem;
+        }
+
+        .timer.warning {
+            color: #e74a3b;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .progress-bar {
+            height: 5px;
+            width: 100%;
+            background-color: #e9ecef;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+        .progress {
+            height: 100%;
+            width: 100%;
+            background-color: var(--day-primary);
+            transition: width 1s linear;
+        }
+
+        body.night-mode .progress {
+            background-color: var(--night-primary);
+        }
+
+        body.sepia-mode .progress {
+            background-color: var(--sepia-primary);
+        }
+
+        .content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        @media (max-width: 992px) {
+            .content {
+                flex-direction: column;
+            }
+        }
+
+        .passage-container {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            border-right: 1px solid #dee2e6;
+            height: calc(100vh - 136px);
+            position: sticky;
+            top: 136px;
+        }
+
+        body.night-mode .passage-container {
+            border-right-color: #343a40;
+        }
+
+        body.sepia-mode .passage-container {
+            border-right-color: #d6c7a8;
+        }
+
+        @media (max-width: 992px) {
+            .passage-container {
+                border-right: none;
+                border-bottom: 1px solid #dee2e6;
+                height: auto;
+                position: static;
+            }
+
+            body.night-mode .passage-container {
+                border-bottom-color: #343a40;
+            }
+
+            body.sepia-mode .passage-container {
+                border-bottom-color: #d6c7a8;
+            }
+        }
+
+        .passage-title {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--day-primary);
+        }
+
+        body.night-mode .passage-title {
+            color: var(--night-primary);
+        }
+
+        body.sepia-mode .passage-title {
+            color: var(--sepia-primary);
+        }
+
+        .passage-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            text-align: justify;
+        }
+
+        .passage-content p {
+            margin-bottom: 1rem;
+        }
+
+        .passage-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .section-label {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--day-primary);
+        }
+
+        body.night-mode .section-label {
+            color: var(--night-primary);
+        }
+
+        body.sepia-mode .section-label {
+            color: var(--sepia-primary);
+        }
+
+        .highlight {
+            background-color: var(--day-highlight);
+            padding: 0 2px;
+            border-radius: 3px;
+        }
+
+        body.night-mode .highlight {
+            background-color: var(--night-highlight);
+        }
+
+        body.sepia-mode .highlight {
+            background-color: var(--sepia-highlight);
+        }
+
+        .highlight-blue {
+            background-color: var(--day-highlight-blue);
+            padding: 0 2px;
+            border-radius: 3px;
+        }
+
+        body.night-mode .highlight-blue {
+            background-color: var(--night-highlight-blue);
+        }
+
+        body.sepia-mode .highlight-blue {
+            background-color: var(--sepia-highlight-blue);
+        }
+
+        .highlight-menu {
+            position: absolute;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            padding: 0.5rem;
+            display: flex;
+            z-index: 1000;
+            transform: translateY(-100%);
+        }
+
+        body.night-mode .highlight-menu {
+            background: #2d3748;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        body.sepia-mode .highlight-menu {
+            background: #e6d7c1;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .highlight-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin: 0 0.2rem;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .highlight-btn.yellow {
+            background-color: #fffacd;
+        }
+
+        .highlight-btn.blue {
+            background-color: #e6f7ff;
+        }
+
+        .highlight-btn.clear {
+            background-color: #f8f9fa;
+        }
+
+        body.night-mode .highlight-btn.clear {
+            background-color: #4a5568;
+            color: white;
+        }
+
+        body.sepia-mode .highlight-btn.clear {
+            background-color: #d6c7a8;
+        }
+
+        .questions-container {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            background-color: var(--day-secondary);
+            height: calc(100vh - 136px);
+        }
+
+        body.night-mode .questions-container {
+            background-color: var(--night-secondary);
+        }
+
+        body.sepia-mode .questions-container {
+            background-color: var(--sepia-secondary);
+        }
+
+        .questions-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--day-primary);
+        }
+
+        body.night-mode .questions-title {
+            color: var(--night-primary);
+        }
+
+        body.sepia-mode .questions-title {
+            color: var(--sepia-primary);
+        }
+
+        .question {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        body.night-mode .question {
+            background-color: #2d3748;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        body.sepia-mode .question {
+            background-color: #e6d7c1;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .option:hover {
+            background-color: #f8f9fa;
+        }
+
+        body.night-mode .option:hover {
+            background-color: #4a5568;
+        }
+
+        body.sepia-mode .option:hover {
+            background-color: #d6c7a8;
+        }
+
+        .option input {
+            margin-right: 0.5rem;
+        }
+
+        .input-text {
+            padding: 0.5rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        body.night-mode .input-text {
+            background-color: #2d3748;
+            border-color: #4a5568;
+            color: white;
+        }
+
+        body.sepia-mode .input-text {
+            background-color: #e6d7c1;
+            border-color: #d6c7a8;
+            color: var(--sepia-text);
+        }
+
+        .dropdown {
+            padding: 0.5rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            width: 100%;
+            margin-top: 0.5rem;
+            background-color: white;
+        }
+
+        body.night-mode .dropdown {
+            background-color: #2d3748;
+            border-color: #4a5568;
+            color: white;
+        }
+
+        body.sepia-mode .dropdown {
+            background-color: #e6d7c1;
+            border-color: #d6c7a8;
+            color: var(--sepia-text);
+        }
+
+        .submit-container {
+            padding: 1rem;
+            text-align: center;
+            background-color: var(--day-secondary);
+            border-top: 1px solid #dee2e6;
+            position: sticky;
+            bottom: 0;
+            z-index: 80;
+        }
+
+        body.night-mode .submit-container {
+            background-color: var(--night-secondary);
+            border-top-color: #343a40;
+        }
+
+        body.sepia-mode .submit-container {
+            background-color: var(--sepia-secondary);
+            border-top-color: #d6c7a8;
+        }
+
+        .submit-btn {
+            background-color: var(--day-primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        body.night-mode .submit-btn {
+            background-color: var(--night-primary);
+        }
+
+        body.sepia-mode .submit-btn {
+            background-color: var(--sepia-primary);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .result-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .result-content {
+            background-color: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        body.night-mode .result-content {
+            background-color: #2d3748;
+            color: white;
+        }
+
+        body.sepia-mode .result-content {
+            background-color: #e6d7c1;
+            color: var(--sepia-text);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6c757d;
+        }
+
+        body.night-mode .close-btn {
+            color: #a0aec0;
+        }
+
+        body.sepia-mode .close-btn {
+            color: #8b5a2b;
+        }
+
+        .result-title {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--day-primary);
+        }
+
+        body.night-mode .result-title {
+            color: var(--night-primary);
+        }
+
+        body.sepia-mode .result-title {
+            color: var(--sepia-primary);
+        }
+
+        .score {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            font-weight: bold;
+        }
+
+        .result-details {
+            margin-bottom: 2rem;
+        }
+
+        .result-question {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+
+        body.night-mode .result-question {
+            background-color: #4a5568;
+        }
+
+        body.sepia-mode .result-question {
+            background-color: #d6c7a8;
+        }
+
+        .correct {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .incorrect {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .answer-location {
+            margin-top: 0.5rem;
+            font-style: italic;
+            color: #6c757d;
+        }
+
+        body.night-mode .answer-location {
+            color: #a0aec0;
+        }
+
+        body.sepia-mode .answer-location {
+            color: #8b5a2b;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .action-btn {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .action-btn i {
+            margin-right: 0.5rem;
+        }
+
+        .restart-btn {
+            background-color: var(--day-primary);
+            color: white;
+        }
+
+        body.night-mode .restart-btn {
+            background-color: var(--night-primary);
+        }
+
+        body.sepia-mode .restart-btn {
+            background-color: var(--sepia-primary);
+        }
+
+        .review-btn {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .view-toggle {
+            display: none;
+        }
+
+        @media (max-width: 992px) {
+            .view-toggle {
+                display: flex;
+                justify-content: center;
+                margin-bottom: 1rem;
+                gap: 1rem;
+            }
+            
+            .view-btn {
+                padding: 0.5rem 1rem;
+                background-color: var(--day-primary);
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+            
+            body.night-mode .view-btn {
+                background-color: var(--night-primary);
+            }
+            
+            body.sepia-mode .view-btn {
+                background-color: var(--sepia-primary);
+            }
+            
+            .passage-container, .questions-container {
+                display: none;
+                height: calc(100vh - 200px);
+            }
+            
+            .passage-container.active, .questions-container.active {
+                display: block;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .theme-switcher {
+                order: 3;
+            }
+            
+            .passage-title {
+                font-size: 1.5rem;
+            }
+            
+            .result-content {
+                padding: 1.5rem;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+        }
+
+        .question-navigation {
+            position: sticky;
+            bottom: 80px;
+            background: white;
+            padding: 0.5rem;
+            border-radius: 8px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            z-index: 70;
+            margin: 0 1rem;
+        }
+
+        body.night-mode .question-navigation {
+            background: #2d3748;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        body.sepia-mode .question-navigation {
+            background: #e6d7c1;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #dee2e6;
+            background: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        body.night-mode .question-btn {
+            background: #4a5568;
+            border-color: #343a40;
+            color: white;
+        }
+
+        body.sepia-mode .question-btn {
+            background: #d6c7a8;
+            border-color: #c3b599;
+            color: var(--sepia-text);
+        }
+
+        .question-btn.answered {
+            background-color: var(--day-primary);
+            color: white;
+            border: none;
+        }
+
+        body.night-mode .question-btn.answered {
+            background-color: var(--night-primary);
+        }
+
+        body.sepia-mode .question-btn.answered {
+            background-color: var(--sepia-primary);
+        }
+
+        .question-btn.current {
+            box-shadow: 0 0 0 2px var(--day-primary);
+        }
+
+        body.night-mode .question-btn.current {
+            box-shadow: 0 0 0 2px var(--night-primary);
+        }
+
+        body.sepia-mode .question-btn.current {
+            box-shadow: 0 0 0 2px var(--sepia-primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-microscope"></i>
+                <span>IELTS Reading Test</span>
+            </div>
+            <div class="theme-switcher">
+                <button class="theme-btn" id="day-theme" title="Day Mode"><i class="fas fa-sun"></i></button>
+                <button class="theme-btn" id="night-theme" title="Night Mode"><i class="fas fa-moon"></i></button>
+                <button class="theme-btn" id="sepia-theme" title="Sepia Mode"><i class="fas fa-book"></i></button>
+            </div>
+            <a href="tg://resolve?domain=aftum_8" class="telegram-btn">
+                <i class="fab fa-telegram"></i>
+                Телеграмм канал
+            </a>
+        </header>
+
+        <div class="timer-container">
+            <div class="timer" id="timer">20:00</div>
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+        </div>
+
+        <div class="view-toggle" id="view-toggle">
+            <button class="view-btn" id="show-passage">Текст</button>
+            <button class="view-btn" id="show-questions">Вопросы</button>
+        </div>
+
+        <div class="content">
+            <div class="passage-container active" id="passage-container">
+                <h1 class="passage-title">The art of deception</h1>
+                <div class="passage-content" id="passage">
+                    <p><em>Do tiny changes of facial expression show whether someone is telling lies?</em></p>
+                    
+                    <div class="passage-section">
+                        <p>Forty years ago, the research psychologist Dr Paul Ekman was addressing a group of young psychiatrists in training when he was asked a question, the answer to which has kept him busy ever since. Suppose the group wanted to know, a particular patient swears they are telling the truth. They look and sound sincere. So here is the question: is there any way you can be sure they are telling the truth? Ekman did not know the answer then, but wanted to find out.</p>
+                    </div>
+
+                    <div class="passage-section">
+                        <p>As part of his research, he had already filmed a series of 12-minute interviews with psychiatric patients. In a subsequent conversation, one of the patients told him that she had lied to him. So, Ekman sat and looked at the film but saw nothing noteworthy. Then he slowed it down and looked again. Then he slowed it even further. And suddenly, there, across just two frames of the film, he saw it: an intense expression of extreme anguish. It lasted less than a 15th of a second, but once he had spotted the first expression, he soon found three more examples in that same interview. He termed his discovery "microexpression": very rapid intense demonstrations of emotion that the subject intended to be concealed.</p>
+                    </div>
+
+                    <div class="passage-section">
+                        <p>Over the course of the next four decades, Ekman successfully demonstrated a proposition first suggested by Charles Darwin: that the ways in which we express rage, disgust, contempt, fear, surprise, happiness and sadness are universal. The facial muscles triggered by those seven basic emotions are, he has shown, essentially standard, regardless of language and culture, from the US to Japan and Brazil to Papua New Guinea. What is more, expressions of emotion are impossible to suppress and, particularly when we are lying, micro-expressions of powerfully felt emotions will inevitably flit across our face before we get the chance to stop them.</p>
+                    </div>
+
+                    <div class="passage-section">
+                        <p>Fortunately for liars, most people will fail to spot these fleeting signals of inner torment. Of the 15,000 Ekman has tested, only 50 people, whom he calls "naturals", have been able to do it. But given a little more training, Ekman says, almost anyone can develop the skill. He should know, since these tests were completed in the mid-1980s and the first publication of his research, he has been called in by the FBI and CIA (among countless more law-enforcement and other agencies around the world), not just to solve cases, but to teach them how to use his technique for themselves. He has held workshops for defense and prosecution lawyers, health professionals, even jealous spouses, all of them wanting to know exactly when someone is not being 100 percent candid.</p>
+                    </div>
+
+                    <div class="passage-section">
+                        <p>Most recently, Ekman's research has resulted in a new television series about the exploits of the fictional Dr Cal Lightman, a scientist who studies involuntary body language to discover not only if you are lying. But why might you have been motivated to do so? According to the publicity blurb, Lightman is a human lie detector, even more accurate than a polygraph test. Ekman concedes he was skeptical when the producer first approached him with the idea of turning his life's work into a TV series, and initially would have stopped the project if he could. In particular, he was fearful that the show would exaggerate the effectiveness of his techniques and create the quite inaccurate impression among audiences that criminals could no longer hope to get away with lying. In the worst-case scenario, he was concerned about unfair convictions, that one day someone not properly trained in his techniques might be sitting on a jury and wrongly find someone guilty of a crime simply on the basis of a television programme.</p>
+                    </div>
+
+                    <div class="passage-section">
+                        <p>In the end though, he was won over because the series is unusual in several respects. It is the first time, as far as Ekman is aware, that a commercial TV drama has been based on the work of just one scientist. That scientist is also deeply involved in the project, talking through plot ideas and checking five successive drafts of each script to ensure details are correct. He was also impressed with the producer's manifestly serious and well-intentioned reasons for making the programme. Now that the first series has been completed, he believes probably 80-90 per cent of the show is based on fact and that's good enough for what is. After all, a drama, not a documentary.</p>
+                    </div>
+
+                    <div class="passage-section">
+                        <p>Ekman, incidentally, professes to have been a terrible liar ever since he was a small boy and observes that the ability to detect a lie and the ability to lie successfully are completely unrelated. He has been asked by people running for high office if he could teach them to become more credible with the public but has always refused to use his skills in that way on ethical grounds. He also insists that there are various kinds of lies. A "true" lie can be identified by having two essential characteristics: there must be a deliberate intent to mislead and there must be no notification that this is what is occurring. This means that an actor or a poker player isn't a true liar. They are supposed to deceive you, it's part of the game, and the same is true of flattery. He prefers to focus on the kinds of lies where the liar would be in grave trouble if they were found out, and where the target would feel properly aggrieved if they knew.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="questions-container" id="questions-container">
+                <h2 class="questions-title">Questions</h2>
+                
+                <div class="question" id="q27">
+                    <div class="question-title">27. According to the writer, Ekman became interested in lying after a question from his</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q27" value="A"> A peers.
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q27" value="B"> B patients.
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q27" value="C"> C students.
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q27" value="D"> D teachers.
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="question" id="q28">
+                    <div class="question-title">28. The writer refers to the 12-minute interviews in order to</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q28" value="A"> A illustrate how frequently patients lie.
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q28" value="B"> B describe the origins of Ekman's theories.
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q28" value="C"> C compare Ekman's research to previous studies.
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q28" value="D"> D show how patients behaviour is affected by filming.
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="question" id="q29">
+                    <div class="question-title">29. What is the writer's point in the third paragraph?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q29" value="A"> A Micro-expressions are common to all people.
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q29" value="B"> B Recent research has refuted an old idea.
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q29" value="C"> C With practice we can learn to control our micro-expressions.
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q29" value="D"> D Human society is too complex to allow for generalisations.
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="question" id="q30">
+                    <div class="question-title">30. What are we told about Ekman's conclusions from his tests?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q30" value="A"> A It's natural for people to lie.
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q30" value="B"> B Few untrained people can detect lying.
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q30" value="C"> C Most liars suffer from periods of depression.
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q30" value="D"> D All of his subjects were trained to identify micro-expressions.
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="question" id="q31">
+                    <div class="question-title">31. What point does the writer make about Ekman's techniques in the fourth paragraph?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q31" value="A"> A They take a decade to teach.
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q31" value="B"> B They have been in great demand.
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q31" value="C"> C They have aroused the suspicions of some agencies.
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q31" value="D"> D They can be used by a limited range of occupations.
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="question" id="q32-36">
+                    <div class="question-title">Questions 32-36</div>
+                    <p>Complete the summary using the list of words, A-I, below</p>
+                    <p>Write the correct letter, A-I, in boxes 32-36 on your answer sheet</p>
+                    
+                    <p>A new TV series based on Ekman's work features a hero named Lightman, who detects lies. Initially, Ekman was unenthusiastic about the TV project because he feared the possibility of encouraging viewers' <select class="dropdown" name="q32">
+                        <option value="">Select</option>
+                        <option value="A">A consequences</option>
+                        <option value="B">B crimes</option>
+                        <option value="C">C false beliefs</option>
+                        <option value="D">D motives</option>
+                        <option value="E">E justice</option>
+                        <option value="F">F accuracy</option>
+                        <option value="G">G acting</option>
+                        <option value="H">H research</option>
+                        <option value="I">I ratings</option>
+                    </select>. For example, he was worried that one day the programme could result in <select class="dropdown" name="q33">
+                        <option value="">Select</option>
+                        <option value="A">A consequences</option>
+                        <option value="B">B crimes</option>
+                        <option value="C">C false beliefs</option>
+                        <option value="D">D motives</option>
+                        <option value="E">E justice</option>
+                        <option value="F">F accuracy</option>
+                        <option value="G">G acting</option>
+                        <option value="H">H research</option>
+                        <option value="I">I ratings</option>
+                    </select> not being carried out. Ultimately though, he has given the show his blessing because he is not aware of any other comparable programme based on a single person's <select class="dropdown" name="q34">
+                        <option value="">Select</option>
+                        <option value="A">A consequences</option>
+                        <option value="B">B crimes</option>
+                        <option value="C">C false beliefs</option>
+                        <option value="D">D motives</option>
+                        <option value="E">E justice</option>
+                        <option value="F">F accuracy</option>
+                        <option value="G">G acting</option>
+                        <option value="H">H research</option>
+                        <option value="I">I ratings</option>
+                    </select>. The <select class="dropdown" name="q35">
+                        <option value="">Select</option>
+                        <option value="A">A consequences</option>
+                        <option value="B">B crimes</option>
+                        <option value="C">C false beliefs</option>
+                        <option value="D">D motives</option>
+                        <option value="E">E justice</option>
+                        <option value="F">F accuracy</option>
+                        <option value="G">G acting</option>
+                        <option value="H">H research</option>
+                        <option value="I">I ratings</option>
+                    </select> of the show's producer have been another pleasant surprise considering the genre of the programme. Ekman is happy with the show's overall <select class="dropdown" name="q36">
+                        <option value="">Select</option>
+                        <option value="A">A consequences</option>
+                        <option value="B">B crimes</option>
+                        <option value="C">C false beliefs</option>
+                        <option value="D">D motives</option>
+                        <option value="E">E justice</option>
+                        <option value="F">F accuracy</option>
+                        <option value="G">G acting</option>
+                        <option value="H">H research</option>
+                        <option value="I">I ratings</option>
+                    </select>.</p>
+                </div>
+                
+                <div class="question" id="q37">
+                    <div class="question-title">37. Ekman regrets the lies he told as a child.</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q37" value="yes"> YES
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q37" value="no"> NO
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q37" value="notgiven"> NOT GIVEN
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="question" id="q38">
+                    <div class="question-title">38. People who are good at lying tend to be good at detecting lies.</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q38" value="yes"> YES
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q38" value="no"> NO
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q38" value="notgiven"> NOT GIVEN
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="question" id="q39">
+                    <div class="question-title">39. Ekman has worked with poker players to help them lie more convincingly.</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q39" value="yes"> YES
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q39" value="no"> NO
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q39" value="notgiven"> NOT GIVEN
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="question" id="q40">
+                    <div class="question-title">40. Ekman is more interested in the types of lies with serious consequences.</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q40" value="yes"> YES
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q40" value="no"> NO
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q40" value="notgiven"> NOT GIVEN
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-navigation" id="question-navigation">
+            <!-- Question navigation buttons will be inserted here -->
+        </div>
+
+        <div class="submit-container">
+            <button class="submit-btn" id="submit-btn">
+                <i class="fas fa-paper-plane"></i> Submit Answers
+            </button>
+        </div>
+    </div>
+
+    <div class="result-container" id="result-container">
+        <div class="result-content">
+            <button class="close-btn" id="close-btn">&times;</button>
+            <h2 class="result-title">Test Results</h2>
+            <div class="score" id="score">Score: 0/14</div>
+            
+            <div class="result-details" id="result-details">
+                <!-- Results will be inserted here -->
+            </div>
+            
+            <div class="actions">
+                <button class="action-btn restart-btn" id="restart-btn">
+                    <i class="fas fa-redo"></i> Try Again
+                </button>
+                <button class="action-btn review-btn" id="review-btn">
+                    <i class="fas fa-book"></i> Review Answers
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme switching functionality
+            const body = document.body;
+            const dayThemeBtn = document.getElementById('day-theme');
+            const nightThemeBtn = document.getElementById('night-theme');
+            const sepiaThemeBtn = document.getElementById('sepia-theme');
+            
+            dayThemeBtn.addEventListener('click', () => {
+                body.className = '';
+            });
+            
+            nightThemeBtn.addEventListener('click', () => {
+                body.className = 'night-mode';
+            });
+            
+            sepiaThemeBtn.addEventListener('click', () => {
+                body.className = 'sepia-mode';
+            });
+            
+            // View toggle for mobile
+            const showPassageBtn = document.getElementById('show-passage');
+            const showQuestionsBtn = document.getElementById('show-questions');
+            const passageContainer = document.getElementById('passage-container');
+            const questionsContainer = document.getElementById('questions-container');
+            
+            if (showPassageBtn && showQuestionsBtn) {
+                showPassageBtn.addEventListener('click', () => {
+                    passageContainer.classList.add('active');
+                    questionsContainer.classList.remove('active');
+                    showPassageBtn.style.opacity = '1';
+                    showQuestionsBtn.style.opacity = '0.7';
+                });
+                
+                showQuestionsBtn.addEventListener('click', () => {
+                    questionsContainer.classList.add('active');
+                    passageContainer.classList.remove('active');
+                    showQuestionsBtn.style.opacity = '1';
+                    showPassageBtn.style.opacity = '0.7';
+                });
+                
+                // Set initial state
+                showPassageBtn.style.opacity = '1';
+                showQuestionsBtn.style.opacity = '0.7';
+            }
+            
+            // Create question navigation
+            const questionNavigation = document.getElementById('question-navigation');
+            const questions = document.querySelectorAll('.question');
+            
+            questions.forEach((question, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'question-btn';
+                btn.textContent = index + 27;
+                btn.setAttribute('data-question', index + 27);
+                
+                btn.addEventListener('click', () => {
+                    document.getElementById(`q${index + 27}`).scrollIntoView({ behavior: 'smooth' });
+                });
+                
+                questionNavigation.appendChild(btn);
+            });
+            
+            // Update question navigation when answers are selected
+            document.querySelectorAll('input[type="radio"], select').forEach(input => {
+                input.addEventListener('change', function() {
+                    const questionNum = this.name.replace('q', '');
+                    const btn = document.querySelector(`.question-btn[data-question="${questionNum}"]`);
+                    if (btn && this.value !== "") {
+                        btn.classList.add('answered');
+                    }
+                });
+            });
+            
+            // Timer functionality
+            const timerDisplay = document.getElementById('timer');
+            const progressBar = document.getElementById('progress');
+            const totalTime = 20 * 60; // 20 minutes in seconds
+            let timeLeft = totalTime;
+            let timerInterval;
+            
+            function startTimer() {
+                clearInterval(timerInterval);
+                timeLeft = totalTime;
+                updateTimerDisplay();
+                progressBar.style.width = '100%';
+                
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    updateTimerDisplay();
+                    
+                    const progressWidth = (timeLeft / totalTime) * 100;
+                    progressBar.style.width = `${progressWidth}%`;
+                    
+                    if (timeLeft <= 5 * 60) { // 5 minutes left
+                        timerDisplay.classList.add('warning');
+                    }
+                    
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        submitAnswers();
+                    }
+                }, 1000);
+            }
+            
+            function updateTimerDisplay() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            // Text highlighting functionality
+            const passage = document.getElementById('passage');
+            let highlightMenu = null;
+            
+            function createHighlightMenu() {
+                if (highlightMenu) {
+                    document.body.removeChild(highlightMenu);
+                }
+                
+                highlightMenu = document.createElement('div');
+                highlightMenu.className = 'highlight-menu';
+                highlightMenu.innerHTML = `
+                    <button class="highlight-btn yellow" title="Yellow Highlight"><i class="fas fa-highlighter"></i></button>
+                    <button class="highlight-btn blue" title="Blue Highlight"><i class="fas fa-highlighter"></i></button>
+                    <button class="highlight-btn clear" title="Clear Highlight"><i class="fas fa-eraser"></i></button>
+                `;
+                
+                document.body.appendChild(highlightMenu);
+                
+                // Add event listeners to highlight buttons
+                highlightMenu.querySelector('.yellow').addEventListener('click', () => {
+                    applyHighlight('highlight');
+                    hideHighlightMenu();
+                });
+                
+                highlightMenu.querySelector('.blue').addEventListener('click', () => {
+                    applyHighlight('highlight-blue');
+                    hideHighlightMenu();
+                });
+                
+                highlightMenu.querySelector('.clear').addEventListener('click', () => {
+                    removeHighlight();
+                    hideHighlightMenu();
+                });
+                
+                return highlightMenu;
+            }
+            
+            function showHighlightMenu(x, y) {
+                if (!highlightMenu) {
+                    highlightMenu = createHighlightMenu();
+                }
+                
+                highlightMenu.style.display = 'flex';
+                highlightMenu.style.left = `${x}px`;
+                highlightMenu.style.top = `${y - 40}px`;
+            }
+            
+            function hideHighlightMenu() {
+                if (highlightMenu) {
+                    highlightMenu.style.display = 'none';
+                }
+            }
+            
+            function applyHighlight(className) {
+                const selection = window.getSelection();
+                if (selection.rangeCount > 0 && !selection.isCollapsed) {
+                    const range = selection.getRangeAt(0);
+                    const selectedText = range.toString();
+                    
+                    if (selectedText.trim().length > 0) {
+                        const span = document.createElement('span');
+                        span.className = className;
+                        span.textContent = selectedText;
+                        
+                        range.deleteContents();
+                        range.insertNode(span);
+                        
+                        // Clear selection
+                        selection.removeAllRanges();
+                    }
+                }
+            }
+            
+            function removeHighlight() {
+                const selection = window.getSelection();
+                if (selection.rangeCount > 0 && !selection.isCollapsed) {
+                    const range = selection.getRangeAt(0);
+                    const selectedText = range.toString();
+                    
+                    if (selectedText.trim().length > 0) {
+                        // Create a document fragment with just the text
+                        const textNode = document.createTextNode(selectedText);
+                        
+                        range.deleteContents();
+                        range.insertNode(textNode);
+                        
+                        // Clear selection
+                        selection.removeAllRanges();
+                    }
+                }
+            }
+            
+            // Event listeners for text selection
+            passage.addEventListener('mouseup', function(e) {
+                const selection = window.getSelection();
+                if (selection.toString().trim().length > 0) {
+                    const range = selection.getRangeAt(0);
+                    const rect = range.getBoundingClientRect();
+                    
+                    showHighlightMenu(rect.left + window.scrollX, rect.top + window.scrollY);
+                } else {
+                    hideHighlightMenu();
+                }
+            });
+            
+            document.addEventListener('mousedown', function(e) {
+                if (highlightMenu && !highlightMenu.contains(e.target)) {
+                    hideHighlightMenu();
+                }
+            });
+            
+            // Answer submission and evaluation
+            const submitBtn = document.getElementById('submit-btn');
+            const resultContainer = document.getElementById('result-container');
+            const scoreDisplay = document.getElementById('score');
+            const resultDetails = document.getElementById('result-details');
+            const closeBtn = document.getElementById('close-btn');
+            const restartBtn = document.getElementById('restart-btn');
+            const reviewBtn = document.getElementById('review-btn');
+            
+            // Correct answers
+            const correctAnswers = {
+                q27: 'C',
+                q28: 'B',
+                q29: 'A',
+                q30: 'B',
+                q31: 'B',
+                q32: 'C',
+                q33: 'E',
+                q34: 'H',
+                q35: 'D',
+                q36: 'F',
+                q37: 'notgiven',
+                q38: 'no',
+                q39: 'notgiven',
+                q40: 'yes'
+            };
+            
+            // Answer locations in the text
+            const answerLocations = {
+                q27: "Forty years ago, the research psychologist Dr Paul Ekman was addressing a group of young psychiatrists in training",
+                q28: "As part of his research, he had already filmed a series of 12-minute interviews with psychiatric patients.",
+                q29: "Over the course of the next four decades, Ekman successfully demonstrated a proposition first suggested by Charles Darwin: that the ways in which we express rage, disgust, contempt, fear, surprise, happiness and sadness are universal.",
+                q30: "Fortunately for liars, most people will fail to spot these fleeting signals of inner torment. Of the 15,000 Ekman has tested, only 50 people, whom he calls 'naturals', have been able to do it.",
+                q31: "He should know, since these tests were completed in the mid-1980s and the first publication of his research, he has been called in by the FBI and CIA (among countless more law-enforcement and other agencies around the world)",
+                q32: "In particular, he was fearful that the show would exaggerate the effectiveness of his techniques and create the quite inaccurate impression among audiences",
+                q33: "In the worst-case scenario, he was concerned about unfair convictions, that one day someone not properly trained in his techniques might be sitting on a jury and wrongly find someone guilty of a crime",
+                q34: "It is the first time, as far as Ekman is aware, that a commercial TV drama has been based on the work of just one scientist.",
+                q35: "He was also impressed with the producer's manifestly serious and well-intentioned reasons for making the programme.",
+                q36: "Now that the first series has been completed, he believes probably 80-90 per cent of the show is based on fact",
+                q37: "No information provided about Ekman regretting childhood lies",
+                q38: "Ekman... observes that the ability to detect a lie and the ability to lie successfully are completely unrelated.",
+                q39: "No information provided about Ekman working with poker players",
+                q40: "He prefers to focus on the kinds of lies where the liar would be in grave trouble if they were found out, and where the target would feel properly aggrieved if they knew."
+            };
+            
+            function submitAnswers() {
+                clearInterval(timerInterval);
+                
+                let score = 0;
+                const results = [];
+                
+                // Check questions 27-31 (Multiple choice)
+                for (let i = 27; i <= 31; i++) {
+                    const questionName = `q${i}`;
+                    const selectedOption = document.querySelector(`input[name=${questionName}]:checked`);
+                    const userAnswer = selectedOption ? selectedOption.value : 'Not answered';
+                    const isCorrect = userAnswer === correctAnswers[questionName];
+                    
+                    if (isCorrect) score++;
+                    
+                    results.push({
+                        question: i,
+                        userAnswer: userAnswer,
+                        correctAnswer: correctAnswers[questionName],
+                        isCorrect: isCorrect,
+                        location: answerLocations[questionName]
+                    });
+                }
+                
+                // Check questions 32-36 (Dropdown selection)
+                for (let i = 32; i <= 36; i++) {
+                    const questionName = `q${i}`;
+                    const selectedOption = document.querySelector(`select[name=${questionName}]`);
+                    const userAnswer = selectedOption ? selectedOption.value : 'Not answered';
+                    const isCorrect = userAnswer === correctAnswers[questionName];
+                    
+                    if (isCorrect) score++;
+                    
+                    results.push({
+                        question: i,
+                        userAnswer: userAnswer,
+                        correctAnswer: correctAnswers[questionName],
+                        isCorrect: isCorrect,
+                        location: answerLocations[questionName]
+                    });
+                }
+                
+                // Check questions 37-40 (Yes/No/Not Given)
+                for (let i = 37; i <= 40; i++) {
+                    const questionName = `q${i}`;
+                    const selectedOption = document.querySelector(`input[name=${questionName}]:checked`);
+                    const userAnswer = selectedOption ? selectedOption.value : 'Not answered';
+                    const isCorrect = userAnswer === correctAnswers[questionName];
+                    
+                    if (isCorrect) score++;
+                    
+                    results.push({
+                        question: i,
+                        userAnswer: userAnswer,
+                        correctAnswer: correctAnswers[questionName],
+                        isCorrect: isCorrect,
+                        location: answerLocations[questionName]
+                    });
+                }
+                
+                displayResults(score, results);
+            }
+            
+            function displayResults(score, results) {
+                scoreDisplay.textContent = `Score: ${score}/14`;
+                
+                let resultsHTML = '';
+                results.forEach(result => {
+                    resultsHTML += `
+                        <div class="result-question">
+                            <p><strong>Question ${result.question}:</strong> 
+                            Your answer: <span class="${result.isCorrect ? 'correct' : 'incorrect'}">${result.userAnswer}</span>
+                            ${!result.isCorrect ? `Correct answer: <span class="correct">${result.correctAnswer}</span>` : ''}
+                            </p>
+                            <p class="answer-location">Answer found in: "${result.location}"</p>
+                        </div>
+                    `;
+                });
+                
+                resultDetails.innerHTML = resultsHTML;
+                resultContainer.style.display = 'flex';
+            }
+            
+            submitBtn.addEventListener('click', submitAnswers);
+            
+            closeBtn.addEventListener('click', () => {
+                resultContainer.style.display = 'none';
+            });
+            
+            restartBtn.addEventListener('click', () => {
+                // Reset all radio buttons
+                document.querySelectorAll('input[type="radio"]').forEach(input => {
+                    input.checked = false;
+                });
+                
+                // Reset all dropdowns
+                document.querySelectorAll('select').forEach(select => {
+                    select.selectedIndex = 0;
+                });
+                
+                // Reset question navigation
+                document.querySelectorAll('.question-btn').forEach(btn => {
+                    btn.classList.remove('answered');
+                });
+                
+                // Remove all highlights
+                document.querySelectorAll('.highlight, .highlight-blue').forEach(el => {
+                    const parent = el.parentNode;
+                    parent.replaceChild(document.createTextNode(el.textContent), el);
+                    parent.normalize();
+                });
+                
+                resultContainer.style.display = 'none';
+                startTimer();
+            });
+            
+            reviewBtn.addEventListener('click', () => {
+                resultContainer.style.display = 'none';
+            });
+            
+            // Initialize the timer when the page loads
+            startTimer();
+        });
+    </script>
+</body>
+</html>

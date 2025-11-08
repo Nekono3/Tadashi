@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Test - Trans-Atlantic Telegraph</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --day-bg: #f8f9fa;
+            --day-text: #212529;
+            --day-panel: #ffffff;
+            --day-accent: #4a6fa5;
+            --day-highlight: #ffeb3b;
+            --day-highlight2: #87ceeb;
+            --day-border: #dee2e6;
+            
+            --night-bg: #1a1a1a;
+            --night-text: #e6e6e6;
+            --night-panel: #2d2d2d;
+            --night-accent: #6b8cbe;
+            --night-highlight: #665d1e;
+            --night-highlight2: #1c3d54;
+            --night-border: #444;
+            
+            --sepia-bg: #f5ecd8;
+            --sepia-text: #3b3021;
+            --sepia-panel: #f0e6d2;
+            --sepia-accent: #8c7b6b;
+            --sepia-highlight: #d6c78a;
+            --sepia-highlight2: #a4c8d0;
+            --sepia-border: #d1c7b7;
+            
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: var(--transition);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body.day-mode {
+            --bg: var(--day-bg);
+            --text: var(--day-text);
+            --panel: var(--day-panel);
+            --accent: var(--day-accent);
+            --highlight: var(--day-highlight);
+            --highlight2: var(--day-highlight2);
+            --border: var(--day-border);
+        }
+
+        body.night-mode {
+            --bg: var(--night-bg);
+            --text: var(--night-text);
+            --panel: var(--night-panel);
+            --accent: var(--night-accent);
+            --highlight: var(--night-highlight);
+            --highlight2: var(--night-highlight2);
+            --border: var(--night-border);
+        }
+
+        body.sepia-mode {
+            --bg: var(--sepia-bg);
+            --text: var(--sepia-text);
+            --panel: var(--sepia-panel);
+            --accent: var(--sepia-accent);
+            --highlight: var(--sepia-highlight);
+            --highlight2: var(--sepia-highlight2);
+            --border: var(--sepia-border);
+        }
+
+        header {
+            background-color: var(--accent);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .theme-selector {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .theme-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .theme-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .telegram-btn {
+            background: #0088cc;
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .telegram-btn:hover {
+            background: #0077b5;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .timer {
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+        }
+
+        .timer.warning {
+            color: #ff5252;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .main-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .passage-container {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            border-right: 1px solid var(--border);
+            background-color: var(--panel);
+        }
+
+        .questions-container {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            background-color: var(--panel);
+        }
+
+        .passage-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .passage-content h2 {
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 0.5rem;
+        }
+
+        .passage-content p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        .highlight-menu {
+            position: absolute;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.5rem;
+            display: flex;
+            gap: 0.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .highlight-menu.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .highlight-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            transition: transform 0.2s;
+        }
+
+        .highlight-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .yellow-highlight {
+            background-color: var(--highlight);
+        }
+
+        .blue-highlight {
+            background-color: var(--highlight2);
+        }
+
+        .clear-highlight {
+            background-color: #f8f9fa;
+            color: #dc3545;
+        }
+
+        .question {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border-radius: 8px;
+            background-color: var(--bg);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .question h3 {
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+        }
+
+        .question p {
+            margin-bottom: 0.5rem;
+        }
+
+        .options {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .option-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            background: var(--panel);
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .option-btn.selected {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        input[type="text"] {
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--panel);
+            color: var(--text);
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .submit-btn {
+            display: block;
+            margin: 2rem auto;
+            padding: 1rem 2rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .results-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--panel);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 2rem;
+            display: none;
+        }
+
+        .results-container.show {
+            display: block;
+        }
+
+        .results-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .score {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            border-radius: 12px;
+            background: var(--bg);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .score h2 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .score-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .answer-review {
+            margin-bottom: 2rem;
+        }
+
+        .answer-item {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            background: var(--bg);
+        }
+
+        .answer-item.correct {
+            border-left: 4px solid #28a745;
+        }
+
+        .answer-item.incorrect {
+            border-left: 4px solid #dc3545;
+        }
+
+        .answer-text {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .answer-explanation {
+            font-size: 0.9rem;
+            color: var(--text);
+            opacity: 0.8;
+        }
+
+        .close-results {
+            display: block;
+            margin: 0 auto;
+            padding: 0.8rem 1.5rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close-results:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 992px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .passage-container {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+            
+            .telegram-btn span {
+                display: none;
+            }
+        }
+
+        @media (max-width: 576px) {
+            header {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+            
+            .theme-selector {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .options {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .option-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body class="day-mode">
+    <header>
+        <div class="theme-selector">
+            <button class="theme-btn" id="day-theme" title="Day Mode"><i class="fas fa-sun"></i></button>
+            <button class="theme-btn" id="night-theme" title="Night Mode"><i class="fas fa-moon"></i></button>
+            <button class="theme-btn" id="sepia-theme" title="Sepia Mode"><i class="fas fa-circle"></i></button>
+        </div>
+        <a href="https://t.me/aftum_8" class="telegram-btn" target="_blank">
+            <i class="fab fa-telegram"></i>
+            <span>Телеграмм канал</span>
+        </a>
+        <div class="timer" id="timer">20:00</div>
+    </header>
+
+    <div class="main-container">
+        <div class="passage-container">
+            <div class="passage-content">
+                <h2>READING PASSAGE 1</h2>
+                <p>You should spend about 20 minutes on Questions 1-13, which are based on Reading Passage 1 below.</p>
+                
+                <h3>How the first trans-Atlantic telegraph cable was laid</h3>
+                
+                <p>On August 16, 1858, the first telegraphic message crossed the Atlantic Ocean. Travelling along a recently laid cable, the message from Britain's Queen Victoria to US President James Buchanan took just 16 hours. Prior to this, communication across the Atlantic would have been by ship – and taken around 10 days.</p>
+                
+                <p>People had been communicating via overland telegraph since 1844 and messages had been passing between Britain and France since 1850 when the first submarine cable was laid in the English Channel. But the attempt to span the Atlantic Ocean was the most daring attempt yet – and was the talk of the age, the 19th-century equivalent of the Apollo space mission. The idea that one could seemingly cheat time and space was inspiring and it changed the way people thought about the world and their place in it.</p>
+                
+                <p>The driving force behind the trans-Atlantic telegraph cable was an American businessman called Cyrus Field. In 1856, he and Englishmen John Watkins Brett and Charles Tilson Bright formed the Atlantic Telegraph company. They raised £350,000 mostly from businessmen in London, Liverpool, Manchester and Glasgow. They also secured £14,000 annually from the British government plus the loan of ships and a similar amount from the US government.</p>
+                
+                <p>Getting the cable made proved to be difficult. The distance between the west coast of Ireland and Newfoundland is over 3,700km, and Field was unable to find a company that was capable of supplying the required cable in the desired time frame. As a result, two companies were engaged to fulfil the order. The cable had a core of seven copper wires down which the signal would pass. These were insulated with several layers of guttapercha (a natural plastic made from tree sap) and then armoured with iron wire. When it was complete, the weight of the cable proved too great for any single ship. It was therefore loaded onto two: the British ship, HMS Agamemnon and the American ship, USS Niagara.</p>
+                
+                <p>The first attempt to lay the cable began on August 5 1857 with both ships departing from the west coast of Ireland, near Ballycarbery Castle. The venture did not go according to plan. The cable snapped on the first day, but was recovered from the bottom and repaired. A few days later, mid-Atlantic, the cable snapped again, this time in water 3km deep. It was lost and the expedition abandoned.</p>
+                
+                <p>The next summer in 1858 they tried again. On this expedition, the two great ships met mid-Atlantic, each carrying half the cable. The two ends were joined together and the ships sailed away from each other. The cable broke three times and each time they were forced to start again. On July 29, with little hope of success, the cable was joined for the fourth time and the ships sailed for home. This time they succeeded. The cable was landed in Newfoundland on August 4 and in Ireland the following day. And a week or so later Queen Victoria sent that first trans-Atlantic message to President Buchanan.</p>
+                
+                <p>The celebrations were tremendous. One US newspaper proclaimed: New York has seldom seen a more complete holiday than that on September 1 1858, in celebration of the successful laying of the Atlantic cable. The enthusiasm of an entire nation was expressed in this jubilee of its metropolis, and the era of a closer connection with Europe was well ushered in by a day of genuine rejoicing and gaiety.</p>
+                
+                <p>Celebrations were, however, short-lived: the cable performed badly and failed after just three weeks. The project was put on hold, but the concept had been proved possible. By 1865, further research had been carried out into the problems which had plagued the earlier cables. In addition, cables had been successfully laid in the Mediterranean and in the Persian Gulf. The cables that were used were better engineered, with thicker cores and better insulation allowing faster transmission speeds.</p>
+                
+                <p>In 1865, Field incorporated a second company to raise enough funds to try again. He chartered the largest ship in the world at the time, the SS Great Eastern, which could carry the entire Atlantic cable. Huge salt-water tanks and other state-of-the-art machinery were fitted to ensure it remained in mint condition during its journey. All went well until, in heavy winds 1000km off the coast of Newfoundland, the cable rubbed on the side of the ship, snapped and plunged to the deep ocean floor.</p>
+                
+                <p>Not one to quit, Field vowed to return the following year. This final 1866 expedition proved to be successful and the cable was put into commercial service on July 28. One month later, the 1865 cable was brought to the surface and repaired, providing a second Atlantic telegraph link.</p>
+                
+                <p>The service had obvious and immediate impact. People in government were able to respond more swiftly to evolving situations. News travelled more quickly, which boosted trade on both sides of the Atlantic. It also had a profound effect on things such as family life and cultural ties. For example, it was no longer so difficult for immigrants in America to keep in touch with their families back home.</p>
+                
+                <p>The roller-coaster of cable-laying highs and lows between 1857 and 1866 caught the imaginations of a generation the way the space race did in the 20th century. There was immense public interest in the endeavour and in telegraphy more generally. At the time, telegraphic science was reported widely in the newspapers and the fortunes of the telegraph companies were followed closely. Discussions of the pitfalls and solutions to spanning the Atlantic with cable became everyday topics of conversation, and endless articles in the newspapers ensured that the project stayed in people's thoughts.</p>
+            </div>
+        </div>
+
+        <div class="questions-container">
+            <div class="question">
+                <h3>Questions 1 – 6</h3>
+                <p>Do the following statements agree with the information given in the text?</p>
+                <p>In boxes 1 – 6 below, write</p>
+                <p><strong>TRUE</strong> if the statement agrees with the information</p>
+                <p><strong>FALSE</strong> if the statement contradicts the information</p>
+                <p><strong>NOT GIVEN</strong> if there is no information on this</p>
+            </div>
+
+            <div class="question" id="q1">
+                <p><strong>1</strong> Field failed to find a company that could produce all of the cable needed by the specified date.</p>
+                <div class="options">
+                    <button class="option-btn" data-value="TRUE">TRUE</button>
+                    <button class="option-btn" data-value="FALSE">FALSE</button>
+                    <button class="option-btn" data-value="NOT GIVEN">NOT GIVEN</button>
+                </div>
+            </div>
+
+            <div class="question" id="q2">
+                <p><strong>2</strong> HMS Agamemnon and USS Niagara set sail from different locations on August 5, 1857.</p>
+                <div class="options">
+                    <button class="option-btn" data-value="TRUE">TRUE</button>
+                    <button class="option-btn" data-value="FALSE">FALSE</button>
+                    <button class="option-btn" data-value="NOT GIVEN">NOT GIVEN</button>
+                </div>
+            </div>
+
+            <div class="question" id="q3">
+                <p><strong>3</strong> On the 1858 expedition, the cable broke three times because of a manufacturing fault.</p>
+                <div class="options">
+                    <button class="option-btn" data-value="TRUE">TRUE</button>
+                    <button class="option-btn" data-value="FALSE">FALSE</button>
+                    <button class="option-btn" data-value="NOT GIVEN">NOT GIVEN</button>
+                </div>
+            </div>
+
+            <div class="question" id="q4">
+                <p><strong>4</strong> The newspaper quoted in the passage disapproved of the enthusiasm that met the 1858 expedition.</p>
+                <div class="options">
+                    <button class="option-btn" data-value="TRUE">TRUE</button>
+                    <button class="option-btn" data-value="FALSE">FALSE</button>
+                    <button class="option-btn" data-value="NOT GIVEN">NOT GIVEN</button>
+                </div>
+            </div>
+
+            <div class="question" id="q5">
+                <p><strong>5</strong> Many articles appeared in the press between 1857 and 1866 about the science behind the telegraph.</p>
+                <div class="options">
+                    <button class="option-btn" data-value="TRUE">TRUE</button>
+                    <button class="option-btn" data-value="FALSE">FALSE</button>
+                    <button class="option-btn" data-value="NOT GIVEN">NOT GIVEN</button>
+                </div>
+            </div>
+
+            <div class="question" id="q6">
+                <p><strong>6</strong> Between 1857 and 1866, people talked about the problems related to the telegraph project on a regular basis.</p>
+                <div class="options">
+                    <button class="option-btn" data-value="TRUE">TRUE</button>
+                    <button class="option-btn" data-value="FALSE">FALSE</button>
+                    <button class="option-btn" data-value="NOT GIVEN">NOT GIVEN</button>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>Questions 7 – 13</h3>
+                <p>Complete the notes below.</p>
+                <p>Choose <strong>ONE WORD ONLY</strong> from the text for each answer.</p>
+                <p>Write your answers in boxes 7 – 13 below.</p>
+            </div>
+
+            <div class="question" id="q7">
+                <p><strong>7</strong> the central wires of the cable were made of <input type="text" data-answer="copper"></p>
+            </div>
+
+            <div class="question" id="q8">
+                <p><strong>8</strong> the cable was put onto two ships due to its <input type="text" data-answer="weight"></p>
+            </div>
+
+            <div class="question" id="q9">
+                <p><strong>9</strong> further research led to the cable's thickness and <input type="text" data-answer="insulation"> being improved</p>
+            </div>
+
+            <div class="question" id="q10">
+                <p><strong>10</strong> Field set up another company to get the <input type="text" data-answer="funds"> for another attempt</p>
+            </div>
+
+            <div class="question" id="q11">
+                <p><strong>11</strong> members of the <input type="text" data-answer="government"> could react more quickly to events</p>
+            </div>
+
+            <div class="question" id="q12">
+                <p><strong>12</strong> news could be relayed faster, thus improving <input type="text" data-answer="trade"></p>
+            </div>
+
+            <div class="question" id="q13">
+                <p><strong>13</strong> it became easier for US <input type="text" data-answer="immigrants"> to maintain contact with their families</p>
+            </div>
+
+            <button class="submit-btn" id="submit-btn">Submit Answers</button>
+        </div>
+    </div>
+
+    <div class="highlight-menu" id="highlight-menu">
+        <button class="highlight-btn yellow-highlight" title="Yellow Highlight"><i class="fas fa-highlighter"></i></button>
+        <button class="highlight-btn blue-highlight" title="Blue Highlight"><i class="fas fa-highlighter"></i></button>
+        <button class="highlight-btn clear-highlight" title="Clear Highlight"><i class="fas fa-eraser"></i></button>
+    </div>
+
+    <div class="results-container" id="results-container">
+        <div class="results-content">
+            <div class="score">
+                <h2>Your Score</h2>
+                <div class="score-number" id="score-number">0/13</div>
+            </div>
+
+            <div class="answer-review">
+                <h3>Answer Review</h3>
+                <div id="answer-review-content"></div>
+            </div>
+
+            <button class="close-results" id="close-results">Close Results</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme switching
+            const body = document.body;
+            const dayThemeBtn = document.getElementById('day-theme');
+            const nightThemeBtn = document.getElementById('night-theme');
+            const sepiaThemeBtn = document.getElementById('sepia-theme');
+            
+            dayThemeBtn.addEventListener('click', () => {
+                body.className = 'day-mode';
+            });
+            
+            nightThemeBtn.addEventListener('click', () => {
+                body.className = 'night-mode';
+            });
+            
+            sepiaThemeBtn.addEventListener('click', () => {
+                body.className = 'sepia-mode';
+            });
+            
+            // Timer functionality
+            const timerElement = document.getElementById('timer');
+            let timeLeft = 20 * 60; // 20 minutes in seconds
+            let timerInterval;
+            
+            function startTimer() {
+                clearInterval(timerInterval);
+                timerInterval = setInterval(updateTimer, 1000);
+            }
+            
+            function updateTimer() {
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitAnswers();
+                    return;
+                }
+                
+                timeLeft--;
+                
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                
+                timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 5 * 60) { // 5 minutes left
+                    timerElement.classList.add('warning');
+                }
+            }
+            
+            startTimer();
+            
+            // Text highlighting functionality
+            const highlightMenu = document.getElementById('highlight-menu');
+            let currentSelection = null;
+            
+            document.addEventListener('selectionchange', function() {
+                const selection = window.getSelection();
+                if (!selection.rangeCount) return;
+                
+                const range = selection.getRangeAt(0);
+                if (range.collapsed) {
+                    hideHighlightMenu();
+                    return;
+                }
+                
+                // Check if selection is within the passage content
+                const passageContent = document.querySelector('.passage-content');
+                if (!passageContent.contains(range.commonAncestorContainer)) {
+                    hideHighlightMenu();
+                    return;
+                }
+                
+                currentSelection = range;
+                showHighlightMenu(range);
+            });
+            
+            document.addEventListener('mousedown', function(e) {
+                if (!highlightMenu.contains(e.target)) {
+                    hideHighlightMenu();
+                }
+            });
+            
+            function showHighlightMenu(range) {
+                const rect = range.getBoundingClientRect();
+                highlightMenu.style.top = `${rect.top + window.scrollY - highlightMenu.offsetHeight - 10}px`;
+                highlightMenu.style.left = `${rect.left + window.scrollX + rect.width / 2 - highlightMenu.offsetWidth / 2}px`;
+                highlightMenu.classList.add('show');
+            }
+            
+            function hideHighlightMenu() {
+                highlightMenu.classList.remove('show');
+                currentSelection = null;
+            }
+            
+            // Highlight buttons functionality
+            document.querySelector('.yellow-highlight').addEventListener('click', function() {
+                applyHighlight('yellow');
+            });
+            
+            document.querySelector('.blue-highlight').addEventListener('click', function() {
+                applyHighlight('blue');
+            });
+            
+            document.querySelector('.clear-highlight').addEventListener('click', function() {
+                clearHighlight();
+            });
+            
+            function applyHighlight(color) {
+                if (!currentSelection) return;
+                
+                const span = document.createElement('span');
+                span.className = `highlight ${color}-highlight`;
+                
+                try {
+                    span.appendChild(currentSelection.extractContents());
+                    currentSelection.insertNode(span);
+                    
+                    // Clear selection after highlighting
+                    window.getSelection().removeAllRanges();
+                    hideHighlightMenu();
+                } catch (e) {
+                    console.error('Error applying highlight:', e);
+                }
+            }
+            
+            function clearHighlight() {
+                if (!currentSelection) return;
+                
+                const selectedText = currentSelection.toString();
+                const parent = currentSelection.commonAncestorContainer.parentNode;
+                
+                if (parent.classList && parent.classList.contains('highlight')) {
+                    const text = document.createTextNode(selectedText);
+                    parent.parentNode.replaceChild(text, parent);
+                    
+                    // Clear selection after removing highlight
+                    window.getSelection().removeAllRanges();
+                    hideHighlightMenu();
+                }
+            }
+            
+            // Answer selection functionality
+            const optionButtons = document.querySelectorAll('.option-btn');
+            optionButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const question = this.closest('.question');
+                    question.querySelectorAll('.option-btn').forEach(btn => {
+                        btn.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                });
+            });
+            
+            // Submit answers functionality
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.addEventListener('click', submitAnswers);
+            
+            function submitAnswers() {
+                clearInterval(timerInterval);
+                
+                // Calculate score
+                let score = 0;
+                const results = [];
+                
+                // Check True/False/Not Given questions (1-6)
+                for (let i = 1; i <= 6; i++) {
+                    const question = document.getElementById(`q${i}`);
+                    const selectedOption = question.querySelector('.option-btn.selected');
+                    const userAnswer = selectedOption ? selectedOption.dataset.value : 'NOT ANSWERED';
+                    const correctAnswer = getCorrectAnswer(i);
+                    
+                    const isCorrect = userAnswer === correctAnswer;
+                    if (isCorrect) score++;
+                    
+                    results.push({
+                        question: i,
+                        userAnswer,
+                        correctAnswer,
+                        isCorrect
+                    });
+                }
+                
+                // Check text input questions (7-13)
+                for (let i = 7; i <= 13; i++) {
+                    const input = document.getElementById(`q${i}`).querySelector('input');
+                    const userAnswer = input.value.trim().toLowerCase();
+                    const correctAnswer = input.dataset.answer.toLowerCase();
+                    
+                    const isCorrect = userAnswer === correctAnswer;
+                    if (isCorrect) score++;
+                    
+                    results.push({
+                        question: i,
+                        userAnswer,
+                        correctAnswer,
+                        isCorrect
+                    });
+                }
+                
+                // Display results
+                document.getElementById('score-number').textContent = `${score}/13`;
+                
+                const reviewContent = document.getElementById('answer-review-content');
+                reviewContent.innerHTML = '';
+                
+                results.forEach(result => {
+                    const answerItem = document.createElement('div');
+                    answerItem.className = `answer-item ${result.isCorrect ? 'correct' : 'incorrect'}`;
+                    
+                    let answerHTML = `
+                        <div class="answer-text"><strong>Question ${result.question}:</strong> 
+                        Your answer: ${result.userAnswer} ${result.isCorrect ? '✓' : '✗'}</div>
+                        <div class="answer-explanation">Correct answer: ${result.correctAnswer}</div>
+                    `;
+                    
+                    answerItem.innerHTML = answerHTML;
+                    reviewContent.appendChild(answerItem);
+                });
+                
+                document.getElementById('results-container').classList.add('show');
+            }
+            
+            function getCorrectAnswer(questionNum) {
+                const correctAnswers = {
+                    1: 'TRUE',
+                    2: 'FALSE',
+                    3: 'NOT GIVEN',
+                    4: 'FALSE',
+                    5: 'TRUE',
+                    6: 'TRUE'
+                };
+                
+                return correctAnswers[questionNum];
+            }
+            
+            // Close results functionality
+            document.getElementById('close-results').addEventListener('click', function() {
+                document.getElementById('results-container').classList.remove('show');
+            });
+        });
+    </script>
+</body>
+</html>

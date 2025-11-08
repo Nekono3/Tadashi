@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Test: The Impact of the Potato</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --day-bg: #f8f9fa;
+            --day-text: #212529;
+            --day-primary: #6f42c1;
+            --day-secondary: #e9ecef;
+            --day-highlight-yellow: rgba(255, 255, 0, 0.3);
+            --day-highlight-blue: rgba(0, 191, 255, 0.3);
+            
+            --night-bg: #1a1a2e;
+            --night-text: #e6e6e6;
+            --night-primary: #8a2be2;
+            --night-secondary: #16213e;
+            --night-highlight-yellow: rgba(255, 215, 0, 0.4);
+            --night-highlight-blue: rgba(30, 144, 255, 0.4);
+            
+            --sepia-bg: #f4ecd8;
+            --sepia-text: #5c4b37;
+            --sepia-primary: #8b4513;
+            --sepia-secondary: #e3d5b8;
+            --sepia-highlight-yellow: rgba(210, 180, 140, 0.4);
+            --sepia-highlight-blue: rgba(101, 139, 165, 0.4);
+            
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            transition: var(--transition);
+        }
+
+        body.day-mode {
+            --bg: var(--day-bg);
+            --text: var(--day-text);
+            --primary: var(--day-primary);
+            --secondary: var(--day-secondary);
+            --highlight-yellow: var(--day-highlight-yellow);
+            --highlight-blue: var(--day-highlight-blue);
+        }
+
+        body.night-mode {
+            --bg: var(--night-bg);
+            --text: var(--night-text);
+            --primary: var(--night-primary);
+            --secondary: var(--night-secondary);
+            --highlight-yellow: var(--night-highlight-yellow);
+            --highlight-blue: var(--night-highlight-blue);
+        }
+
+        body.sepia-mode {
+            --bg: var(--sepia-bg);
+            --text: var(--sepia-text);
+            --primary: var(--sepia-primary);
+            --secondary: var(--sepia-secondary);
+            --highlight-yellow: var(--sepia-highlight-yellow);
+            --highlight-blue: var(--sepia-highlight-blue);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .theme-selector {
+            display: flex;
+            gap: 10px;
+        }
+
+        .theme-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .telegram-btn {
+            background: #0088cc;
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .telegram-btn:hover {
+            background: #006da3;
+            transform: translateY(-2px);
+        }
+
+        .timer {
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        .timer.warning {
+            color: #ff6b6b;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        .content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+        }
+
+        .passage-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            border-right: 1px solid var(--secondary);
+        }
+
+        .questions-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: var(--secondary);
+        }
+
+        .passage {
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .passage h1 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+        }
+
+        .passage p {
+            margin-bottom: 16px;
+        }
+
+        .highlight-yellow {
+            background-color: var(--highlight-yellow);
+        }
+
+        .highlight-blue {
+            background-color: var(--highlight-blue);
+        }
+
+        .highlight-menu {
+            position: absolute;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: flex;
+            gap: 5px;
+        }
+
+        .highlight-menu button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 3px;
+            transition: var(--transition);
+        }
+
+        .highlight-menu button:hover {
+            background: #f0f0f0;
+        }
+
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: var(--bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .question h3 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+
+        .options {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            border: 1px solid var(--secondary);
+            border-radius: 4px;
+            background-color: var(--bg);
+            color: var(--text);
+            width: 200px;
+        }
+
+        .submit-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 30px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .results {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--bg);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 20px;
+            display: none;
+        }
+
+        .results.visible {
+            display: block;
+        }
+
+        .results-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .score {
+            text-align: center;
+            font-size: 2rem;
+            margin: 20px 0;
+            color: var(--primary);
+        }
+
+        .answer {
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: var(--secondary);
+        }
+
+        .correct {
+            border-left: 5px solid #4caf50;
+        }
+
+        .incorrect {
+            border-left: 5px solid #f44336;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .reference {
+            font-style: italic;
+            color: var(--primary);
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body class="day-mode">
+    <div class="container">
+        <header>
+            <div class="theme-selector">
+                <button class="theme-btn" title="Day Mode" onclick="setTheme('day')"><i class="fas fa-sun"></i></button>
+                <button class="theme-btn" title="Night Mode" onclick="setTheme('night')"><i class="fas fa-moon"></i></button>
+                <button class="theme-btn" title="Sepia Mode" onclick="setTheme('sepia')"><i class="fas fa-seedling"></i></button>
+            </div>
+            <a href="tg://resolve?domain=aftum_8" class="telegram-btn">
+                <i class="fab fa-telegram"></i> Телеграмм канал
+            </a>
+            <div class="timer" id="timer">20:00</div>
+        </header>
+
+        <div class="content">
+            <div class="passage-container">
+                <div class="passage" id="reading-passage">
+                    <h1>The Impact of the Potato</h1>
+                    <p><strong>Jeff Chapman relates the story of history the most important vegetable</strong></p>
+
+                    <p><strong>A</strong> The potato was first cultivated in South America between three and seven thousand years ago, though scientists believe they may have grown wild in the region as long as 13,000 years ago. The genetic patterns of potato distribution indicate that the potato probably originated in the mountainous west-central region of the continent.</p>
+
+                    <p><strong>B</strong> Early Spanish chroniclers who misused the Indian word batata (sweet potato) as the name for the potato noted the importance of the tuber to the Incan Empire. The Incas had learned to preserve the potato for storage by dehydrating and mashing potatoes into a substance called Chuchu could be stored in a room for up to 10 years, providing excellent insurance against possible crop failures. As well as using the food as a staple crop, the Incas thought potatoes made childbirth easier and used it to treat injuries.</p>
+
+                    <p><strong>C</strong> The Spanish conquistadors first encountered the potato when they arrived in Peru in 1532 in search of gold, and noted Inca miners eating chuchu. At the time the Spaniards failed to realize that the potato represented a far more important treasure than either silver or gold, but they did gradually begin to use potatoes as basic rations aboard their ships. After the arrival of the potato in Spain in 1570a few Spanish farmers began to cultivate them on a small scale, mostly as food for livestock.</p>
+
+                    <p><strong>D</strong> Throughout Europe, potatoes were regarded with suspicion, distaste and fear. Generally considered to be unfit for human consumption, they were used only as animal fodder and sustenance for the starving. In northern Europe, potatoes were primarily grown in botanical gardens as an exotic novelty. Even peasants refused to eat from a plant that produced ugly, misshapen tubers and that had come from a heathen civilization. Some felt that the potato plant’s resemblance to plants in the nightshade family hinted that it was the creation of witches or devils.</p>
+
+                    <p><strong>E</strong> In meat-loving England, farmers and urban workers regarded potatoes with extreme distaste. In 1662, the Royal Society recommended the cultivation of the tuber to the English government and the nation, but this recommendation had little impact. Potatoes did not become a staple until, during the food shortages associated with the Revolutionary Wars, the English government began to officially encourage potato cultivation. In 1795, the Board of Agriculture issued a pamphlet entitled “Hints Respecting the Culture and Use of Potatoes” this was followed shortly by pro-potato editorials and potato recipes in The Times. Gradually, the lower classes began to follow the lead of the upper classes.</p>
+
+                    <p><strong>F</strong> A similar pattern emerged across the English Channel in the Netherlands, Belgium and France. While the potato slowly gained ground in eastern France (where it was often the only crop remaining after marauding soldiers plundered wheat fields and vineyards), it did not achieve widespread acceptance until the late 1700s. The peasants remained suspicious, in spite of a 1771 paper from the Facult de Paris testifying that the potato was not harmful but beneficial. The people began to overcome their distaste when the plant received the royal seal of approval: Louis XVI began to sport a potato flower in his buttonhole, and Marie-Antoinette wore the purple potato blossom in her hair.</p>
+
+                    <p><strong>G</strong> Frederick the Great of Prussia saw the potato’s potential to help feed his nation and lower the price of bread, but faced the challenge of overcoming the people’s prejudice against the plant. When he issued a 1774 order for his subjects to grow potatoes as protection against famine, the town of Kolberg replied: “The things have neither smell nor taste, not even the dogs will eat them, so what use are they to us?” Trying a less direct approach to encourage his subjects to begin planting potatoes, Frederick used a bit of reverse psychology: he planted a royal field of potato plants and stationed a heavy guard to protect this field from thieves. Nearby peasants naturally assumed that anything worth guarding was worth stealing, and so snuck into the field and snatched the plants for their home gardens. Of course, this was entirely in line with Frederick’s wishes.</p>
+
+                    <p><strong>H</strong> Historians debate whether the potato was primarily a cause or an effect of the huge population boom in industrial-era England and Wales. Prior to 1800the English diet had consisted primarily of meat, supplemented by bread, butter and cheese. Few vegetables were consumed, most vegetables being regarded as nutritionally worthless and potentially harmful. This view began to change gradually in the late 1700s. The Industrial Revolution was drawing an ever increasing percentage of the populace into crowded cities, where only the richest could afford homes with ovens or coal storage rooms, and people were working 12-16 hour days which left them with little time or energy to prepare food. High yielding, easily prepared potato crops were the obvious solution to England’s food problems.</p>
+
+                    <p><strong>I</strong> Whereas most of their neighbors regarded the potato with suspicion and had to be persuaded to use it by the upper classes, the Irish peasantry embraced the tuber more passionately than anyone since the Incas. The potato was well suited to the Irish the soil and climate, and its high yield suited the most important concern of most Irish farmers: to feed their families.</p>
+
+                    <p><strong>J</strong> The most dramatic example of the potato’s potential to alter population patterns occurred in Ireland, where the potato had become a staple by 1800. The Irish population doubled to eight million between 1780 and 1841this without any significant expansion of industry or reform of agricultural techniques beyond the widespread cultivation of the potato. Though Irish landholding practices were primitive in comparison with those of England, the potato’s high yields allowed even the poorest farmers to produce more healthy food than they needed with scarcely any investment or hard labor. Even children could easily plant, harvest and cook potatoes, which of course required no threshing, curing or grinding. The abundance provided by potatoes greatly decreased infant mortality and encouraged early marriage.</p>
+                </div>
+            </div>
+
+            <div class="questions-container">
+                <h2>Questions 1-5</h2>
+                <p>Do the following statements agree with the views of the writer in Reading Passage 1?</p>
+                <p>In boxes 1-5 on your answer sheet, write<br>
+                <strong>TRUE</strong> if the statement agrees with the information<br>
+                <strong>FALSE</strong> if the statement contradicts the information<br>
+                <strong>NOT GIVEN</strong> if there is no information on this</p>
+
+                <div class="question">
+                    <h3>1. The early Spanish called potato as the Incan name 'Chuchu'</h3>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q1" value="true"> TRUE</label>
+                        <label class="option"><input type="radio" name="q1" value="false"> FALSE</label>
+                        <label class="option"><input type="radio" name="q1" value="not-given"> NOT GIVEN</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>2. The purposes of Spanish coming to Peru were to find out potatoes</h3>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q2" value="true"> TRUE</label>
+                        <label class="option"><input type="radio" name="q2" value="false"> FALSE</label>
+                        <label class="option"><input type="radio" name="q2" value="not-given"> NOT GIVEN</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>3. The Spanish believed that the potato has the same nutrients as other vegetables</h3>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q3" value="true"> TRUE</label>
+                        <label class="option"><input type="radio" name="q3" value="false"> FALSE</label>
+                        <label class="option"><input type="radio" name="q3" value="not-given"> NOT GIVEN</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>4. Peasants at that time did not like to eat potatoes because they were ugly</h3>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q4" value="true"> TRUE</label>
+                        <label class="option"><input type="radio" name="q4" value="false"> FALSE</label>
+                        <label class="option"><input type="radio" name="q4" value="not-given"> NOT GIVEN</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>5. The popularity of potatoes in the UK was due to food shortages during the war</h3>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q5" value="true"> TRUE</label>
+                        <label class="option"><input type="radio" name="q5" value="false"> FALSE</label>
+                        <label class="option"><input type="radio" name="q5" value="not-given"> NOT GIVEN</label>
+                    </div>
+                </div>
+
+                <h2>Questions 6-13</h2>
+                <p>Complete the sentences below with <strong>NO MORE THAN ONE WORD</strong> from the passage for each answer.</p>
+
+                <div class="question">
+                    <h3>6. In France, people started to overcome their disgusting about potatoes because the King put a potato <input type="text" id="q6"> in his button hole.</h3>
+                </div>
+
+                <div class="question">
+                    <h3>7. Frederick realized the potential of potato but he had to handle the <input type="text" id="q7"> against potatoes from ordinary people.</h3>
+                </div>
+
+                <div class="question">
+                    <h3>8. The King of Prussia adopted some <input type="text" id="q8"> psychology to make people accept potatoes.</h3>
+                </div>
+
+                <div class="question">
+                    <h3>9. Before 1800 the English people preferred eating <input type="text" id="q9"> with bread, butter and cheese.</h3>
+                </div>
+
+                <div class="question">
+                    <h3>10. The obvious way to deal with England food problems were high yielding potato <input type="text" id="q10"></h3>
+                </div>
+
+                <div class="question">
+                    <h3>11. The Irish <input type="text" id="q11"> and climate suited potatoes well.</h3>
+                </div>
+
+                <div class="question">
+                    <h3>12. Between 1780 and 1841, based on the <input type="text" id="q12"> of the potatoes, the Irish population doubled to eight million.</h3>
+                </div>
+
+                <div class="question">
+                    <h3>13. The potato's high yields help the poorest farmers to produce more healthy food almost without <input type="text" id="q13"></h3>
+                </div>
+
+                <button class="submit-btn" onclick="submitAnswers()">Submit Answers</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="results" id="results">
+        <div class="results-content">
+            <h2>Your Results</h2>
+            <div class="score" id="score"></div>
+            
+            <div id="answers-review"></div>
+            
+            <button class="close-btn" onclick="closeResults()">&times;</button>
+        </div>
+    </div>
+
+    <script>
+        // Таймер
+        let timeLeft = 20 * 60; // 20 минут в секундах
+        const timerElement = document.getElementById('timer');
+        let timerInterval;
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            timerElement.textContent = `${minutes}:${seconds}`;
+            
+            if (timeLeft === 5 * 60) {
+                timerElement.classList.add('warning');
+            }
+            
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                submitAnswers();
+            } else {
+                timeLeft--;
+            }
+        }
+
+        // Система выделения текста
+        let highlightMenu = null;
+
+        document.getElementById('reading-passage').addEventListener('mouseup', function(e) {
+            const selection = window.getSelection();
+            if (selection.toString().length > 0) {
+                showHighlightMenu(e, selection);
+            }
+        });
+
+        document.addEventListener('mousedown', function(e) {
+            if (highlightMenu && !highlightMenu.contains(e.target)) {
+                document.body.removeChild(highlightMenu);
+                highlightMenu = null;
+            }
+        });
+
+        function showHighlightMenu(e, selection) {
+            if (highlightMenu) {
+                document.body.removeChild(highlightMenu);
+            }
+            
+            highlightMenu = document.createElement('div');
+            highlightMenu.className = 'highlight-menu';
+            
+            const yellowBtn = document.createElement('button');
+            yellowBtn.title = 'Yellow Highlight';
+            yellowBtn.innerHTML = '<i class="fas fa-highlighter" style="color: #ffeb3b;"></i>';
+            yellowBtn.onclick = function() {
+                highlightSelection(selection, 'yellow');
+                document.body.removeChild(highlightMenu);
+                highlightMenu = null;
+            };
+            
+            const blueBtn = document.createElement('button');
+            blueBtn.title = 'Blue Highlight';
+            blueBtn.innerHTML = '<i class="fas fa-highlighter" style="color: #00b0ff;"></i>';
+            blueBtn.onclick = function() {
+                highlightSelection(selection, 'blue');
+                document.body.removeChild(highlightMenu);
+                highlightMenu = null;
+            };
+            
+            const clearBtn = document.createElement('button');
+            clearBtn.title = 'Clear Highlight';
+            clearBtn.innerHTML = '<i class="fas fa-eraser"></i>';
+            clearBtn.onclick = function() {
+                removeHighlight(selection);
+                document.body.removeChild(highlightMenu);
+                highlightMenu = null;
+            };
+            
+            highlightMenu.appendChild(yellowBtn);
+            highlightMenu.appendChild(blueBtn);
+            highlightMenu.appendChild(clearBtn);
+            
+            document.body.appendChild(highlightMenu);
+            
+            const rect = selection.getRangeAt(0).getBoundingClientRect();
+            highlightMenu.style.top = (rect.bottom + window.scrollY - 40) + 'px';
+            highlightMenu.style.left = (rect.left + window.scrollX) + 'px';
+        }
+
+        function highlightSelection(selection, color) {
+            const range = selection.getRangeAt(0);
+            const selectedText = range.extractContents();
+            const span = document.createElement('span');
+            
+            span.appendChild(selectedText);
+            span.className = `highlight-${color}`;
+            
+            range.insertNode(span);
+            selection.removeAllRanges();
+        }
+
+        function removeHighlight(selection) {
+            const range = selection.getRangeAt(0);
+            const parentElement = range.startContainer.parentElement;
+            
+            if (parentElement.classList.contains('highlight-yellow') || 
+                parentElement.classList.contains('highlight-blue')) {
+                
+                const text = parentElement.textContent;
+                const textNode = document.createTextNode(text);
+                
+                parentElement.parentNode.replaceChild(textNode, parentElement);
+            }
+            
+            selection.removeAllRanges();
+        }
+
+        // Смена темы
+        function setTheme(theme) {
+            document.body.className = `${theme}-mode`;
+            localStorage.setItem('theme', theme);
+        }
+
+        // Проверка ответов
+        function submitAnswers() {
+            clearInterval(timerInterval);
+            
+            const answers = {
+                q1: getRadioValue('q1'),
+                q2: getRadioValue('q2'),
+                q3: getRadioValue('q3'),
+                q4: getRadioValue('q4'),
+                q5: getRadioValue('q5'),
+                q6: document.getElementById('q6').value.trim().toLowerCase(),
+                q7: document.getElementById('q7').value.trim().toLowerCase(),
+                q8: document.getElementById('q8').value.trim().toLowerCase(),
+                q9: document.getElementById('q9').value.trim().toLowerCase(),
+                q10: document.getElementById('q10').value.trim().toLowerCase(),
+                q11: document.getElementById('q11').value.trim().toLowerCase(),
+                q12: document.getElementById('q12').value.trim().toLowerCase(),
+                q13: document.getElementById('q13').value.trim().toLowerCase()
+            };
+            
+            const correctAnswers = {
+                q1: 'false',
+                q2: 'false',
+                q3: 'not-given',
+                q4: 'true',
+                q5: 'true',
+                q6: 'flower',
+                q7: 'prejudice',
+                q8: 'reverse',
+                q9: 'meat',
+                q10: 'crops',
+                q11: 'soil',
+                q12: 'cultivation',
+                q13: 'investment'
+            };
+            
+            const references = {
+                q1: 'Paragraph B: "Early Spanish chroniclers who misused the Indian word batata (sweet potato) as the name for the potato"',
+                q2: 'Paragraph C: "The Spanish conquistadors first encountered the potato when they arrived in Peru in 1532 in search of gold"',
+                q3: 'No information in the text about Spanish beliefs regarding potato nutrients',
+                q4: 'Paragraph D: "Even peasants refused to eat from a plant that produced ugly, misshapen tubers"',
+                q5: 'Paragraph E: "Potatoes did not become a staple until, during the food shortages associated with the Revolutionary Wars"',
+                q6: 'Paragraph F: "Louis XVI began to sport a potato flower in his buttonhole"',
+                q7: 'Paragraph G: "but faced the challenge of overcoming the people\'s prejudice against the plant"',
+                q8: 'Paragraph G: "Frederick used a bit of reverse psychology"',
+                q9: 'Paragraph H: "Prior to 1800 the English diet had consisted primarily of meat, supplemented by bread, butter and cheese"',
+                q10: 'Paragraph H: "High yielding, easily prepared potato crops were the obvious solution"',
+                q11: 'Paragraph I: "The potato was well suited to the Irish the soil and climate"',
+                q12: 'Paragraph J: "beyond the widespread cultivation of the potato"',
+                q13: 'Paragraph J: "with scarcely any investment or hard labor"'
+            };
+            
+            let score = 0;
+            let resultsHTML = '';
+            
+            for (let i = 1; i <= 13; i++) {
+                const q = 'q' + i;
+                const userAnswer = answers[q];
+                const correctAnswer = correctAnswers[q];
+                const isCorrect = userAnswer === correctAnswer;
+                
+                if (isCorrect) score++;
+                
+                resultsHTML += `
+                    <div class="answer ${isCorrect ? 'correct' : 'incorrect'}">
+                        <p><strong>Question ${i}:</strong> ${isCorrect ? 'Correct' : 'Incorrect'}</p>
+                        <p>Your answer: ${userAnswer || 'No answer'}</p>
+                        <p>Correct answer: ${correctAnswer}</p>
+                        <p class="reference">${references[q]}</p>
+                    </div>
+                `;
+            }
+            
+            const percentage = Math.round((score / 13) * 100);
+            document.getElementById('score').textContent = `Score: ${score}/13 (${percentage}%)`;
+            document.getElementById('answers-review').innerHTML = resultsHTML;
+            document.getElementById('results').classList.add('visible');
+        }
+
+        function getRadioValue(name) {
+            const selected = document.querySelector(`input[name="${name}"]:checked`);
+            return selected ? selected.value : '';
+        }
+
+        function closeResults() {
+            document.getElementById('results').classList.remove('visible');
+        }
+
+        // Инициализация
+        window.onload = function() {
+            const savedTheme = localStorage.getItem('theme') || 'day';
+            setTheme(savedTheme);
+            startTimer();
+        };
+    </script>
+</body>
+</html>

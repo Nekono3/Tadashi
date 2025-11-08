@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Test: The communication of science</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --day-bg: #f8f9fa;
+            --day-text: #212529;
+            --day-primary: #4e73df;
+            --day-secondary: #eaecf4;
+            --day-highlight-yellow: rgba(255, 255, 0, 0.3);
+            --day-highlight-blue: rgba(173, 216, 230, 0.3);
+            
+            --night-bg: #1a1a2e;
+            --night-text: #e6e6e6;
+            --night-primary: #6c8bce;
+            --night-secondary: #2d3748;
+            --night-highlight-yellow: rgba(255, 215, 0, 0.3);
+            --night-highlight-blue: rgba(100, 149, 237, 0.3);
+            
+            --sepia-bg: #f4ecd8;
+            --sepia-text: #5c4b37;
+            --sepia-primary: #8b4513;
+            --sepia-secondary: #e3d5bc;
+            --sepia-highlight-yellow: rgba(210, 180, 140, 0.3);
+            --sepia-highlight-blue: rgba(166, 123, 91, 0.3);
+            
+            --current-bg: var(--day-bg);
+            --current-text: var(--day-text);
+            --current-primary: var(--day-primary);
+            --current-secondary: var(--day-secondary);
+            --current-highlight-yellow: var(--day-highlight-yellow);
+            --current-highlight-blue: var(--day-highlight-blue);
+            
+            --transition: all 0.3s ease;
+        }
+
+        .night-theme {
+            --current-bg: var(--night-bg);
+            --current-text: var(--night-text);
+            --current-primary: var(--night-primary);
+            --current-secondary: var(--night-secondary);
+            --current-highlight-yellow: var(--night-highlight-yellow);
+            --current-highlight-blue: var(--night-highlight-blue);
+        }
+
+        .sepia-theme {
+            --current-bg: var(--sepia-bg);
+            --current-text: var(--sepia-text);
+            --current-primary: var(--sepia-primary);
+            --current-secondary: var(--sepia-secondary);
+            --current-highlight-yellow: var(--sepia-highlight-yellow);
+            --current-highlight-blue: var(--sepia-highlight-blue);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: var(--transition);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--current-bg);
+            color: var(--current-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--current-primary);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 100;
+        }
+
+        .theme-selector {
+            display: flex;
+            gap: 10px;
+        }
+
+        .theme-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .telegram-btn {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0088cc;
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .telegram-btn:hover {
+            background: #0077b5;
+            transform: translateX(-50%) scale(1.05);
+        }
+
+        .timer-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+        }
+
+        .timer {
+            font-size: 1.2rem;
+        }
+
+        .timer.warning {
+            color: #ff6b6b;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 130px);
+            overflow: hidden;
+        }
+
+        @media (max-width: 992px) {
+            .main-content {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .passage-container, .questions-container {
+                height: 50vh !important;
+            }
+        }
+
+        .passage-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            background-color: var(--current-secondary);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            height: 100%;
+        }
+
+        .passage-title {
+            margin-bottom: 1rem;
+            color: var(--current-primary);
+            border-bottom: 2px solid var(--current-primary);
+            padding-bottom: 0.5rem;
+            position: sticky;
+            top: 0;
+            background-color: var(--current-secondary);
+            z-index: 10;
+            padding: 1rem;
+            margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+        }
+
+        .passage-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .passage-content p {
+            margin-bottom: 1rem;
+        }
+
+        .highlight-yellow {
+            background-color: var(--current-highlight-yellow);
+        }
+
+        .highlight-blue {
+            background-color: var(--current-highlight-blue);
+        }
+
+        .highlight-menu {
+            position: absolute;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: flex;
+            gap: 5px;
+        }
+
+        .highlight-btn {
+            border: none;
+            border-radius: 4px;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .highlight-btn.yellow {
+            background-color: #ffeb3b;
+        }
+
+        .highlight-btn.blue {
+            background-color: #90caf9;
+        }
+
+        .highlight-btn.clear {
+            background-color: #f5f5f5;
+        }
+
+        .questions-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            background-color: var(--current-bg);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            height: 100%;
+        }
+
+        .questions-title {
+            margin-bottom: 1rem;
+            color: var(--current-primary);
+            border-bottom: 2px solid var(--current-primary);
+            padding-bottom: 0.5rem;
+            position: sticky;
+            top: 0;
+            background-color: var(--current-bg);
+            z-index: 10;
+            padding: 1rem;
+            margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+        }
+
+        .question {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: var(--current-secondary);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .question-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--current-primary);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+            background-color: var(--current-bg);
+            color: var(--current-text);
+        }
+
+        select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: var(--current-bg);
+            color: var(--current-text);
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .submit-btn {
+            display: block;
+            margin: 1rem auto;
+            padding: 12px 24px;
+            background-color: var(--current-primary);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: sticky;
+            bottom: 10px;
+            z-index: 10;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .results-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .results-content {
+            background-color: var(--current-bg);
+            color: var(--current-text);
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .results-title {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--current-primary);
+        }
+
+        .score {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            font-weight: bold;
+        }
+
+        .result-item {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            background-color: var(--current-secondary);
+        }
+
+        .correct {
+            border-left: 4px solid #4caf50;
+        }
+
+        .incorrect {
+            border-left: 4px solid #f44336;
+        }
+
+        .result-question {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .answer-reference {
+            font-style: italic;
+            color: var(--current-primary);
+            margin-top: 0.5rem;
+        }
+
+        .close-btn {
+            display: block;
+            margin: 1rem auto 0;
+            padding: 10px 20px;
+            background-color: var(--current-primary);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: var(--current-primary);
+            color: white;
+        }
+        
+        .yes-no-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 0.5rem;
+        }
+        
+        .yes-no-option {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .summary-options {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 10px;
+            margin-top: 0.5rem;
+        }
+        
+        .summary-option {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .summary-select {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="theme-selector">
+                <button class="theme-btn" id="day-theme" title="Day Mode"><i class="fas fa-sun"></i></button>
+                <button class="theme-btn" id="night-theme" title="Night Mode"><i class="fas fa-moon"></i></button>
+                <button class="theme-btn" id="sepia-theme" title="Sepia Mode"><i class="fas fa-seedling"></i></button>
+            </div>
+            
+            <a href="tg://resolve?domain=aftum_8" class="telegram-btn">
+                <i class="fab fa-telegram"></i> Телеграмм канал
+            </a>
+            
+            <div class="timer-container">
+                <i class="fas fa-clock"></i>
+                <div class="timer" id="timer">20:00</div>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <div class="passage-container">
+                <h2 class="passage-title">READING PASSAGE 3: The communication of science</h2>
+                <div class="passage-content" id="passage-content">
+                    <p>Science plays an increasingly significant role in peoples lives, making the communication by journalists in the popular media of scientific developments more important than ever. Yet such communication is fraught with challenges that can easily distort discussions and lead to unnecessary confusion.</p>
+
+                    <p>Some problems stem from the esoteric nature of current research and are the associated difficulty of coming up with sufficiently faithful terminology. Abstraction and complexity are not signs that a given scientific direction is wrong, but are instead a tribute to the success of human ingenuity in meeting the challenges that nature presents. They can, however, make communication more difficult.</p>
+
+                    <p>But many of the biggest challenges for scientific reporting arise because in areas of evolving research, scientists tend to be specialists, and often only party realise the significance of any particular advance or development. Since that partial understanding applies to most of the scientific developments that directly affect people's lives, such as cancer research and diet studies, learning how to overcome it is critical to stimulating a more informed scientific debate among the broader public.</p>
+
+                    <p>Ambiguous word choices are the source of some misunderstandings. Scientists often employ common terminology, to which they then assign a specific meaning that is impossible to fathom without a precise definition. Take Einstein's famous theory of relativity. The term 'relativity' here is intrinsically misleading. Many interpret the theory to mean that everything is relative and there are no absolutes, Yet although the measurements any observer makes depend on his coordinates and reference frame, according to Einstein's theory, the physical phenomena he measures, in fact, have an invariant description that transcends that observer's particular coordinates. The physical phenomena are not relative. Even Einstein admitted that the term relativity was probably misleading.</p>
+
+                    <p>But not all communication problems stem solely from poor word choices. Some are inherent in the intrinsically complex nature of much of modern science. Science sometimes transcends this limitation: remarkably, chemists were able to detail the precise chemical processes involved in the destruction of the ozone layer, making the evidence that chlorofluorocarbon gases (Freon, for example) were destroying the ozone layer successfully conveyed to the public.</p>
+
+                    <p>How journalists report scientific developments on vital issues of the day that are less well understood, or in which the connection is less direct, is a more complicated question. Global warming patterns are a case in point. Even if we understand some effects of carbon dioxide in the atmosphere, it is difficult to predict the precise chain of events that a marked increase in carbon dioxide will cause. The distillation of results presented to the public in such cases should reflect at least some of the subtleties of the most current developments. Balanced reporting, of course, usually helps public understanding. Journalists should seek to offer balance by providing opposing or competitive on any controversial issue, But almost all newly discovered results will have some supporters and some opponents, and only time and more evidence will sort out the true story. However, a real problem in the global warming debate was that the story was reported in the press in a way that suggested some scientists believed it was a legitimate issue and some didn't, even long after the bulk of the scientific community had recognized the seriousness of the problem.</p>
+
+                    <p>A better understanding by the general public of the mathematical significance of results would help to clarify many scientific discussions. Statistical analysis can show whether particular results are significant or could occur simply by chance. A few because no one yet knows the big years ago, the Harvard University faculty was tortured by empty debates over the relative intrinsic differences in the scientific abilities of men and women. One of the more amusing aspects of the discussion was that those who believed in the differences and those who didn't used the same evidence in their opposing arguments. about gender-specific scientific ability. How could that be? The answer is that the data did show gender differences, but no statistically significant differences in inherent scientific ability based on gender.</p>
+
+                    <p>There are steps we can take to improve public understanding of scientific developments. The first would be to inculcate greater understanding and acceptance of indirect scientific evidence not directly observable by human scientists. The information from an unmanned space mission is no less legitimate than the information from one in which people are on board. Second we might need different standards for evaluating science with urgent policy implications as opposed to research with a purely theoretical value. Third. It would be better if scientists were more prepared to discuss the mathematical significance of their results, and if the public didn't treat maths as quite so scary: statistics, which tell us the uncertainty in a measurement, give us the tools to evaluate new developments fully.</p>
+
+                    <p>But fourth, and most important, people have to recognise that science can be complex. If we accept only straightforward stories, the description will necessarily be distorted. When advances are subtle or complicated, scientists should be willing to go the extra distance to give proper explanations, and the public should be more patient about the truth. Even so, some difficulties are unavoidable. Most developments reflect work in progress, so the story is complex because no one yet know the big picture. Although the more involved story might not have the same immediate appeal, the truth in the end will always be far more interesting.</p>
+                </div>
+            </div>
+            
+            <div class="questions-container">
+                <h2 class="questions-title">Questions 27-40</h2>
+                
+                <div class="question">
+                    <div class="question-title">Questions 27-30</div>
+                    <p>Choose the correct letter, A, B, C or D.</p>
+                    <p>Write the correct letter in boxes 27-30 on your answer sheet.</p>
+                    
+                    <div class="options">
+                        <div class="option">
+                            <label for="q27">27. Why does the writer say we particularly need to pay attention to the communication of science?</label>
+                            <select id="q27">
+                                <option value="">Select answer</option>
+                                <option value="A">A Scientific developments are affecting everyone more and more.</option>
+                                <option value="B">B There is too little discussion of scientific research nowadays.</option>
+                                <option value="C">C There are now so many scientific research projects.</option>
+                                <option value="D">D Scientists need wider public support.</option>
+                            </select>
+                        </div>
+                        <div class="option">
+                            <label for="q28">28. In the second paragraph, the writer says it may be difficult to choose the appropriate terminology to describe scientific developments because</label>
+                            <select id="q28">
+                                <option value="">Select answer</option>
+                                <option value="A">A research findings can be interpreted very differently.</option>
+                                <option value="B">B the nature of modern science is inherently complicated.</option>
+                                <option value="C">C scientists are the only people who can understand their research.</option>
+                                <option value="D">D the public is so critical of the findings of scientists.</option>
+                            </select>
+                        </div>
+                        <div class="option">
+                            <label for="q29">29. The writer refers to the term relativity as an example of</label>
+                            <select id="q29">
+                                <option value="">Select answer</option>
+                                <option value="A">A Einstein's deliberate deception of the public.</option>
+                                <option value="B">B a scientific word used to describe a physical phenomenon.</option>
+                                <option value="C">C the use of a generally used word to describe a scientific concept.</option>
+                                <option value="D">D the absolute nature of scientific theories.</option>
+                            </select>
+                        </div>
+                        <div class="option">
+                            <label for="q30">30. What example does the writer cite as a successful scientific explanation of a complicated issue?</label>
+                            <select id="q30">
+                                <option value="">Select answer</option>
+                                <option value="A">A the results of diet studies</option>
+                                <option value="B">B the developments in cancer research</option>
+                                <option value="C">C the explanation of the theory of relativity</option>
+                                <option value="D">D the destruction of the ozone layer</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <div class="question-title">Questions 31-34</div>
+                    <p>Do the following statements agree with the views of the writer in Reading Passage 3?</p>
+                    <p>In boxes 31-34 on your answer sheet, write</p>
+                    
+                    <div class="options">
+                        <div class="option">
+                            <label>31. Reporting of different viewpoints on global warming tends to lead to a fuller appreciation of the issues.</label>
+                            <div class="yes-no-options">
+                                <div class="yes-no-option">
+                                    <input type="radio" id="q31-yes" name="q31" value="YES">
+                                    <label for="q31-yes">YES</label>
+                                </div>
+                                <div class="yes-no-option">
+                                    <input type="radio" id="q31-no" name="q31" value="NO">
+                                    <label for="q31-no">NO</label>
+                                </div>
+                                <div class="yes-no-option">
+                                    <input type="radio" id="q31-ng" name="q31" value="NOT GIVEN">
+                                    <label for="q31-ng">NOT GIVEN</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <label>32. The media's attempt to present both sides of the global warming issue went on for too long.</label>
+                            <div class="yes-no-options">
+                                <div class="yes-no-option">
+                                    <input type="radio" id="q32-yes" name="q32" value="YES">
+                                    <label for="q32-yes">YES</label>
+                                </div>
+                                <div class="yes-no-option">
+                                    <input type="radio" id="q32-no" name="q32" value="NO">
+                                    <label for="q32-no">NO</label>
+                                </div>
+                                <div class="yes-no-option">
+                                    <input type="radio" id="q32-ng" name="q32" value="NOT GIVEN">
+                                    <label for="q32-ng">NOT GIVEN</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <label>33. Explaining the mathematical significance of experimental results would confuse the public.</label>
+                            <div class="yes-no-options">
+                                <div class="yes-no-option">
+                                    <input type="radio" id="q33-yes" name="q33" value="YES">
+                                    <label for="q33-yes">YES</label>
+                                </div>
+                                <div class="yes-no-option">
+                                    <input type="radio" id="q33-no" name="q33" value="NO">
+                                    <label for="q33-no">NO</label>
+                                </div>
+                                <div class="yes-no-option">
+                                    <input type="radio" id="q33-ng" name="q33" value="NOT GIVEN">
+                                    <label for="q33-ng">NOT GIVEN</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <label>34. In the Harvard debate, it would have been better to pay more attention to the discoveries made by male and female scientists.</label>
+                            <div class="yes-no-options">
+                                <div class="yes-no-option">
+                                    <input type="radio" id="q34-yes" name="q34" value="YES">
+                                    <label for="q34-yes">YES</label>
+                                </div>
+                                <div class="yes-no-option">
+                                    <input type="radio" id="q34-no" name="q34" value="NO">
+                                    <label for="q34-no">NO</label>
+                                </div>
+                                <div class="yes-no-option">
+                                    <input type="radio" id="q34-ng" name="q34" value="NOT GIVEN">
+                                    <label for="q34-ng">NOT GIVEN</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <div class="question-title">Questions 35-40</div>
+                    <p>Complete the summary using the list of words, A-J below.</p>
+                    <p>Write the correct letter, A-J in boxes 35-40 on your answer sheet.</p>
+                    
+                    <div class="options">
+                        <div class="summary-options">
+                            <label for="q35">35. Several possible changes could reduce</label>
+                            <select id="q35" class="summary-select">
+                                <option value="">Select word</option>
+                                <option value="A">A complicated</option>
+                                <option value="B">B observable</option>
+                                <option value="C">C data</option>
+                                <option value="D">D proposals</option>
+                                <option value="E">E immediate</option>
+                                <option value="F">F misunderstandings</option>
+                                <option value="G">G open</option>
+                                <option value="H">H distorted</option>
+                                <option value="I">I implications</option>
+                                <option value="J">J miscalculations</option>
+                            </select>
+                        </div>
+                        <div class="summary-options">
+                            <label for="q36">36. in the reporting of science. The public needs to recognise that scientific evidence does not need to be</label>
+                            <select id="q36" class="summary-select">
+                                <option value="">Select word</option>
+                                <option value="A">A complicated</option>
+                                <option value="B">B observable</option>
+                                <option value="C">C data</option>
+                                <option value="D">D proposals</option>
+                                <option value="E">E immediate</option>
+                                <option value="F">F misunderstandings</option>
+                                <option value="G">G open</option>
+                                <option value="H">H distorted</option>
+                                <option value="I">I implications</option>
+                                <option value="J">J miscalculations</option>
+                            </select>
+                        </div>
+                        <div class="summary-options">
+                            <label for="q37">37. by people to be valid. The way theoretical research is judged may be different from the way research with practical</label>
+                            <select id="q37" class="summary-select">
+                                <option value="">Select word</option>
+                                <option value="A">A complicated</option>
+                                <option value="B">B observable</option>
+                                <option value="C">C data</option>
+                                <option value="D">D proposals</option>
+                                <option value="E">E immediate</option>
+                                <option value="F">F misunderstandings</option>
+                                <option value="G">G open</option>
+                                <option value="H">H distorted</option>
+                                <option value="I">I implications</option>
+                                <option value="J">J miscalculations</option>
+                            </select>
+                        </div>
+                        <div class="summary-options">
+                            <label for="q38">38. is. Scientists should be more</label>
+                            <select id="q38" class="summary-select">
+                                <option value="">Select word</option>
+                                <option value="A">A complicated</option>
+                                <option value="B">B observable</option>
+                                <option value="C">C data</option>
+                                <option value="D">D proposals</option>
+                                <option value="E">E immediate</option>
+                                <option value="F">F misunderstandings</option>
+                                <option value="G">G open</option>
+                                <option value="H">H distorted</option>
+                                <option value="I">I implications</option>
+                                <option value="J">J miscalculations</option>
+                            </select>
+                        </div>
+                        <div class="summary-options">
+                            <label for="q39">39. about the mathematical significance of their findings and the public should learn to be more comfortable with numerical</label>
+                            <select id="q39" class="summary-select">
+                                <option value="">Select word</option>
+                                <option value="A">A complicated</option>
+                                <option value="B">B observable</option>
+                                <option value="C">C data</option>
+                                <option value="D">D proposals</option>
+                                <option value="E">E immediate</option>
+                                <option value="F">F misunderstandings</option>
+                                <option value="G">G open</option>
+                                <option value="H">H distorted</option>
+                                <option value="I">I implications</option>
+                                <option value="J">J miscalculations</option>
+                            </select>
+                        </div>
+                        <div class="summary-options">
+                            <label for="q40">40. Most importantly, scientists, journalists and the public must accept that science and science reporting is necessarily</label>
+                            <select id="q40" class="summary-select">
+                                <option value="">Select word</option>
+                                <option value="A">A complicated</option>
+                                <option value="B">B observable</option>
+                                <option value="C">C data</option>
+                                <option value="D">D proposals</option>
+                                <option value="E">E immediate</option>
+                                <option value="F">F misunderstandings</option>
+                                <option value="G">G open</option>
+                                <option value="H">H distorted</option>
+                                <option value="I">I implications</option>
+                                <option value="J">J miscalculations</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="submit-btn" id="submit-btn">Submit Answers</button>
+            </div>
+        </div>
+        
+        <footer>
+            <p>IELTS Reading Practice Test &copy; 2023</p>
+        </footer>
+        
+        <div class="results-container" id="results-container">
+            <div class="results-content">
+                <h2 class="results-title">Test Results</h2>
+                <div class="score" id="score">Score: 0/14</div>
+                
+                <div id="results-details">
+                    <!-- Results will be inserted here -->
+                </div>
+                
+                <button class="close-btn" id="close-results">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme switching
+            const dayThemeBtn = document.getElementById('day-theme');
+            const nightThemeBtn = document.getElementById('night-theme');
+            const sepiaThemeBtn = document.getElementById('sepia-theme');
+            const body = document.body;
+            
+            dayThemeBtn.addEventListener('click', () => {
+                body.classList.remove('night-theme', 'sepia-theme');
+            });
+            
+            nightThemeBtn.addEventListener('click', () => {
+                body.classList.add('night-theme');
+                body.classList.remove('sepia-theme');
+            });
+            
+            sepiaThemeBtn.addEventListener('click', () => {
+                body.classList.add('sepia-theme');
+                body.classList.remove('night-theme');
+            });
+            
+            // Timer functionality
+            const timerElement = document.getElementById('timer');
+            let timeLeft = 20 * 60; // 20 minutes in seconds
+            let timerInterval;
+            
+            function startTimer() {
+                clearInterval(timerInterval);
+                timerInterval = setInterval(updateTimer, 1000);
+            }
+            
+            function updateTimer() {
+                const minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                seconds = seconds < 10 ? '0' + seconds : seconds;
+                
+                timerElement.textContent = `${minutes}:${seconds}`;
+                
+                if (timeLeft === 5 * 60) { // 5 minutes warning
+                    timerElement.classList.add('warning');
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitAnswers();
+                } else {
+                    timeLeft--;
+                }
+            }
+            
+            startTimer();
+            
+            // Text highlighting functionality
+            const passageContent = document.getElementById('passage-content');
+            let highlightMenu = null;
+            let currentSelection = null;
+            
+            passageContent.addEventListener('mouseup', function(e) {
+                const selection = window.getSelection();
+                if (selection.toString().length > 0) {
+                    showHighlightMenu(e, selection);
+                } else if (highlightMenu) {
+                    removeHighlightMenu();
+                }
+            });
+            
+            document.addEventListener('mousedown', function(e) {
+                if (highlightMenu && !highlightMenu.contains(e.target)) {
+                    removeHighlightMenu();
+                }
+            });
+            
+            function showHighlightMenu(e, selection) {
+                removeHighlightMenu();
+                currentSelection = selection;
+                
+                highlightMenu = document.createElement('div');
+                highlightMenu.className = 'highlight-menu';
+                
+                const yellowBtn = document.createElement('button');
+                yellowBtn.className = 'highlight-btn yellow';
+                yellowBtn.innerHTML = '<i class="fas fa-highlighter"></i>';
+                yellowBtn.title = 'Yellow Highlight';
+                yellowBtn.addEventListener('click', () => applyHighlight('yellow'));
+                
+                const blueBtn = document.createElement('button');
+                blueBtn.className = 'highlight-btn blue';
+                blueBtn.innerHTML = '<i class="fas fa-highlighter"></i>';
+                blueBtn.title = 'Blue Highlight';
+                blueBtn.addEventListener('click', () => applyHighlight('blue'));
+                
+                const clearBtn = document.createElement('button');
+                clearBtn.className = 'highlight-btn clear';
+                clearBtn.innerHTML = '<i class="fas fa-eraser"></i>';
+                clearBtn.title = 'Clear Highlight';
+                clearBtn.addEventListener('click', clearHighlight);
+                
+                highlightMenu.appendChild(yellowBtn);
+                highlightMenu.appendChild(blueBtn);
+                highlightMenu.appendChild(clearBtn);
+                
+                document.body.appendChild(highlightMenu);
+                
+                const rect = currentSelection.getRangeAt(0).getBoundingClientRect();
+                highlightMenu.style.top = (rect.bottom + window.scrollY + 5) + 'px';
+                highlightMenu.style.left = (rect.left + window.scrollX) + 'px';
+            }
+            
+            function removeHighlightMenu() {
+                if (highlightMenu) {
+                    highlightMenu.remove();
+                    highlightMenu = null;
+                    currentSelection = null;
+                }
+            }
+            
+            function applyHighlight(color) {
+                if (!currentSelection || currentSelection.toString().length === 0) {
+                    removeHighlightMenu();
+                    return;
+                }
+                
+                try {
+                    const range = currentSelection.getRangeAt(0);
+                    const selectedText = range.extractContents();
+                    
+                    const span = document.createElement('span');
+                    span.className = `highlight-${color}`;
+                    span.appendChild(selectedText);
+                    
+                    range.insertNode(span);
+                    
+                    // Clear selection
+                    currentSelection.removeAllRanges();
+                    removeHighlightMenu();
+                } catch (error) {
+                    console.error('Error applying highlight:', error);
+                    removeHighlightMenu();
+                }
+            }
+            
+            function clearHighlight() {
+                if (!currentSelection || currentSelection.toString().length === 0) {
+                    removeHighlightMenu();
+                    return;
+                }
+                
+                try {
+                    const range = currentSelection.getRangeAt(0);
+                    const parentElement = range.startContainer.parentElement;
+                    
+                    if (parentElement.classList.contains('highlight-yellow') || 
+                        parentElement.classList.contains('highlight-blue')) {
+                        
+                        const text = parentElement.textContent;
+                        parentElement.replaceWith(text);
+                    }
+                    
+                    // Clear selection
+                    currentSelection.removeAllRanges();
+                    removeHighlightMenu();
+                } catch (error) {
+                    console.error('Error clearing highlight:', error);
+                    removeHighlightMenu();
+                }
+            }
+            
+            // Answer submission and evaluation
+            const submitBtn = document.getElementById('submit-btn');
+            const resultsContainer = document.getElementById('results-container');
+            const scoreElement = document.getElementById('score');
+            const resultsDetails = document.getElementById('results-details');
+            const closeResultsBtn = document.getElementById('close-results');
+            
+            submitBtn.addEventListener('click', submitAnswers);
+            closeResultsBtn.addEventListener('click', () => {
+                resultsContainer.style.display = 'none';
+            });
+            
+            function submitAnswers() {
+                clearInterval(timerInterval);
+                
+                // Correct answers
+                const correctAnswers = {
+                    q27: 'A',
+                    q28: 'B',
+                    q29: 'C',
+                    q30: 'D',
+                    q31: 'NO',
+                    q32: 'YES',
+                    q33: 'NOT GIVEN',
+                    q34: 'NOT GIVEN',
+                    q35: 'F',
+                    q36: 'B',
+                    q37: 'I',
+                    q38: 'G',
+                    q39: 'C',
+                    q40: 'A'
+                };
+                
+                // Answer references
+                const answerReferences = {
+                    q27: "Paragraph 1: 'Science plays an increasingly significant role in peoples lives, making the communication by journalists in the popular media of scientific developments more important than ever.'",
+                    q28: "Paragraph 2: 'Some problems stem from the esoteric nature of current research and are the associated difficulty of coming up with sufficiently faithful terminology.'",
+                    q29: "Paragraph 4: 'Take Einstein's famous theory of relativity. The term 'relativity' here is intrinsically misleading.'",
+                    q30: "Paragraph 5: 'Science sometimes transcends this limitation: remarkably, chemists were able to detail the precise chemical processes involved in the destruction of the ozone layer'",
+                    q31: "Paragraph 6: 'Balanced reporting, of course, usually helps public understanding. However, a real problem in the global warming debate was that the story was reported in the press in a way that suggested some scientists believed it was a legitimate issue and some didn't'",
+                    q32: "Paragraph 6: 'However, a real problem in the global warming debate was that the story was reported in the press in a way that suggested some scientists believed it was a legitimate issue and some didn't, even long after the bulk of the scientific community had recognized the seriousness of the problem.'",
+                    q33: "Paragraph 7: 'A better understanding by the general public of the mathematical significance of results would help to clarify many scientific discussions.'",
+                    q34: "Paragraph 7: No specific recommendation is given about paying more attention to discoveries by gender",
+                    q35: "Paragraph 8: 'There are steps we can take to improve public understanding of scientific developments.'",
+                    q36: "Paragraph 8: 'The first would be to inculcate greater understanding and acceptance of indirect scientific evidence not directly observable by human scientists.'",
+                    q37: "Paragraph 8: 'Second we might need different standards for evaluating science with urgent policy implications as opposed to research with a purely theoretical value.'",
+                    q38: "Paragraph 8: 'Third, it would be better if scientists were more prepared to discuss the mathematical significance of their results'",
+                    q39: "Paragraph 8: 'and if the public didn't treat maths as quite so scary: statistics, which tell us the uncertainty in a measurement'",
+                    q40: "Paragraph 9: 'But fourth, and most important, people have to recognise that science can be complex.'"
+                };
+                
+                let score = 0;
+                resultsDetails.innerHTML = '';
+                
+                // Check each answer
+                for (let i = 27; i <= 40; i++) {
+                    const qId = 'q' + i;
+                    let userAnswer;
+                    
+                    if (i >= 27 && i <= 30 || i >= 35 && i <= 40) {
+                        // For dropdown questions
+                        userAnswer = document.getElementById(qId).value;
+                    } else if (i >= 31 && i <= 34) {
+                        // For radio button questions
+                        const selected = document.querySelector(`input[name="${qId}"]:checked`);
+                        userAnswer = selected ? selected.value : '';
+                    }
+                    
+                    const correctAnswer = correctAnswers[qId];
+                    
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'result-item';
+                    
+                    const questionText = document.createElement('div');
+                    questionText.className = 'result-question';
+                    
+                    if (i >= 27 && i <= 30) {
+                        questionText.textContent = `Question ${i}: ${document.querySelector(`label[for="${qId}"]`).textContent}`;
+                    } else if (i >= 31 && i <= 34) {
+                        questionText.textContent = `Question ${i}: ${document.querySelector(`label[for="${qId}-yes"]`).parentElement.parentElement.previousElementSibling.textContent}`;
+                    } else {
+                        questionText.textContent = `Question ${i}: ${document.querySelector(`label[for="${qId}"]`).textContent}`;
+                    }
+                    
+                    const userAnswerText = document.createElement('div');
+                    userAnswerText.textContent = `Your answer: ${userAnswer || '(no answer)'}`;
+                    
+                    const correctAnswerText = document.createElement('div');
+                    correctAnswerText.textContent = `Correct answer: ${correctAnswer}`;
+                    
+                    const referenceText = document.createElement('div');
+                    referenceText.className = 'answer-reference';
+                    referenceText.innerHTML = answerReferences[qId];
+                    
+                    resultItem.appendChild(questionText);
+                    resultItem.appendChild(userAnswerText);
+                    resultItem.appendChild(correctAnswerText);
+                    resultItem.appendChild(referenceText);
+                    
+                    if (userAnswer === correctAnswer) {
+                        resultItem.classList.add('correct');
+                        score++;
+                    } else {
+                        resultItem.classList.add('incorrect');
+                    }
+                    
+                    resultsDetails.appendChild(resultItem);
+                }
+                
+                scoreElement.textContent = `Score: ${score}/14`;
+                resultsContainer.style.display = 'flex';
+            }
+        });
+    </script>
+</body>
+</html>

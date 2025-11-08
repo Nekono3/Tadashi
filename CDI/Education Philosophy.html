@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Test</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --day-bg: #f8f9fa;
+            --day-text: #212529;
+            --day-primary: #6f42c1;
+            --day-secondary: #e9ecef;
+            --day-highlight: #fff9c4;
+            --day-highlight2: #bbdefb;
+            
+            --night-bg: #1a1a2e;
+            --night-text: #e6e6e6;
+            --night-primary: #a78bfa;
+            --night-secondary: #16213e;
+            --night-highlight: #374151;
+            --night-highlight2: #1e3a8a;
+            
+            --sepia-bg: #f5ecd8;
+            --sepia-text: #3b2c1e;
+            --sepia-primary: #8b5a2b;
+            --sepia-secondary: #e8d9c0;
+            --sepia-highlight: #e3cda5;
+            --sepia-highlight2: #c9af8f;
+            
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--day-bg);
+            color: var(--day-text);
+            transition: var(--transition);
+            line-height: 1.6;
+        }
+
+        body.night-mode {
+            background-color: var(--night-bg);
+            color: var(--night-text);
+        }
+
+        body.sepia-mode {
+            background-color: var(--sepia-bg);
+            color: var(--sepia-text);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .header-center {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .telegram-btn {
+            background-color: #0088cc;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .telegram-btn:hover {
+            background-color: #006da3;
+            transform: translateY(-2px);
+        }
+
+        .theme-switcher {
+            display: flex;
+            gap: 10px;
+        }
+
+        .theme-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .timer {
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        .timer.warning {
+            color: #ff6b6b;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .passage-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 1px solid #ddd;
+        }
+
+        .night-mode .passage-container {
+            border-right-color: #444;
+        }
+
+        .sepia-mode .passage-container {
+            border-right-color: #c9b18a;
+        }
+
+        .questions-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .passage-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .night-mode .passage-content {
+            background-color: var(--night-secondary);
+        }
+
+        .sepia-mode .passage-content {
+            background-color: var(--sepia-secondary);
+        }
+
+        .passage-content h1 {
+            color: var(--day-primary);
+            border-bottom: 2px solid var(--day-primary);
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        .night-mode .passage-content h1 {
+            color: var(--night-primary);
+            border-bottom-color: var(--night-primary);
+        }
+
+        .sepia-mode .passage-content h1 {
+            color: var(--sepia-primary);
+            border-bottom-color: var(--sepia-primary);
+        }
+
+        .passage-content p {
+            margin-bottom: 15px;
+        }
+
+        .highlight-menu {
+            position: absolute;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            padding: 5px;
+            display: flex;
+            z-index: 1000;
+        }
+
+        .highlight-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            margin: 0 3px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .highlight-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .yellow-highlight {
+            background-color: #fff9c4;
+        }
+
+        .blue-highlight {
+            background-color: #bbdefb;
+        }
+
+        .clear-highlight {
+            background-color: #f8f9fa;
+        }
+
+        .question-section {
+            margin-bottom: 30px;
+        }
+
+        .question-section h2 {
+            color: var(--day-primary);
+            margin-top: 0;
+        }
+
+        .night-mode .question-section h2 {
+            color: var(--night-primary);
+        }
+
+        .sepia-mode .question-section h2 {
+            color: var(--sepia-primary);
+        }
+
+        .question {
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .night-mode .question {
+            background-color: var(--night-secondary);
+        }
+
+        .sepia-mode .question {
+            background-color: var(--sepia-secondary);
+        }
+
+        select, input {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            background-color: white;
+            color: var(--day-text);
+            font-family: inherit;
+        }
+
+        .night-mode select, .night-mode input {
+            background-color: #2d3748;
+            border-color: #4a5568;
+            color: var(--night-text);
+        }
+
+        .sepia-mode select, .sepia-mode input {
+            background-color: #e8d9c0;
+            border-color: #c9b18a;
+            color: var(--sepia-text);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            display: block;
+            margin: 20px auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .result-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .result-modal.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .result-content {
+            background-color: white;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            border-radius: 10px;
+            padding: 30px;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .night-mode .result-content {
+            background-color: var(--night-secondary);
+        }
+
+        .sepia-mode .result-content {
+            background-color: var(--sepia-secondary);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        .night-mode .close-btn:hover {
+            color: #fff;
+        }
+
+        .sepia-mode .close-btn:hover {
+            color: var(--sepia-text);
+        }
+
+        .score-display {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .answer-feedback {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+
+        .night-mode .answer-feedback {
+            background-color: #2d3748;
+        }
+
+        .sepia-mode .answer-feedback {
+            background-color: #e8d9c0;
+        }
+
+        .correct {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .incorrect {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .answer-reference {
+            font-style: italic;
+            margin-top: 5px;
+            color: #6c757d;
+        }
+
+        .night-mode .answer-reference {
+            color: #a0aec0;
+        }
+
+        .sepia-mode .answer-reference {
+            color: #8b7d6b;
+        }
+
+        @media (max-width: 992px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .passage-container {
+                border-right: none;
+                border-bottom: 1px solid #ddd;
+                max-height: 40vh;
+            }
+            
+            .night-mode .passage-container {
+                border-bottom-color: #444;
+            }
+            
+            .sepia-mode .passage-container {
+                border-bottom-color: #c9b18a;
+            }
+        }
+
+        .highlighted-yellow {
+            background-color: #fff9c4;
+            transition: var(--transition);
+        }
+
+        .highlighted-blue {
+            background-color: #bbdefb;
+            transition: var(--transition);
+        }
+
+        .night-mode .highlighted-yellow {
+            background-color: #5a4e1f;
+        }
+
+        .night-mode .highlighted-blue {
+            background-color: #1e3a5f;
+        }
+
+        .sepia-mode .highlighted-yellow {
+            background-color: #e3cda5;
+        }
+
+        .sepia-mode .highlighted-blue {
+            background-color: #c9af8f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="theme-switcher">
+                <button class="theme-btn" id="day-theme" title="Day Mode"><i class="fas fa-sun"></i></button>
+                <button class="theme-btn" id="night-theme" title="Night Mode"><i class="fas fa-moon"></i></button>
+                <button class="theme-btn" id="sepia-theme" title="Sepia Mode"><i class="fas fa-book"></i></button>
+            </div>
+            
+            <div class="header-center">
+                <a href="tg://resolve?domain=aftum_8" class="telegram-btn">
+                    <i class="fab fa-telegram"></i> Телеграмм канал
+                </a>
+            </div>
+            
+            <div class="timer" id="timer">20:00</div>
+        </header>
+        
+        <div class="content">
+            <div class="passage-container">
+                <div class="passage-content" id="passage-content">
+                    <h1>Education Philosophy</h1>
+                    
+                    <p><strong>A</strong></p>
+                    <p>Although we lack accurate statistics about child mortality in the pre-industrial period, we do have evidence that in the 1660s, the mortality rate for children who died within 14 days of birth was as much as 30 per cent. Nearly all families suffered some premature death. Since all parents expected to bury some of their children, they found it difficult to invest in their newborn children. Moreover, to protect themselves from the emotional consequences of children's death, parents avoided making any emotional commitment to an infant. It is no wonder that we find mothers leave their babies in gutters or refer to the death in the same paragraph with reference to pickles.</p>
+                    
+                    <p><strong>B</strong></p>
+                    <p>The 18th century witnessed the transformation from an agrarian economy to an industrial one, one of the vital social changes taking place in the Western world. An increasing number of people moved from their villages and small towns to big cities where life was quite different. Social supports which had previously existed in smaller communities were replaced by ruthless problems such as poverty, crime, substandard housing and disease. Due to the need for additional income to support the family, young children from the poorest families were forced into early employment and thus their childhood became painfully short. Children as young as 7 might be required to work full-time, subjected to unpleasant and unhealthy circumstances, from factories to prostitution. Although such a role has disappeared in most wealthy countries, the practice of childhood employment still remains a staple in underdeveloped countries and rarely disappeared entirely.</p>
+                    
+                    <p><strong>C</strong></p>
+                    <p>The lives of children underwent a drastic change during the 1800s in the United States. Previously, children from both rural and urban families were expected to participate in everyday labour due to the bulk of manual hard working. Nevertheless, thanks to the technological advances of the mid-1800s, coupled with the rise of the middle class and redefinition of roles of family members, work and home became less synonymous over time. People began to purchase toys and books for their children. When the country depended more upon machines, children in rural and urban areas, were less likely to be required to work at home. Beginning from the Industrial Revolution and rising slowly over the course of the 19th century, this trend increased exponentially after civil war. John Locke, one of the most influential writers of his period, created the first clear and comprehensive statement of the 'environmental position' that family education determines a child's life, and via this, he became the father of modern learning theory. During the colonial period, his teachings about child care gained a lot of recognition in America.</p>
+                    
+                    <p><strong>D</strong></p>
+                    <p>According to Jean Jacques Rousseau, who lived in an era of the American and French Revolution, people were 'noble savages' in the original state of nature, meaning they are innocent, free and uncorrupted. In 1762, Rousseau wrote a famous novel Emile to convey his educational philosophy through a story of a boy's education from infancy to adult-hood. This work was based on his extensive observation of children and adolescents, their individuality, his developmental theory and on the memories of his own childhood. He contrasts children with adults and describes their age-specific characteristics in terms of historical perspective and developmental psychology. Johan Heinrich Pestalozzi, living during the early stages of the Industrial Revolution, sought to develop schools to nurture children's all-round development. He agreed with Rousseau that humans are naturally good but were spoiled by a corrupt society. His approach to teaching consists of the general and special methods, and his theory was based upon establishing an emotionally healthy homelike learning environment, which had to be in place before more specific instructions occurred.</p>
+                    
+                    <p><strong>E</strong></p>
+                    <p>One of the best-documented cases of Pestalozzi's theory concerned a so-called feral child named Victor, who was captured in a small town in the south of France in 1800. Prepubescent, mute, naked, and perhaps 11 or 12 years old, Victor had been seen foraging for food in the gardens of the locals in the area and sometimes accepted people's direct offers of food before his final capture. Eventually, he was brought to Paris and expected to answer some profound questions about the nature of human, but that goal was quashed very soon. A young physician Jean Marc Gaspard Itard was optimistic about the future of Victor and initiated a five-year education plan to civilise him and teach him to speak. With a subsidy from the government, Itard recruited a local woman Madame Guerin to assist him to provide a semblance of a home for Victor, and he spent an enormous amount of time and effort working with Victor. Itard's goal to teach Victor the basics of speech could never be fully achieved, but Victor had learnt some elementary forms of communication.</p>
+                    
+                    <p><strong>F</strong></p>
+                    <p>Although other educators were beginning to recognise the simple truth embedded in Rousseau's philosophy, it is not enough to identify the stages of children's development alone. There must be certain education which had to be geared towards those stages. One of the early examples was the invention of kindergarten, which was a word and a movement created by a German-born educator, Friedrich Froebel in 1840. Froebel placed a high value on the importance of play in children's learning. His invention would spread around the world eventually in a verity of forms. Froebel's ideas were inspired through his cooperation with Johann Heinrich Pestalozzi. Froebel didn't introduce the notion of kindergarten until 58 years old, and he had been a teacher for four decades. The notion was a haven and a preparation for children who were about to enter the regimented educational system. The use of guided or structured play was a cornerstone of his kindergarten education because he believed that play was the most significant aspect of development at this time of life. Play served as a mechanism for a child to grow emotionally and to achieve a sense of self-worth. Meanwhile, teachers served to organise materials and a structured environment in which each child, as an individual, could achieve these goals. When Froebel died in 1852, dozens of kindergartens had been created in Germany. Kindergartens began to increase in Europe, and the movement eventually reached and flourished in the United States in the 20th century.</p>
+                </div>
+            </div>
+            
+            <div class="questions-container">
+                <div class="question-section">
+                    <h2>Questions 1-4</h2>
+                    <p>Reading Passage 1 has six paragraphs, <strong>A-F</strong>.<br>
+                    Choose the correct heading for paragraphs <strong>A</strong> and <strong>C-E</strong> from the list of headings below.<br>
+                    Write the correct number, <strong>i-vii</strong>, in boxes <strong>1-4</strong> on your answer sheet.</p>
+                    
+                    <p><strong>List of Headings</strong></p>
+                    <ol type="i">
+                        <li>The inheritance and development of educational concepts of different thinkers</li>
+                        <li>Why children had to work to alleviate the burden on family</li>
+                        <li>Why children are not highly valued</li>
+                        <li>The explanation for children dying in hospital at their early age</li>
+                        <li>The first appearance of modern educational philosophy</li>
+                        <li>The application of a creative learning method on a wild kid</li>
+                        <li>The emergence and spread of the notion of kindergarten</li>
+                    </ol>
+                    
+                    <div class="question">
+                        <p><strong>1. </strong>
+                            <select id="q1">
+                                <option value="">Select heading</option>
+                                <option value="i">i</option>
+                                <option value="ii">ii</option>
+                                <option value="iii">iii</option>
+                                <option value="iv">iv</option>
+                                <option value="v">v</option>
+                                <option value="vi">vi</option>
+                                <option value="vii">vii</option>
+                            </select>
+                            Paragraph A
+                        </p>
+                    </div>
+                    
+                    <div class="question">
+                        <p><strong>2. </strong>
+                            <select id="q2">
+                                <option value="">Select heading</option>
+                                <option value="i">i</option>
+                                <option value="ii">ii</option>
+                                <option value="iii">iii</option>
+                                <option value="iv">iv</option>
+                                <option value="v">v</option>
+                                <option value="vi">vi</option>
+                                <option value="vii">vii</option>
+                            </select>
+                            Paragraph C
+                        </p>
+                    </div>
+                    
+                    <div class="question">
+                        <p><strong>3. </strong>
+                            <select id="q3">
+                                <option value="">Select heading</option>
+                                <option value="i">i</option>
+                                <option value="ii">ii</option>
+                                <option value="iii">iii</option>
+                                <option value="iv">iv</option>
+                                <option value="v">v</option>
+                                <option value="vi">vi</option>
+                                <option value="vii">vii</option>
+                            </select>
+                            Paragraph D
+                        </p>
+                    </div>
+                    
+                    <div class="question">
+                        <p><strong>4. </strong>
+                            <select id="q4">
+                                <option value="">Select heading</option>
+                                <option value="i">i</option>
+                                <option value="ii">ii</option>
+                                <option value="iii">iii</option>
+                                <option value="iv">iv</option>
+                                <option value="v">v</option>
+                                <option value="vi">vi</option>
+                                <option value="vii">vii</option>
+                            </select>
+                            Paragraph E
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="question-section">
+                    <h2>Questions 5-8</h2>
+                    <p>Look at the following events (Questions <strong>5-8</strong>) and the list of dates below.<br>
+                    Match each event with the correct date, <strong>A</strong>, <strong>B</strong> or <strong>C</strong>.<br>
+                    Write the correct letter, <strong>A</strong>, <strong>B</strong> or <strong>C</strong>, in boxes <strong>5-8</strong> on your answer sheet.</p>
+                    
+                    <p><strong>NB</strong> You may use any letter more than once.</p>
+                    
+                    <p><strong>List of Dates</strong></p>
+                    <ul>
+                        <li><strong>A</strong> the 18th century (1700-1799)</li>
+                        <li><strong>B</strong> the 19th century (1800-1899)</li>
+                        <li><strong>C</strong> the 20th century (1900-1999)</li>
+                    </ul>
+                    
+                    <div class="question">
+                        <p><strong>5. </strong>
+                            <select id="q5">
+                                <option value="">Select date</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                            </select>
+                            the need for children to work
+                        </p>
+                    </div>
+                    
+                    <div class="question">
+                        <p><strong>6. </strong>
+                            <select id="q6">
+                                <option value="">Select date</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                            </select>
+                            the rise of the middle class
+                        </p>
+                    </div>
+                    
+                    <div class="question">
+                        <p><strong>7. </strong>
+                            <select id="q7">
+                                <option value="">Select date</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                            </select>
+                            the emergence of a kindergarten
+                        </p>
+                    </div>
+                    
+                    <div class="question">
+                        <p><strong>8. </strong>
+                            <select id="q8">
+                                <option value="">Select date</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                            </select>
+                            the spread of kindergartens around the U.S.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="question-section">
+                    <h2>Questions 9-13</h2>
+                    <p>Look at the following opinions or deeds (Questions 9-13) and the list of people below.<br>
+                    Match each opinion or deed with the correct person, <strong>A</strong>, <strong>B</strong>, <strong>C</strong> or <strong>D</strong>.<br>
+                    Write the correct letter, <strong>A</strong>, <strong>B</strong>, <strong>C</strong> or <strong>D</strong>, in boxes 9-13 on your answer sheet.</p>
+                    
+                    <p><strong>NB</strong> You may use any letter more than once.</p>
+                    
+                    <p><strong>List of People</strong></p>
+                    <ul>
+                        <li><strong>A</strong> Jean Jacques Rousseau</li>
+                        <li><strong>B</strong> Johan Heinrich Pestalozzi</li>
+                        <li><strong>C</strong> Jean Marc Gaspard Itard</li>
+                        <li><strong>D</strong> Friedrich Froebel</li>
+                    </ul>
+                    
+                    <div class="question">
+                        <p><strong>9. </strong>
+                            <select id="q9">
+                                <option value="">Select person</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                            </select>
+                            was not successful to prove the theory
+                        </p>
+                    </div>
+                    
+                    <div class="question">
+                        <p><strong>10. </strong>
+                            <select id="q10">
+                                <option value="">Select person</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                            </select>
+                            observed a child's record
+                        </p>
+                    </div>
+                    
+                    <div class="question">
+                        <p><strong>11. </strong>
+                            <select id="q11">
+                                <option value="">Select person</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                            </select>
+                            requested a study setting with emotional comfort firstly
+                        </p>
+                    </div>
+                    
+                    <div class="question">
+                        <p><strong>12. </strong>
+                            <select id="q12">
+                                <option value="">Select person</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                            </select>
+                            proposed that corruption was not a characteristic in people's nature
+                        </p>
+                    </div>
+                    
+                    <div class="question">
+                        <p><strong>13. </strong>
+                            <select id="q13">
+                                <option value="">Select person</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                            </select>
+                            was responsible for an increase in the number of a type of school
+                        </p>
+                    </div>
+                </div>
+                
+                <button class="submit-btn" id="submit-btn">Submit Answers</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="result-modal" id="result-modal">
+        <div class="result-content">
+            <button class="close-btn" id="close-results">&times;</button>
+            <h2>Test Results</h2>
+            
+            <div class="score-display">
+                <div class="score-circle" id="score-circle">0/13</div>
+                <h3 id="score-text">Your Score: 0 out of 13</h3>
+            </div>
+            
+            <div id="answer-feedback">
+                <!-- Results will be inserted here -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme switching
+            const body = document.body;
+            const dayThemeBtn = document.getElementById('day-theme');
+            const nightThemeBtn = document.getElementById('night-theme');
+            const sepiaThemeBtn = document.getElementById('sepia-theme');
+            
+            dayThemeBtn.addEventListener('click', () => {
+                body.className = '';
+                localStorage.setItem('theme', 'day');
+            });
+            
+            nightThemeBtn.addEventListener('click', () => {
+                body.className = 'night-mode';
+                localStorage.setItem('theme', 'night');
+            });
+            
+            sepiaThemeBtn.addEventListener('click', () => {
+                body.className = 'sepia-mode';
+                localStorage.setItem('theme', 'sepia');
+            });
+            
+            // Load saved theme
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'night') {
+                body.className = 'night-mode';
+            } else if (savedTheme === 'sepia') {
+                body.className = 'sepia-mode';
+            }
+            
+            // Timer functionality
+            const timerElement = document.getElementById('timer');
+            let timeLeft = 20 * 60; // 20 minutes in seconds
+            let timerInterval;
+            
+            function startTimer() {
+                clearInterval(timerInterval);
+                timerInterval = setInterval(updateTimer, 1000);
+            }
+            
+            function updateTimer() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                
+                timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft === 5 * 60) {
+                    timerElement.classList.add('warning');
+                }
+                
+                if (timeLeft === 0) {
+                    clearInterval(timerInterval);
+                    submitAnswers();
+                } else {
+                    timeLeft--;
+                }
+            }
+            
+            startTimer();
+            
+            // Text highlighting functionality
+            const passageContent = document.getElementById('passage-content');
+            let highlightMenu = null;
+            let currentSelection = null;
+            
+            passageContent.addEventListener('mouseup', function(e) {
+                const selection = window.getSelection();
+                if (selection.toString().length > 0) {
+                    showHighlightMenu(e, selection);
+                } else if (highlightMenu) {
+                    removeHighlightMenu();
+                }
+            });
+            
+            document.addEventListener('mousedown', function(e) {
+                if (highlightMenu && !highlightMenu.contains(e.target)) {
+                    removeHighlightMenu();
+                }
+            });
+            
+            function showHighlightMenu(e, selection) {
+                removeHighlightMenu();
+                currentSelection = selection;
+                
+                highlightMenu = document.createElement('div');
+                highlightMenu.className = 'highlight-menu';
+                
+                const yellowBtn = document.createElement('button');
+                yellowBtn.className = 'highlight-btn yellow-highlight';
+                yellowBtn.innerHTML = '<i class="fas fa-highlighter"></i>';
+                yellowBtn.title = 'Yellow Highlight';
+                yellowBtn.addEventListener('click', () => highlightSelection('yellow'));
+                
+                const blueBtn = document.createElement('button');
+                blueBtn.className = 'highlight-btn blue-highlight';
+                blueBtn.innerHTML = '<i class="fas fa-highlighter"></i>';
+                blueBtn.title = 'Blue Highlight';
+                blueBtn.addEventListener('click', () => highlightSelection('blue'));
+                
+                const clearBtn = document.createElement('button');
+                clearBtn.className = 'highlight-btn clear-highlight';
+                clearBtn.innerHTML = '<i class="fas fa-eraser"></i>';
+                clearBtn.title = 'Clear Highlight';
+                clearBtn.addEventListener('click', clearHighlight);
+                
+                highlightMenu.appendChild(yellowBtn);
+                highlightMenu.appendChild(blueBtn);
+                highlightMenu.appendChild(clearBtn);
+                
+                document.body.appendChild(highlightMenu);
+                
+                const rect = selection.getRangeAt(0).getBoundingClientRect();
+                highlightMenu.style.top = `${rect.bottom + window.scrollY + 5}px`;
+                highlightMenu.style.left = `${rect.left + window.scrollX}px`;
+            }
+            
+            function removeHighlightMenu() {
+                if (highlightMenu) {
+                    highlightMenu.remove();
+                    highlightMenu = null;
+                    currentSelection = null;
+                }
+            }
+            
+            function highlightSelection(color) {
+                if (!currentSelection || currentSelection.toString().length === 0) return;
+                
+                const range = currentSelection.getRangeAt(0);
+                const selectedText = range.extractContents();
+                
+                const span = document.createElement('span');
+                span.appendChild(selectedText);
+                span.className = `highlighted-${color}`;
+                
+                range.insertNode(span);
+                
+                // Clear selection and remove menu
+                currentSelection.removeAllRanges();
+                removeHighlightMenu();
+            }
+            
+            function clearHighlight() {
+                if (!currentSelection || currentSelection.toString().length === 0) return;
+                
+                const range = currentSelection.getRangeAt(0);
+                const selectedContent = range.extractContents();
+                
+                // Create a document fragment to hold the content
+                const fragment = document.createDocumentFragment();
+                
+                // Process each node in the selected content
+                const nodes = Array.from(selectedContent.childNodes);
+                nodes.forEach(node => {
+                    if (node.nodeType === Node.ELEMENT_NODE && 
+                        (node.classList.contains('highlighted-yellow') || 
+                         node.classList.contains('highlighted-blue'))) {
+                        // Extract the text content from the highlighted span
+                        const textNode = document.createTextNode(node.textContent);
+                        fragment.appendChild(textNode);
+                    } else {
+                        fragment.appendChild(node.cloneNode(true));
+                    }
+                });
+                
+                range.insertNode(fragment);
+                
+                // Clear selection and remove menu
+                currentSelection.removeAllRanges();
+                removeHighlightMenu();
+            }
+            
+            // Answer submission and evaluation
+            const submitBtn = document.getElementById('submit-btn');
+            const resultModal = document.getElementById('result-modal');
+            const closeResultsBtn = document.getElementById('close-results');
+            const scoreCircle = document.getElementById('score-circle');
+            const scoreText = document.getElementById('score-text');
+            const answerFeedback = document.getElementById('answer-feedback');
+            
+            submitBtn.addEventListener('click', submitAnswers);
+            closeResultsBtn.addEventListener('click', () => {
+                resultModal.classList.remove('show');
+            });
+            
+            function submitAnswers() {
+                clearInterval(timerInterval);
+                
+                const correctAnswers = {
+                    q1: 'iii', q2: 'v', q3: 'i', q4: 'vi',
+                    q5: 'A', q6: 'B', q7: 'B', q8: 'C',
+                    q9: 'C', q10: 'A', q11: 'B', q12: 'A', q13: 'D'
+                };
+                
+                let score = 0;
+                let feedbackHTML = '';
+                
+                for (let i = 1; i <= 13; i++) {
+                    const userAnswer = document.getElementById(`q${i}`).value;
+                    const isCorrect = userAnswer === correctAnswers[`q${i}`];
+                    
+                    if (isCorrect) score++;
+                    
+                    feedbackHTML += `
+                        <div class="answer-feedback">
+                            <p><strong>Question ${i}:</strong> Your answer: ${userAnswer || 'Not answered'} 
+                            <span class="${isCorrect ? 'correct' : 'incorrect'}">${isCorrect ? '✓ Correct' : '✗ Incorrect'}</span></p>
+                            <p class="answer-reference">Correct answer: ${correctAnswers[`q${i}`]}</p>
+                        </div>
+                    `;
+                }
+                
+                scoreCircle.textContent = `${score}/13`;
+                scoreText.textContent = `Your Score: ${score} out of 13`;
+                answerFeedback.innerHTML = feedbackHTML;
+                
+                resultModal.classList.add('show');
+            }
+        });
+    </script>
+</body>
+</html>

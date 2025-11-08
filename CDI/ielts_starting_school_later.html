@@ -1,0 +1,552 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script>```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Test: Starting School Later Has Positive Effects on Teens</title>
+    <style>
+        /* Base styles for cute, aesthetic, modern design */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --accent-color: #ff69b4;
+            --highlight-yellow: #ffff99;
+            --highlight-blue: #add8e6;
+            --header-bg: #f0f8ff;
+            --button-bg: #ffb6c1;
+            --button-text: #ffffff;
+            --timer-color: #4caf50;
+            --warning-color: #ff9800;
+            --error-color: #f44336;
+            --success-color: #4caf50;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        header {
+            background-color: var(--header-bg);
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        #telegram {
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: transform 0.2s ease, background-color 0.3s ease;
+        }
+
+        #telegram:hover {
+            transform: scale(1.05);
+        }
+
+        .theme-button {
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            margin: 5px;
+            transition: transform 0.2s ease;
+        }
+
+        .theme-button:hover {
+            transform: scale(1.05);
+        }
+
+        .container {
+            display: flex;
+            height: calc(100vh - 60px);
+            overflow: hidden;
+        }
+
+        .left, .right {
+            padding: 20px;
+            overflow-y: auto;
+            transition: background-color 0.3s ease;
+        }
+
+        .left {
+            flex: 1;
+            border-right: 1px solid #ddd;
+        }
+
+        .right {
+            flex: 1;
+        }
+
+        #passage {
+            line-height: 1.6;
+        }
+
+        #passage p {
+            margin-bottom: 15px;
+        }
+
+        #questions {
+            margin-bottom: 20px;
+        }
+
+        .question {
+            margin-bottom: 15px;
+        }
+
+        select, input {
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease;
+        }
+
+        select:focus, input:focus {
+            border-color: var(--accent-color);
+        }
+
+        #timer {
+            font-size: 18px;
+            color: var(--timer-color);
+            margin-bottom: 10px;
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.05); }
+        }
+
+        #submit {
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.2s ease;
+        }
+
+        #submit:hover {
+            transform: scale(1.05);
+        }
+
+        #report {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(255, 255, 255, 0.95);
+            color: var(--text-color);
+            overflow-y: auto;
+            padding: 20px;
+            display: none;
+            z-index: 1000;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .report-item {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .report-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .correct {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .wrong {
+            background-color: var(--error-color);
+            color: white;
+        }
+
+        #menu {
+            position: absolute;
+            display: none;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            padding: 5px;
+            z-index: 999;
+        }
+
+        .menu-button {
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 2px;
+            transition: background-color 0.3s ease;
+        }
+
+        .menu-button:hover {
+            background-color: #ff1493;
+        }
+
+        /* Night mode */
+        body.night {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --header-bg: #1e1e1e;
+            --button-bg: #333333;
+            --button-text: #ffffff;
+            --timer-color: #81c784;
+        }
+
+        /* Sepia mode */
+        body.sepia {
+            --bg-color: #f4ecd8;
+            --text-color: #5b4636;
+            --header-bg: #e0d4b8;
+            --button-bg: #d2b48c;
+            --button-text: #4b3621;
+            --timer-color: #8b4513;
+        }
+
+        /* Adaptive design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .left, .right {
+                border: none;
+                height: auto;
+            }
+
+            #menu {
+                transform: scale(0.8); /* Smaller menu on mobile */
+            }
+        }
+    </style>
+</head>
+<body class="day"> <!-- Default Day theme -->
+
+    <header>
+        <button id="telegram" onclick="window.location.href='tg://resolve?domain=aftum_8'">📱 Telegram channel</button>
+        <button class="theme-button" onclick="changeTheme('day')">Day</button>
+        <button class="theme-button" onclick="changeTheme('night')">Night</button>
+        <button class="theme-button" onclick="changeTheme('sepia')">Sepia</button>
+    </header>
+
+    <div class="container">
+        <div class="left">
+            <div id="passage">
+                <h2>Starting School Later Has Positive Effects on Teens</h2>
+                <p><strong>A</strong><br>Teenagers are notorious for staying up late and struggling to get up in the morning. The average teenager needs about nine hours of sleep per night, yet many get far less due to early school start times. Research consistently shows that starting school later can significantly benefit teens’ health, academic performance, and overall well-being. A growing number of schools worldwide are experimenting with later start times, typically between 8:30 and 9:00 AM, rather than the traditional 7:30 AM.</p>
+                <p><strong>B</strong><br>One major reason for this shift is the biology of adolescence. During puberty, a teenager’s circadian rhythm—the body’s internal clock—shifts, making it harder to fall asleep early and wake up early. This change is driven by a delay in melatonin production, the hormone that regulates sleep. Studies, such as one by the American Academy of Pediatrics in 2014, found that later school start times align better with this biological shift, allowing teens to get more restorative sleep. Schools that adopted later start times reported fewer students falling asleep in class and improved attendance.</p>
+                <p><strong>C</strong><br>Beyond sleep, later start times can improve academic outcomes. A study conducted in Seattle in 2016 delayed high school start times from 7:50 AM to 8:45 AM. The results were striking: students gained an average of 34 minutes of sleep per night, and their grades improved by 4.5% on average. Teachers noted that students were more alert and engaged during morning classes. Moreover, students reported feeling less stressed and more prepared to learn, suggesting that the extra sleep improved their cognitive functioning.</p>
+                <p><strong>D</strong><br>Mental health is another area where later start times show benefits. Chronic sleep deprivation in teens is linked to higher rates of anxiety, depression, and mood swings. A 2018 study in the Journal of School Health found that schools with later start times saw a decrease in students reporting symptoms of depression and anxiety. The additional sleep allowed teens to better regulate their emotions, leading to fewer behavioral issues and improved relationships with peers and teachers.</p>
+                <p><strong>E</strong><br>Safety is also a concern. Early start times often mean teens are walking or driving to school in the dark, increasing the risk of accidents. The National Highway Traffic Safety Administration in the US reported a reduction in teen-related car accidents in areas where schools shifted to later start times. Furthermore, later schedules allow parents more time to supervise morning routines, reducing the likelihood of teens skipping breakfast, which is critical for energy and focus.</p>
+                <p><strong>F</strong><br>However, implementing later start times is not without challenges. Schools must adjust bus schedules, after-school activities, and teacher timetables, which can be costly and logistically complex. Some parents oppose the change, citing conflicts with their work schedules or concerns about reduced time for extracurricular activities. Critics also argue that later start times might encourage teens to stay up even later, negating the benefits. Despite these concerns, evidence suggests that the advantages outweigh the drawbacks, as the positive effects on health and performance are well-documented.</p>
+                <p><strong>G</strong><br>Interestingly, the benefits of later start times extend beyond the classroom. A 2019 study found that teens with later school schedules were less likely to engage in risky behaviors, such as substance use, because they were better rested and more emotionally stable. Community-wide benefits have also been observed, including reduced healthcare costs due to fewer mental health issues and accidents. As more schools adopt this change, researchers continue to monitor long-term effects, but the current evidence strongly supports later start times for teenagers.</p>
+            </div>
+        </div>
+        <div class="right">
+            <div id="timer">Time left: 20:00</div>
+            <div id="questions">
+                <h2>Questions 1-13</h2>
+                <div class="question">
+                    <p><strong>Questions 1-7</strong></p>
+                    <p>Do the following statements agree with the information given in Reading Passage?</p>
+                    <p>Write</p>
+                    <p><strong>TRUE</strong> if the statement agrees with the information</p>
+                    <p><strong>FALSE</strong> if the statement contradicts the information</p>
+                    <p><strong>NOT GIVEN</strong> if there is no information on this</p>
+                    <p>1. Teenagers need about nine hours of sleep per night.</p>
+                    <select id="q1"><option value="">Select</option><option value="TRUE">TRUE</option><option value="FALSE">FALSE</option><option value="NOT GIVEN">NOT GIVEN</option></select>
+                    <p>2. Most schools worldwide have already adopted later start times.</p>
+                    <select id="q2"><option value="">Select</option><option value="TRUE">TRUE</option><option value="FALSE">FALSE</option><option value="NOT GIVEN">NOT GIVEN</option></select>
+                    <p>3. A delay in melatonin production affects teenagers’ sleep patterns.</p>
+                    <select id="q3"><option value="">Select</option><option value="TRUE">TRUE</option><option value="FALSE">FALSE</option><option value="NOT GIVEN">NOT GIVEN</option></select>
+                    <p>4. Later school start times lead to worse academic performance.</p>
+                    <select id="q4"><option value="">Select</option><option value="TRUE">TRUE</option><option value="FALSE">FALSE</option><option value="NOT GIVEN">NOT GIVEN</option></select>
+                    <p>5. Later start times reduce the risk of teen-related car accidents.</p>
+                    <select id="q5"><option value="">Select</option><option value="TRUE">TRUE</option><option value="FALSE">FALSE</option><option value="NOT GIVEN">NOT GIVEN</option></select>
+                    <p>6. All parents support later school start times.</p>
+                    <select id="q6"><option value="">Select</option><option value="TRUE">TRUE</option><option value="FALSE">FALSE</option><option value="NOT GIVEN">NOT GIVEN</option></select>
+                    <p>7. Later start times increase healthcare costs due to more mental health issues.</p>
+                    <select id="q7"><option value="">Select</option><option value="TRUE">TRUE</option><option value="FALSE">FALSE</option><option value="NOT GIVEN">NOT GIVEN</option></select>
+                </div>
+                <div class="question">
+                    <p><strong>Questions 8-10</strong></p>
+                    <p>Complete the sentences below.</p>
+                    <p>Choose <strong>NO MORE THAN TWO WORDS</strong> from the passage for each answer.</p>
+                    <p>8. Later school start times align with a teenager’s _______ rhythm.</p>
+                    <input id="q8" type="text" size="20">
+                    <p>9. A Seattle study showed an average grade improvement of _______ percent.</p>
+                    <input id="q9" type="text" size="20">
+                    <p>10. Adjusting bus schedules for later start times can be _______ complex.</p>
+                    <input id="q10" type="text" size="20">
+                </div>
+                <div class="question">
+                    <p><strong>Questions 11-13</strong></p>
+                    <p>Which paragraph contains the following information?</p>
+                    <p>11. Evidence of improved mental health outcomes</p>
+                    <select id="q11"><option value="">Select</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select>
+                    <p>12. Challenges of implementing later start times</p>
+                    <select id="q12"><option value="">Select</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select>
+                    <p>13. Reduction in risky behaviors among teens</p>
+                    <select id="q13"><option value="">Select</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select>
+                </div>
+            </div>
+            <button id="submit">Submit Answers</button>
+        </div>
+    </div>
+
+    <div id="report">
+        <h2>Test Report</h2>
+        <p id="score"></p>
+        <div id="details"></div>
+        <button onclick="closeReport()" style="background-color: #ffb6c1; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer;">Close</button>
+    </div>
+
+    <div id="menu">
+        <button class="menu-button" onclick="highlight('yellow')">Yellow</button>
+        <button class="menu-button" onclick="highlight('blue')">Blue</button>
+        <button class="menu-button" onclick="highlight('clear')">Clear</button>
+    </div>
+
+    <script>
+        // Timer
+        let timeLeft = 20 * 60; // 20 minutes in seconds
+        const timerElement = document.getElementById('timer');
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `Time left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            if (timeLeft <= 5 * 60) {
+                timerElement.style.color = 'var(--warning-color)';
+            }
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                alert('Time is up!');
+                submitAnswers();
+            }
+            timeLeft--;
+        }
+        const timerInterval = setInterval(updateTimer, 1000);
+
+        // Theme change
+        function changeTheme(theme) {
+            document.body.className = theme;
+        }
+
+        // Highlighting system for cross-browser compatibility
+        const passage = document.getElementById('passage');
+        const menu = document.getElementById('menu');
+        let currentRange = null;
+
+        function showHighlightMenu(e) {
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                if (!range.collapsed && passage.contains(range.commonAncestorContainer)) {
+                    currentRange = range;
+                    const rect = range.getBoundingClientRect();
+                    menu.style.display = 'flex';
+                    let posX = rect.left + window.scrollX;
+                    let posY = rect.bottom + window.scrollY + 5;
+                    const menuWidth = menu.offsetWidth || 120; // Fallback width
+                    const menuHeight = menu.offsetHeight || 40; // Fallback height
+                    if (posX + menuWidth > window.innerWidth) {
+                        posX = window.innerWidth - menuWidth - 10;
+                    }
+                    if (posY + menuHeight > window.innerHeight + window.scrollY) {
+                        posY = rect.top + window.scrollY - menuHeight - 5;
+                    }
+                    menu.style.left = `${posX}px`;
+                    menu.style.top = `${posY}px`;
+                } else {
+                    menu.style.display = 'none';
+                }
+            }
+        }
+
+        passage.addEventListener('mouseup', showHighlightMenu);
+        passage.addEventListener('touchend', (e) => {
+            setTimeout(() => showHighlightMenu(e), 100);
+        });
+
+        document.addEventListener('mousedown', (e) => {
+            if (!menu.contains(e.target) && !passage.contains(e.target)) {
+                menu.style.display = 'none';
+                window.getSelection().removeAllRanges();
+            }
+        });
+
+        document.addEventListener('touchstart', (e) => {
+            if (!menu.contains(e.target) && !passage.contains(e.target)) {
+                menu.style.display = 'none';
+                window.getSelection().removeAllRanges();
+            }
+        });
+
+        function highlight(color) {
+            if (!currentRange) return;
+            try {
+                if (!passage.contains(currentRange.commonAncestorContainer)) {
+                    console.warn('Selection outside passage');
+                    return;
+                }
+                const fragment = currentRange.extractContents();
+                if (color === 'clear') {
+                    currentRange.insertNode(fragment);
+                } else {
+                    const span = document.createElement('span');
+                    span.style.backgroundColor = color === 'yellow' ? 'var(--highlight-yellow)' : 'var(--highlight-blue)';
+                    span.appendChild(fragment);
+                    currentRange.insertNode(span);
+                }
+                passage.normalize();
+            } catch (err) {
+                console.error('Highlight error:', err);
+                alert('Error applying highlight. Please try again.');
+            }
+            menu.style.display = 'none';
+            currentRange = null;
+            window.getSelection().removeAllRanges();
+        }
+
+        // Submit and report
+        const correctAnswers = {
+            q1: 'TRUE', // Paragraph A: Teenagers need about nine hours of sleep per night.
+            q2: 'FALSE', // Paragraph A: A growing number, not most, schools have adopted later start times.
+            q3: 'TRUE', // Paragraph B: Delay in melatonin production affects sleep patterns.
+            q4: 'FALSE', // Paragraph C: Grades improved by 4.5%, not worse.
+            q5: 'TRUE', // Paragraph E: Reduction in teen-related car accidents.
+            q6: 'FALSE', // Paragraph F: Some parents oppose later start times.
+            q7: 'FALSE', // Paragraph G: Reduced healthcare costs due to fewer mental health issues.
+            q8: 'circadian', // Paragraph B: Align with teenager’s circadian rhythm.
+            q9: '4.5', // Paragraph C: Grades improved by 4.5%.
+            q10: 'logistically', // Paragraph F: Logistically complex to adjust schedules.
+            q11: 'D', // Paragraph D: Improved mental health outcomes.
+            q12: 'F', // Paragraph F: Challenges of implementing later start times.
+            q13: 'G' // Paragraph G: Reduction in risky behaviors.
+        };
+
+        const explanations = {
+            q1: 'Paragraph A: "The average teenager needs about nine hours of sleep per night."',
+            q2: 'Paragraph A: "A growing number of schools worldwide are experimenting with later start times," not most.',
+            q3: 'Paragraph B: "This change is driven by a delay in melatonin production, the hormone that regulates sleep."',
+            q4: 'Paragraph C: "Their grades improved by 4.5% on average," contradicting worse performance.',
+            q5: 'Paragraph E: "The National Highway Traffic Safety Administration reported a reduction in teen-related car accidents."',
+            q6: 'Paragraph F: "Some parents oppose the change," so not all support it.',
+            q7: 'Paragraph G: "Reduced healthcare costs due to fewer mental health issues," not increased.',
+            q8: 'Paragraph B: "Later school start times align better with this biological [circadian] rhythm."',
+            q9: 'Paragraph C: "Their grades improved by 4.5% on average."',
+            q10: 'Paragraph F: "Adjusting bus schedules... can be costly and logistically complex."',
+            q11: 'Paragraph D: "A 2018 study... saw a decrease in students reporting symptoms of depression and anxiety."',
+            q12: 'Paragraph F: Discusses challenges like adjusting bus schedules and parent opposition.',
+            q13: 'Paragraph G: "Teens with later school schedules were less likely to engage in risky behaviors."'
+        };
+
+        document.getElementById('submit').addEventListener('click', submitAnswers);
+
+        function submitAnswers() {
+            clearInterval(timerInterval);
+            let score = 0;
+            const total = 13; // 1-13 = 13 questions
+            const details = document.getElementById('details');
+            details.innerHTML = '';
+            for (let i = 1; i <= 13; i++) {
+                const qid = `q${i}`;
+                const userAnswer = (i >= 8 && i <= 10 ? document.getElementById(qid).value.trim().toLowerCase() : document.getElementById(qid).value);
+                const correct = correctAnswers[qid].toLowerCase();
+                if (userAnswer === correct) {
+                    score++;
+                    const item = document.createElement('div');
+                    item.classList.add('report-item', 'correct');
+                    item.innerHTML = `<p>Question ${i}: Correct! Your answer: ${userAnswer}</p><p>Explanation: ${explanations[qid]}</p>`;
+                    details.appendChild(item);
+                } else {
+                    const item = document.createElement('div');
+                    item.classList.add('report-item', 'wrong');
+                    item.innerHTML = `<p>Question ${i}: Wrong. Your answer: ${userAnswer || 'None'} | Correct: ${correctAnswers[qid]}</p><p>Explanation: ${explanations[qid]}</p>`;
+                    details.appendChild(item);
+                }
+            }
+            document.getElementById('score').textContent = `Score: ${score}/${total}`;
+            document.getElementById('report').style.display = 'block';
+        }
+
+        function closeReport() {
+            document.getElementById('report').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
+```

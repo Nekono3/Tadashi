@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading: The Cane Toad in Australia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --day-bg: #f8f9fa;
+            --day-text: #212529;
+            --day-primary: #6f42c1;
+            --day-secondary: #e9ecef;
+            --day-highlight: #fff9c4;
+            --day-highlight-blue: #bbdefb;
+            
+            --night-bg: #1a1a2e;
+            --night-text: #e6e6e6;
+            --night-primary: #a78bfa;
+            --night-secondary: #2d3748;
+            --night-highlight: #52525b;
+            --night-highlight-blue: #1e3a8a;
+            
+            --sepia-bg: #f5efe0;
+            --sepia-text: #5c4b37;
+            --sepia-primary: #8b5a2b;
+            --sepia-secondary: #e8d9c0;
+            --sepia-highlight: #e3cda5;
+            --sepia-highlight-blue: #c3d6e8;
+            
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: var(--day-bg);
+            color: var(--day-text);
+            transition: var(--transition);
+        }
+
+        body.night-mode {
+            background-color: var(--night-bg);
+            color: var(--night-text);
+        }
+
+        body.sepia-mode {
+            background-color: var(--sepia-bg);
+            color: var(--sepia-text);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            background-color: var(--day-primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+
+        .night-mode header {
+            background-color: var(--night-primary);
+        }
+
+        .sepia-mode header {
+            background-color: var(--sepia-primary);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+        }
+
+        .theme-switcher {
+            display: flex;
+            gap: 10px;
+        }
+
+        .theme-btn {
+            background: none;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .theme-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .telegram-btn {
+            background-color: #0088cc;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .telegram-btn:hover {
+            background-color: #006da3;
+            transform: translateY(-2px);
+        }
+
+        .timer {
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 12px;
+            background-color: var(--day-secondary);
+            margin-bottom: 20px;
+            text-align: center;
+            transition: var(--transition);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .night-mode .timer {
+            background-color: var(--night-secondary);
+        }
+
+        .sepia-mode .timer {
+            background-color: var(--sepia-secondary);
+        }
+
+        .timer.warning {
+            background-color: #ffecb3;
+            color: #ff6f00;
+            animation: pulse 1s infinite;
+        }
+
+        .night-mode .timer.warning {
+            background-color: #5a3c1d;
+            color: #ffab40;
+        }
+
+        .sepia-mode .timer.warning {
+            background-color: #e3cda5;
+            color: #8b5a2b;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .content {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 992px) {
+            .content {
+                flex-direction: column;
+            }
+        }
+
+        .passage-container {
+            flex: 1;
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: var(--transition);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .night-mode .passage-container {
+            background-color: #2d3748;
+        }
+
+        .sepia-mode .passage-container {
+            background-color: #f0e6d2;
+        }
+
+        .questions-container {
+            flex: 1;
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: var(--transition);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .night-mode .questions-container {
+            background-color: #2d3748;
+        }
+
+        .sepia-mode .questions-container {
+            background-color: #f0e6d2;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-top: 0;
+            color: var(--day-primary);
+            transition: var(--transition);
+        }
+
+        .night-mode h1 {
+            color: var(--night-primary);
+        }
+
+        .sepia-mode h1 {
+            color: var(--sepia-primary);
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            margin-top: 0;
+            color: var(--day-primary);
+            transition: var(--transition);
+        }
+
+        .night-mode h2 {
+            color: var(--night-primary);
+        }
+
+        .sepia-mode h2 {
+            color: var(--sepia-primary);
+        }
+
+        .passage-text {
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        .passage-text p {
+            margin-bottom: 20px;
+        }
+
+        .highlight-menu {
+            position: absolute;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            padding: 8px;
+            display: flex;
+            gap: 5px;
+            z-index: 1000;
+            transform: translateY(-100%);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            pointer-events: none;
+        }
+
+        .highlight-menu.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .highlight-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .highlight-btn.yellow {
+            background-color: #ffeb3b;
+        }
+
+        .highlight-btn.blue {
+            background-color: #90caf9;
+            color: #0d47a1;
+        }
+
+        .highlight-btn.clear {
+            background-color: #f5f5f5;
+        }
+
+        .highlight-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .highlight-yellow {
+            background-color: var(--day-highlight);
+            transition: var(--transition);
+        }
+
+        .night-mode .highlight-yellow {
+            background-color: var(--night-highlight);
+        }
+
+        .sepia-mode .highlight-yellow {
+            background-color: var(--sepia-highlight);
+        }
+
+        .highlight-blue {
+            background-color: var(--day-highlight-blue);
+            transition: var(--transition);
+        }
+
+        .night-mode .highlight-blue {
+            background-color: var(--night-highlight-blue);
+        }
+
+        .sepia-mode .highlight-blue {
+            background-color: var(--sepia-highlight-blue);
+        }
+
+        .question-block {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e9ecef;
+            transition: var(--transition);
+        }
+
+        .night-mode .question-block {
+            border-bottom: 1px solid #4a5568;
+        }
+
+        .sepia-mode .question-block {
+            border-bottom: 1px solid #d9c9a6;
+        }
+
+        .question-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .question-title i {
+            color: var(--day-primary);
+            transition: var(--transition);
+        }
+
+        .night-mode .question-title i {
+            color: var(--night-primary);
+        }
+
+        .sepia-mode .question-title i {
+            color: var(--sepia-primary);
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .option-btn {
+            padding: 10px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            text-align: center;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .night-mode .option-btn {
+            background: #2d3748;
+            border-color: #4a5568;
+            color: #e6e6e6;
+        }
+
+        .sepia-mode .option-btn {
+            background: #f0e6d2;
+            border-color: #d9c9a6;
+            color: #5c4b37;
+        }
+
+        .option-btn:hover {
+            border-color: var(--day-primary);
+            transform: translateY(-2px);
+        }
+
+        .night-mode .option-btn:hover {
+            border-color: var(--night-primary);
+        }
+
+        .sepia-mode .option-btn:hover {
+            border-color: var(--sepia-primary);
+        }
+
+        .option-btn.selected {
+            background-color: var(--day-primary);
+            color: white;
+            border-color: var(--day-primary);
+        }
+
+        .night-mode .option-btn.selected {
+            background-color: var(--night-primary);
+            border-color: var(--night-primary);
+        }
+
+        .sepia-mode .option-btn.selected {
+            background-color: var(--sepia-primary);
+            border-color: var(--sepia-primary);
+            color: white;
+        }
+
+        .input-box {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+            margin-bottom: 10px;
+        }
+
+        .night-mode .input-box {
+            background: #2d3748;
+            border-color: #4a5568;
+            color: #e6e6e6;
+        }
+
+        .sepia-mode .input-box {
+            background: #f0e6d2;
+            border-color: #d9c9a6;
+            color: #5c4b37;
+        }
+
+        .input-box:focus {
+            border-color: var(--day-primary);
+            outline: none;
+        }
+
+        .night-mode .input-box:focus {
+            border-color: var(--night-primary);
+        }
+
+        .sepia-mode .input-box:focus {
+            border-color: var(--sepia-primary);
+        }
+
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .word-option {
+            padding: 8px 15px;
+            background: #e9ecef;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .night-mode .word-option {
+            background: #4a5568;
+        }
+
+        .sepia-mode .word-option {
+            background: #e8d9c0;
+        }
+
+        .word-option:hover {
+            background: #dee2e6;
+            transform: translateY(-2px);
+        }
+
+        .night-mode .word-option:hover {
+            background: #718096;
+        }
+
+        .sepia-mode .word-option:hover {
+            background: #d9c9a6;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: var(--day-primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .night-mode .submit-btn {
+            background-color: var(--night-primary);
+        }
+
+        .sepia-mode .submit-btn {
+            background-color: var(--sepia-primary);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .results-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .results-container.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .results-content {
+            background-color: white;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            border-radius: 12px;
+            padding: 30px;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .night-mode .results-content {
+            background-color: #2d3748;
+            color: #e6e6e6;
+        }
+
+        .sepia-mode .results-content {
+            background-color: #f0e6d2;
+            color: #5c4b37;
+        }
+
+        .close-results {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6c757d;
+            transition: var(--transition);
+        }
+
+        .close-results:hover {
+            color: #495057;
+        }
+
+        .night-mode .close-results:hover {
+            color: #e6e6e6;
+        }
+
+        .sepia-mode .close-results:hover {
+            color: #8b5a2b;
+        }
+
+        .score-display {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .score-value {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--day-primary);
+            margin: 10px 0;
+            transition: var(--transition);
+        }
+
+        .night-mode .score-value {
+            color: var(--night-primary);
+        }
+
+        .sepia-mode .score-value {
+            color: var(--sepia-primary);
+        }
+
+        .result-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            transition: var(--transition);
+        }
+
+        .night-mode .result-item {
+            background-color: #4a5568;
+        }
+
+        .sepia-mode .result-item {
+            background-color: #e8d9c0;
+        }
+
+        .result-item.correct {
+            border-left: 4px solid #28a745;
+        }
+
+        .result-item.incorrect {
+            border-left: 4px solid #dc3545;
+        }
+
+        .result-question {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .result-answer {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+
+        .result-icon {
+            font-size: 1.2rem;
+        }
+
+        .correct .result-icon {
+            color: #28a745;
+        }
+
+        .incorrect .result-icon {
+            color: #dc3545;
+        }
+
+        .result-location {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+        .night-mode .result-location {
+            color: #a0aec0;
+        }
+
+        .sepia-mode .result-location {
+            color: #8b5a2b;
+        }
+
+        .passage-reference {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #e9ecef;
+            border-radius: 6px;
+            font-style: italic;
+            transition: var(--transition);
+        }
+
+        .night-mode .passage-reference {
+            background-color: #4a5568;
+        }
+
+        .sepia-mode .passage-reference {
+            background-color: #e8d9c0;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            color: #6c757d;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .night-mode .footer {
+            color: #a0aec0;
+        }
+
+        .sepia-mode .footer {
+            color: #8b5a2b;
+        }
+    </style>
+</head>
+<body class="day-mode">
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-book-reader"></i>
+                <span>IELTS Reading Practice</span>
+            </div>
+            <div class="theme-switcher">
+                <button class="theme-btn" id="day-theme">Day</button>
+                <button class="theme-btn" id="night-theme">Night</button>
+                <button class="theme-btn" id="sepia-theme">Sepia</button>
+            </div>
+            <a href="tg://resolve?domain=aftum_8" class="telegram-btn">
+                <i class="fab fa-telegram"></i>
+                <span>Телеграмм канал</span>
+            </a>
+        </header>
+
+        <div class="timer" id="timer">
+            <i class="fas fa-clock"></i>
+            <span id="time">20:00</span>
+        </div>
+
+        <div class="content">
+            <div class="passage-container">
+                <h1>The Cane Toad in Australia</h1>
+                <div class="passage-text" id="passage-text">
+                    <p><strong>Paragraph A</strong></p>
+                    <p>The cane toad was introduced into Australia in 1935 to control sugar cane pests in Queensland. One hundred and one cane toads arrived at Edmonton in June in 1935. Breeding occurred almost immediately. The cane toad is tough and adaptable, as well as being poisonous throughout its life cycle, and has few predators in Australia.</p>
+                    
+                    <p><strong>Paragraph B</strong></p>
+                    <p>Cane toads are large heavily-built amphibians with dry, warty skin. They have a bony head and over their eyes are bony ridges that meet above the nose. They sit upright and move in short rapid hops. Their hind feet have leathery webbing between the toes and their front feet are unwebbed. Adult cane toads have large swellings - the parotoid glands - on each shoulder behind the eardrum. Cane toads may be grey, yellowish, olive-brown or reddish-brown, and their bellies are pale with dark mottling. Average-sized adults are ten to fifteen centimetres long. The largest female measured in Queensland was twenty-four centimetres long and weighed one point three kilograms. Male cane toads are smaller and wartier than females. During the breeding season males develop dark lumps (nuptial pads) on their first two fingers; these help them cling to a female while mating. Their mating call is a long loud purring trill. Cane toad spawn is exclusive in Australia. It is laid in long strings of transparent jelly enclosing double rows of black eggs. The spawn tangles in dense dark masses around water plants, and hangs in ropy strands if picked up.</p>
+                    
+                    <p><strong>Paragraph C</strong></p>
+                    <p>The natural range of cane toads extends from the southern United States to tropical South America. In 2002, cane toads occurred throughout the eastern and northern half of Queensland and have extended their range to the river catchments surrounding Kakadu National Park in the Northern Territory. In New South Wales, they occur as far south as Yamba and Port Macquarie.</p>
+                    
+                    <p><strong>Paragraph D</strong></p>
+                    <p>Cane toads tolerate a broad range of environmental and climatic conditions and appear to be able to adjust and survive in almost any environment system, including sea water for short periods of time. This to a large extent explains their success in their spreading in Australia. Cane toads are found in environments ranging from sand dunes and coastal heath to the margins of rainforest and mangroves. They are most abundant in open clearings in urban areas, and in grassland and woodland.</p>
+                    
+                    <p><strong>Paragraph E</strong></p>
+                    <p>Cane toads eat almost anything they can swallow, including pet food, carrion and household scraps, but most of their food consists of living insects. Beetles, honey bees, ants, winged termites, crickets and bugs are eaten in abundance. Marine snails, smaller toads and native frogs, small snakes, and small mammals are occasionally eaten by cane toads. The tadpoles of cane toads eat algae and other aquatic plants which they rasp off with five rows of tiny peg-like teeth. They also filter organic matter from the water. Large tadpoles sometimes eat cane toad eggs.</p>
+                    
+                    <p><strong>Paragraph F</strong></p>
+                    <p>Cane toads were introduced to Australia to eat French's Cane Beetle and the Greyback Cane Beetle. The whitegrub larvae of these beetles eat the roots of sugar cane and kill or stunt the plants. The Australian Bureau of Sugar Experimental Stations imported about a hundred toads from Hawaii to the Meringa Experimental Station near Cairns. The toads bred quickly and more than three thousand were released in the sugar cane plantations of north Queensland in July 1935. At that time, some naturalists and scientists warned of the dangers of liberating cane toads in Australia. Their protests resulted in a brief moratorium on the release of toads, but releases resumed in 1936. The protestors were right. Firstly, cane toads compete for the resources of native animals, like food, which affects native populations. Secondly, cane toads don't have as many established predators as native animals and so their population grows quickly. Finally, some native animals who would normally feed on frogs try to eat toads and get poisoned.</p>
+                    
+                    <p><strong>Paragraph G</strong></p>
+                    <p>All stages of the cane toad's life-cycle are poisonous. No humans have died in Australia from cane toad poison, but overseas, people have died after eating toads and even soup made from boiled toad eggs. Cane toads are also poisonous to pets. In Hawaii, up to fifty dogs a year have died after having cane toads in their mouths. Signs of dogs being poisoned through ingestion include profuse salivation, twitching, vomiting, shallow breathing, and collapse of the hind limbs. Death may occur by cardiac arrest within fifteen minutes. A cane toad responds to threat by turning side-on so its parotoid glands are directed towards the attacker. The poison usually oozes out of the glands, but toads can squirt a fine spray for a short distance if they want. The poison is absorbed through mucous membranes such as eyes, mouth and nose, and in humans may cause intense pain, temporary blindness and inflammation.</p>
+                </div>
+            </div>
+
+            <div class="questions-container">
+                <h2>Questions 1-13</h2>
+                
+                <div class="question-block">
+                    <div class="question-title">
+                        <i class="fas fa-list-ol"></i>
+                        <span>Questions 1-6</span>
+                    </div>
+                    <p>The reading passage <em>The Cane Toad in Australia</em> has paragraphs (A - G). From the list of headings below choose the most suitable headings for paragraphs B - G.</p>
+                    <p>Write the appropriate number (i - X) in boxes 1-6 on your answer sheet.</p>
+                    <p><strong>NB</strong> There are more headings than paragraphs, so you will not use them all.</p>
+                    
+                    <div class="options-grid">
+                        <div class="option-btn" data-value="i">i Diet</div>
+                        <div class="option-btn" data-value="ii">ii Habitat</div>
+                        <div class="option-btn" data-value="iii">iii Pollution Effects</div>
+                        <div class="option-btn" data-value="iv">iv Danger</div>
+                        <div class="option-btn" data-value="v">v Arrival In Australia</div>
+                        <div class="option-btn" data-value="vi">vi Food for Snakes</div>
+                        <div class="option-btn" data-value="vii">vii Identification</div>
+                        <div class="option-btn" data-value="viii">viii Captivity</div>
+                        <div class="option-btn" data-value="ix">ix Distribution</div>
+                        <div class="option-btn" data-value="x">x Environmental Impacts</div>
+                    </div>
+                    
+                    <div class="questions-list">
+                        <div class="question-item">
+                            <p>1. ...... Paragraph B</p>
+                            <div class="answer-buttons" data-question="1">
+                                <div class="option-btn" data-value="i">i</div>
+                                <div class="option-btn" data-value="ii">ii</div>
+                                <div class="option-btn" data-value="iii">iii</div>
+                                <div class="option-btn" data-value="iv">iv</div>
+                                <div class="option-btn" data-value="v">v</div>
+                                <div class="option-btn" data-value="vi">vi</div>
+                                <div class="option-btn" data-value="vii">vii</div>
+                                <div class="option-btn" data-value="viii">viii</div>
+                                <div class="option-btn" data-value="ix">ix</div>
+                                <div class="option-btn" data-value="x">x</div>
+                            </div>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p>2. ...... Paragraph C</p>
+                            <div class="answer-buttons" data-question="2">
+                                <div class="option-btn" data-value="i">i</div>
+                                <div class="option-btn" data-value="ii">ii</div>
+                                <div class="option-btn" data-value="iii">iii</div>
+                                <div class="option-btn" data-value="iv">iv</div>
+                                <div class="option-btn" data-value="v">v</div>
+                                <div class="option-btn" data-value="vi">vi</div>
+                                <div class="option-btn" data-value="vii">vii</div>
+                                <div class="option-btn" data-value="viii">viii</div>
+                                <div class="option-btn" data-value="ix">ix</div>
+                                <div class="option-btn" data-value="x">x</div>
+                            </div>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p>3. ...... Paragraph D</p>
+                            <div class="answer-buttons" data-question="3">
+                                <div class="option-btn" data-value="i">i</div>
+                                <div class="option-btn" data-value="ii">ii</div>
+                                <div class="option-btn" data-value="iii">iii</div>
+                                <div class="option-btn" data-value="iv">iv</div>
+                                <div class="option-btn" data-value="v">v</div>
+                                <div class="option-btn" data-value="vi">vi</div>
+                                <div class="option-btn" data-value="vii">vii</div>
+                                <div class="option-btn" data-value="viii">viii</div>
+                                <div class="option-btn" data-value="ix">ix</div>
+                                <div class="option-btn" data-value="x">x</div>
+                            </div>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p>4. ...... Paragraph E</p>
+                            <div class="answer-buttons" data-question="4">
+                                <div class="option-btn" data-value="i">i</div>
+                                <div class="option-btn" data-value="ii">ii</div>
+                                <div class="option-btn" data-value="iii">iii</div>
+                                <div class="option-btn" data-value="iv">iv</div>
+                                <div class="option-btn" data-value="v">v</div>
+                                <div class="option-btn" data-value="vi">vi</div>
+                                <div class="option-btn" data-value="vii">vii</div>
+                                <div class="option-btn" data-value="viii">viii</div>
+                                <div class="option-btn" data-value="ix">ix</div>
+                                <div class="option-btn" data-value="x">x</div>
+                            </div>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p>5. ...... Paragraph F</p>
+                            <div class="answer-buttons" data-question="5">
+                                <div class="option-btn" data-value="i">i</div>
+                                <div class="option-btn" data-value="ii">ii</div>
+                                <div class="option-btn" data-value="iii">iii</div>
+                                <div class="option-btn" data-value="iv">iv</div>
+                                <div class="option-btn" data-value="v">v</div>
+                                <div class="option-btn" data-value="vi">vi</div>
+                                <div class="option-btn" data-value="vii">vii</div>
+                                <div class="option-btn" data-value="viii">viii</div>
+                                <div class="option-btn" data-value="ix">ix</div>
+                                <div class="option-btn" data-value="x">x</div>
+                            </div>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p>6. ...... Paragraph G</p>
+                            <div class="answer-buttons" data-question="6">
+                                <div class="option-btn" data-value="i">i</div>
+                                <div class="option-btn" data-value="ii">ii</div>
+                                <div class="option-btn" data-value="iii">iii</div>
+                                <div class="option-btn" data-value="iv">iv</div>
+                                <div class="option-btn" data-value="v">v</div>
+                                <div class="option-btn" data-value="vi">vi</div>
+                                <div class="option-btn" data-value="vii">vii</div>
+                                <div class="option-btn" data-value="viii">viii</div>
+                                <div class="option-btn" data-value="ix">ix</div>
+                                <div class="option-btn" data-value="x">x</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question-title">
+                        <i class="fas fa-paragraph"></i>
+                        <span>Questions 7-10</span>
+                    </div>
+                    <p>Which paragraphs offer information on the following ideas? Write the appropriate letters (A - G) in boxes 7-10 on your answer sheet.</p>
+                    
+                    <div class="questions-list">
+                        <div class="question-item">
+                            <p>7. Male cane toads grow protuberances during mating periods.</p>
+                            <div class="answer-buttons" data-question="7">
+                                <div class="option-btn" data-value="A">A</div>
+                                <div class="option-btn" data-value="B">B</div>
+                                <div class="option-btn" data-value="C">C</div>
+                                <div class="option-btn" data-value="D">D</div>
+                                <div class="option-btn" data-value="E">E</div>
+                                <div class="option-btn" data-value="F">F</div>
+                                <div class="option-btn" data-value="G">G</div>
+                            </div>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p>8. The cane toad's unique way of laying eggs in Australia.</p>
+                            <div class="answer-buttons" data-question="8">
+                                <div class="option-btn" data-value="A">A</div>
+                                <div class="option-btn" data-value="B">B</div>
+                                <div class="option-btn" data-value="C">C</div>
+                                <div class="option-btn" data-value="D">D</div>
+                                <div class="option-btn" data-value="E">E</div>
+                                <div class="option-btn" data-value="F">F</div>
+                                <div class="option-btn" data-value="G">G</div>
+                            </div>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p>9. Opposition to the introduction of cane toads in Australia.</p>
+                            <div class="answer-buttons" data-question="9">
+                                <div class="option-btn" data-value="A">A</div>
+                                <div class="option-btn" data-value="B">B</div>
+                                <div class="option-btn" data-value="C">C</div>
+                                <div class="option-btn" data-value="D">D</div>
+                                <div class="option-btn" data-value="E">E</div>
+                                <div class="option-btn" data-value="F">F</div>
+                                <div class="option-btn" data-value="G">G</div>
+                            </div>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p>10. The danger of eating cane toad eggs.</p>
+                            <div class="answer-buttons" data-question="10">
+                                <div class="option-btn" data-value="A">A</div>
+                                <div class="option-btn" data-value="B">B</div>
+                                <div class="option-btn" data-value="C">C</div>
+                                <div class="option-btn" data-value="D">D</div>
+                                <div class="option-btn" data-value="E">E</div>
+                                <div class="option-btn" data-value="F">F</div>
+                                <div class="option-btn" data-value="G">G</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question-title">
+                        <i class="fas fa-edit"></i>
+                        <span>Questions 11-13</span>
+                    </div>
+                    <p>Complete each of the following statements with words taken from the box below.</p>
+                    
+                    <div class="word-bank">
+                        <div class="word-option">flowers</div>
+                        <div class="word-option">hearing</div>
+                        <div class="word-option">hair</div>
+                        <div class="word-option">walking</div>
+                        <div class="word-option">leaves</div>
+                        <div class="word-option">roots</div>
+                        <div class="word-option">smelling</div>
+                        <div class="word-option">tadpoles</div>
+                        <div class="word-option">stalks</div>
+                        <div class="word-option">rope</div>
+                        <div class="word-option">seeds</div>
+                        <div class="word-option">sleeping</div>
+                    </div>
+                    
+                    <div class="questions-list">
+                        <div class="question-item">
+                            <p>11. When suspended, the eggs of the cane toad resemble 11 <input type="text" class="input-box" data-question="11"></p>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p>12. Cane toads were introduced into Australia in order to stop beetle young eating sugar cane 12 <input type="text" class="input-box" data-question="12"></p>
+                        </div>
+                        
+                        <div class="question-item">
+                            <p>13. The text says that dogs affected by cane toad poisoning may have problems with 13 <input type="text" class="input-box" data-question="13"></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="submit-btn" id="submit-btn">
+                    <i class="fas fa-paper-plane"></i>
+                    Submit Answers
+                </button>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>IELTS Reading Practice Test • Good luck with your preparation!</p>
+        </div>
+    </div>
+
+    <div class="highlight-menu" id="highlight-menu">
+        <button class="highlight-btn yellow" data-color="yellow">
+            <i class="fas fa-highlighter"></i>
+        </button>
+        <button class="highlight-btn blue" data-color="blue">
+            <i class="fas fa-highlighter"></i>
+        </button>
+        <button class="highlight-btn clear" data-color="clear">
+            <i class="fas fa-eraser"></i>
+        </button>
+    </div>
+
+    <div class="results-container" id="results-container">
+        <div class="results-content">
+            <button class="close-results" id="close-results">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="score-display">
+                <h2>Your Results</h2>
+                <div class="score-value" id="score-value">0/13</div>
+                <p id="score-message">Well done!</p>
+            </div>
+            
+            <div id="results-list">
+                <!-- Results will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme switching
+            const body = document.body;
+            const dayThemeBtn = document.getElementById('day-theme');
+            const nightThemeBtn = document.getElementById('night-theme');
+            const sepiaThemeBtn = document.getElementById('sepia-theme');
+            
+            dayThemeBtn.addEventListener('click', () => {
+                body.className = 'day-mode';
+            });
+            
+            nightThemeBtn.addEventListener('click', () => {
+                body.className = 'night-mode';
+            });
+            
+            sepiaThemeBtn.addEventListener('click', () => {
+                body.className = 'sepia-mode';
+            });
+            
+            // Timer functionality
+            const timerElement = document.getElementById('timer');
+            const timeDisplay = document.getElementById('time');
+            let timeLeft = 20 * 60; // 20 minutes in seconds
+            let timerInterval;
+            
+            function startTimer() {
+                clearInterval(timerInterval);
+                timerInterval = setInterval(updateTimer, 1000);
+            }
+            
+            function updateTimer() {
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timeDisplay.textContent = '00:00';
+                    timerElement.classList.add('warning');
+                    submitAnswers();
+                    return;
+                }
+                
+                timeLeft--;
+                
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                
+                timeDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft === 5 * 60) {
+                    timerElement.classList.add('warning');
+                }
+            }
+            
+            startTimer();
+            
+            // Text highlighting
+            const passageText = document.getElementById('passage-text');
+            const highlightMenu = document.getElementById('highlight-menu');
+            let currentSelection = null;
+            
+            passageText.addEventListener('mouseup', function(e) {
+                const selection = window.getSelection();
+                if (!selection.toString().trim()) return;
+                
+                currentSelection = selection;
+                
+                const range = selection.getRangeAt(0);
+                const rect = range.getBoundingClientRect();
+                
+                highlightMenu.style.top = (rect.top + window.scrollY - 45) + 'px';
+                highlightMenu.style.left = (rect.left + window.scrollX + rect.width / 2 - 60) + 'px';
+                highlightMenu.classList.add('show');
+            });
+            
+            document.addEventListener('mousedown', function(e) {
+                if (!highlightMenu.contains(e.target)) {
+                    highlightMenu.classList.remove('show');
+                }
+            });
+            
+            document.querySelectorAll('.highlight-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (!currentSelection) return;
+                    
+                    const color = this.dataset.color;
+                    
+                    if (color === 'clear') {
+                        removeHighlight(currentSelection);
+                    } else {
+                        applyHighlight(currentSelection, color);
+                    }
+                    
+                    highlightMenu.classList.remove('show');
+                    currentSelection = null;
+                });
+            });
+            
+            function applyHighlight(selection, color) {
+                const range = selection.getRangeAt(0);
+                const selectedText = range.extractContents();
+                
+                const span = document.createElement('span');
+                span.appendChild(selectedText);
+                span.classList.add(`highlight-${color}`);
+                
+                range.insertNode(span);
+            }
+            
+            function removeHighlight(selection) {
+                const range = selection.getRangeAt(0);
+                const parentElement = range.startContainer.parentElement;
+                
+                if (parentElement.classList.contains('highlight-yellow') || 
+                    parentElement.classList.contains('highlight-blue')) {
+                    
+                    const text = parentElement.textContent;
+                    parentElement.parentNode.replaceChild(document.createTextNode(text), parentElement);
+                }
+            }
+            
+            // Answer selection
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const questionNum = this.parentElement.dataset.question;
+                    const value = this.dataset.value;
+                    
+                    // Remove selected class from all buttons in this question
+                    this.parentElement.querySelectorAll('.option-btn').forEach(b => {
+                        b.classList.remove('selected');
+                    });
+                    
+                    // Add selected class to clicked button
+                    this.classList.add('selected');
+                    
+                    // Store the answer
+                    this.closest('.question-item').dataset.answer = value;
+                });
+            });
+            
+            // Word bank selection
+            document.querySelectorAll('.word-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const word = this.textContent;
+                    const activeInput = document.querySelector('.input-box:focus');
+                    
+                    if (activeInput) {
+                        activeInput.value = word;
+                    }
+                });
+            });
+            
+            // Submit answers
+            const submitBtn = document.getElementById('submit-btn');
+            const resultsContainer = document.getElementById('results-container');
+            const closeResults = document.getElementById('close-results');
+            const scoreValue = document.getElementById('score-value');
+            const scoreMessage = document.getElementById('score-message');
+            const resultsList = document.getElementById('results-list');
+            
+            submitBtn.addEventListener('click', submitAnswers);
+            closeResults.addEventListener('click', () => {
+                resultsContainer.classList.remove('show');
+            });
+            
+            function submitAnswers() {
+                clearInterval(timerInterval);
+                
+                // Correct answers
+                const correctAnswers = {
+                    1: 'vii',
+                    2: 'ix',
+                    3: 'ii',
+                    4: 'i',
+                    5: 'x',
+                    6: 'iv',
+                    7: 'B',
+                    8: 'B',
+                    9: 'F',
+                    10: 'G',
+                    11: 'rope',
+                    12: 'roots',
+                    13: 'walking'
+                };
+                
+                // Answer locations in the text
+                const answerLocations = {
+                    1: "Paragraph B: 'Cane toads are large heavily-built amphibians with dry, warty skin...'",
+                    2: "Paragraph C: 'The natural range of cane toads extends from the southern United States to tropical South America...'",
+                    3: "Paragraph D: 'Cane toads tolerate a broad range of environmental and climatic conditions...'",
+                    4: "Paragraph E: 'Cane toads eat almost anything they can swallow...'",
+                    5: "Paragraph F: 'The protestors were right. Firstly, cane toads compete for the resources of native animals...'",
+                    6: "Paragraph G: 'All stages of the cane toad's life-cycle are poisonous...'",
+                    7: "Paragraph B: 'During the breeding season males develop dark lumps (nuptial pads) on their first two fingers...'",
+                    8: "Paragraph B: 'Cane toad spawn is exclusive in Australia. It is laid in long strings of transparent jelly...'",
+                    9: "Paragraph F: 'At that time, some naturalists and scientists warned of the dangers of liberating cane toads in Australia.'",
+                    10: "Paragraph G: 'No humans have died in Australia from cane toad poison, but overseas, people have died after eating toads and even soup made from boiled toad eggs.'",
+                    11: "Paragraph B: 'The spawn tangles in dense dark masses around water plants, and hangs in ropy strands if picked up.'",
+                    12: "Paragraph F: 'The whitegrub larvae of these beetles eat the roots of sugar cane and kill or stunt the plants.'",
+                    13: "Paragraph G: 'Signs of dogs being poisoned through ingestion include profuse salivation, twitching, vomiting, shallow breathing, and collapse of the hind limbs.'"
+                };
+                
+                let score = 0;
+                resultsList.innerHTML = '';
+                
+                // Check answers for questions 1-10
+                for (let i = 1; i <= 10; i++) {
+                    const questionElement = document.querySelector(`.question-item[data-answer]`);
+                    const userAnswer = questionElement ? questionElement.dataset.answer : '';
+                    const isCorrect = userAnswer === correctAnswers[i];
+                    
+                    if (isCorrect) score++;
+                    
+                    const resultItem = document.createElement('div');
+                    resultItem.className = `result-item ${isCorrect ? 'correct' : 'incorrect'}`;
+                    resultItem.innerHTML = `
+                        <div class="result-question">Question ${i}: Your answer: ${userAnswer || 'Not answered'} ${isCorrect ? '✓' : '✗'}</div>
+                        <div class="result-answer">
+                            <span class="result-icon">${isCorrect ? '✓' : '✗'}</span>
+                            <span>Correct answer: ${correctAnswers[i]}</span>
+                        </div>
+                        <div class="result-location">Location in text: ${answerLocations[i]}</div>
+                    `;
+                    
+                    resultsList.appendChild(resultItem);
+                }
+                
+                // Check answers for questions 11-13
+                for (let i = 11; i <= 13; i++) {
+                    const inputElement = document.querySelector(`.input-box[data-question="${i}"]`);
+                    const userAnswer = inputElement ? inputElement.value.trim().toLowerCase() : '';
+                    const isCorrect = userAnswer === correctAnswers[i];
+                    
+                    if (isCorrect) score++;
+                    
+                    const resultItem = document.createElement('div');
+                    resultItem.className = `result-item ${isCorrect ? 'correct' : 'incorrect'}`;
+                    resultItem.innerHTML = `
+                        <div class="result-question">Question ${i}: Your answer: ${userAnswer || 'Not answered'} ${isCorrect ? '✓' : '✗'}</div>
+                        <div class="result-answer">
+                            <span class="result-icon">${isCorrect ? '✓' : '✗'}</span>
+                            <span>Correct answer: ${correctAnswers[i]}</span>
+                        </div>
+                        <div class="result-location">Location in text: ${answerLocations[i]}</div>
+                    `;
+                    
+                    resultsList.appendChild(resultItem);
+                }
+                
+                // Update score display
+                scoreValue.textContent = `${score}/13`;
+                
+                // Set message based on score
+                if (score >= 11) {
+                    scoreMessage.textContent = 'Excellent work! You have a strong understanding of the text.';
+                } else if (score >= 8) {
+                    scoreMessage.textContent = 'Good job! With a bit more practice, you\'ll improve even more.';
+                } else if (score >= 5) {
+                    scoreMessage.textContent = 'Not bad! Review the text and try again to improve your score.';
+                } else {
+                    scoreMessage.textContent = 'Keep practicing! Review the text and try again.';
+                }
+                
+                // Show results
+                resultsContainer.classList.add('show');
+            }
+        });
+    </script>
+</body>
+</html>

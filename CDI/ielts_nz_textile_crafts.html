@@ -1,0 +1,556 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script>```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Test: New Zealand Home Textile Crafts of the 1930s to 1950s</title>
+    <style>
+        /* Base styles for cute, aesthetic, modern design */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --accent-color: #ff69b4;
+            --highlight-yellow: #ffff99;
+            --highlight-blue: #add8e6;
+            --header-bg: #f0f8ff;
+            --button-bg: #ffb6c1;
+            --button-text: #ffffff;
+            --timer-color: #4caf50;
+            --warning-color: #ff9800;
+            --error-color: #f44336;
+            --success-color: #4caf50;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        header {
+            background-color: var(--header-bg);
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        #telegram {
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: transform 0.2s ease, background-color 0.3s ease;
+        }
+
+        #telegram:hover {
+            transform: scale(1.05);
+        }
+
+        .theme-button {
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            margin: 5px;
+            transition: transform 0.2s ease;
+        }
+
+        .theme-button:hover {
+            transform: scale(1.05);
+        }
+
+        .container {
+            display: flex;
+            height: calc(100vh - 60px);
+            overflow: hidden;
+        }
+
+        .left, .right {
+            padding: 20px;
+            overflow-y: auto;
+            transition: background-color 0.3s ease;
+        }
+
+        .left {
+            flex: 1;
+            border-right: 1px solid #ddd;
+        }
+
+        .right {
+            flex: 1;
+        }
+
+        #passage {
+            line-height: 1.6;
+        }
+
+        #passage p {
+            margin-bottom: 15px;
+        }
+
+        #questions {
+            margin-bottom: 20px;
+        }
+
+        .question {
+            margin-bottom: 15px;
+        }
+
+        select, input {
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease;
+        }
+
+        select:focus, input:focus {
+            border-color: var(--accent-color);
+        }
+
+        #timer {
+            font-size: 18px;
+            color: var(--timer-color);
+            margin-bottom: 10px;
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.05); }
+        }
+
+        #submit {
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.2s ease;
+        }
+
+        #submit:hover {
+            transform: scale(1.05);
+        }
+
+        #report {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(255, 255, 255, 0.95);
+            color: var(--text-color);
+            overflow-y: auto;
+            padding: 20px;
+            display: none;
+            z-index: 1000;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .report-item {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .report-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .correct {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .wrong {
+            background-color: var(--error-color);
+            color: white;
+        }
+
+        #menu {
+            position: absolute;
+            display: none;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            padding: 5px;
+            z-index: 999;
+        }
+
+        .menu-button {
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 2px;
+            transition: background-color 0.3s ease;
+        }
+
+        .menu-button:hover {
+            background-color: #ff1493;
+        }
+
+        /* Night mode */
+        body.night {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --header-bg: #1e1e1e;
+            --button-bg: #333333;
+            --button-text: #ffffff;
+            --timer-color: #81c784;
+        }
+
+        /* Sepia mode */
+        body.sepia {
+            --bg-color: #f4ecd8;
+            --text-color: #5b4636;
+            --header-bg: #e0d4b8;
+            --button-bg: #d2b48c;
+            --button-text: #4b3621;
+            --timer-color: #8b4513;
+        }
+
+        /* Adaptive design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .left, .right {
+                border: none;
+                height: auto;
+            }
+
+            #menu {
+                transform: scale(0.8); /* Smaller menu on mobile */
+            }
+        }
+    </style>
+</head>
+<body class="day"> <!-- Default Day theme -->
+
+    <header>
+        <button id="telegram" onclick="window.location.href='tg://resolve?domain=aftum_8'">📱 Telegram channel</button>
+        <button class="theme-button" onclick="changeTheme('day')">Day</button>
+        <button class="theme-button" onclick="changeTheme('night')">Night</button>
+        <button class="theme-button" onclick="changeTheme('sepia')">Sepia</button>
+    </header>
+
+    <div class="container">
+        <div class="left">
+            <div id="passage">
+                <h2>New Zealand Home Textile Crafts of the 1930s to 1950s</h2>
+                <p><strong>A</strong><br>In the 1930s to 1950s, New Zealand’s home textile crafts flourished as a response to economic and social conditions. The Great Depression and World War II created material shortages, encouraging households to repurpose old fabrics and create their own textiles. Women, in particular, played a significant role, using skills like sewing, knitting, and embroidery to produce practical and decorative items such as quilts, tablecloths, and curtains. These crafts were not only a necessity but also a creative outlet, reflecting personal and cultural identity.</p>
+                <p><strong>B</strong><br>The economic constraints of the era led to a ‘make-do-and-mend’ ethos. Families repurposed flour sacks, old clothing, and even parachute silk from the war into household textiles. Instructions for such projects were shared through women’s magazines, community groups, and radio broadcasts. For example, the New Zealand Women’s Institute offered workshops teaching techniques like patchwork, where scraps of fabric were sewn together to create quilts. These practices fostered resourcefulness and community spirit, as women exchanged ideas and materials.</p>
+                <p><strong>C</strong><br>Textile crafts also served as a form of cultural expression. Māori women incorporated traditional weaving techniques, using native flax (harakeke) to create items like mats and baskets, blending them with European sewing methods. This fusion resulted in unique designs that celebrated both Māori and Pākehā (European New Zealander) heritage. Patterns often featured motifs inspired by nature, such as ferns or stars, symbolising the connection to New Zealand’s landscape. These creations were frequently displayed at local fairs, strengthening community bonds.</p>
+                <p><strong>D</strong><br>During World War II, textile crafts took on a patriotic dimension. Women knitted socks, scarves, and balaclavas for soldiers, contributing to the war effort. The Red Cross and other organisations provided patterns and materials, encouraging home crafters to support troops overseas. These efforts gave women a sense of purpose and agency, as their work directly aided the national cause. Additionally, handmade textiles were often donated to fundraising events, further embedding crafts in community life.</p>
+                <p><strong>E</strong><br>Post-war, the 1950s saw a shift as New Zealand’s economy improved and mass-produced textiles became more available. However, home crafts remained popular, particularly in rural areas where access to commercial goods was limited. Women continued to create intricate embroideries and crocheted doilies, often as a way to personalise their homes. Craft groups, such as embroidery guilds, grew in popularity, offering spaces for skill-sharing and socialising. These groups also helped preserve traditional techniques as modern manufacturing began to dominate.</p>
+                <p><strong>F</strong><br>The legacy of this period’s textile crafts is still evident today. Many quilts and embroidered pieces from the 1930s to 1950s are preserved in museums, showcasing the skill and creativity of the era. These items are valued not only for their aesthetic appeal but also for their historical significance, reflecting a time of resilience and ingenuity. Modern crafters draw inspiration from these designs, reviving techniques like patchwork and flax weaving in contemporary textile art.</p>
+                <p><strong>G</strong><br>Interestingly, the skills developed during this period had lasting impacts. Home textile crafts empowered women, providing economic independence through selling their creations or teaching others. They also fostered a sense of community, as women gathered to share techniques and stories. Today, these crafts are celebrated as part of New Zealand’s cultural heritage, with exhibitions and workshops highlighting their enduring appeal. The period’s emphasis on sustainability and resourcefulness continues to resonate in modern crafting movements.</p>
+            </div>
+        </div>
+        <div class="right">
+            <div id="timer">Time left: 20:00</div>
+            <div id="questions">
+                <h2>Questions 27-40</h2>
+                <div class="question">
+                    <p><strong>Questions 27-33</strong></p>
+                    <p>Do the following statements agree with the information given in Reading Passage?</p>
+                    <p>Write</p>
+                    <p><strong>TRUE</strong> if the statement agrees with the information</p>
+                    <p><strong>FALSE</strong> if the statement contradicts the information</p>
+                    <p><strong>NOT GIVEN</strong> if there is no information on this</p>
+                    <p>27. Material shortages during the 1930s and 1940s encouraged home textile crafts in New Zealand.</p>
+                    <select id="q27"><option value="">Select</option><option value="TRUE">TRUE</option><option value="FALSE">FALSE</option><option value="NOT GIVEN">NOT GIVEN</option></select>
+                    <p>28. Men were primarily responsible for creating household textiles during this period.</p>
+                    <select id="q28"><option value="">Select</option><option value="TRUE">TRUE</option><option value="FALSE">FALSE</option><option value="NOT GIVEN">NOT GIVEN</option></select>
+                    <p>29. Māori women used only European sewing techniques in their textile crafts.</p>
+                    <select id="q29"><option value="">Select</option><option value="TRUE">TRUE</option><option value="FALSE">FALSE</option><option value="NOT GIVEN">NOT GIVEN</option></select>
+                    <p>30. Textile crafts during World War II had no connection to the war effort.</p>
+                    <select id="q30"><option value="">Select</option><option value="TRUE">TRUE</option><option value="FALSE">FALSE</option><option value="NOT GIVEN">NOT GIVEN</option></select>
+                    <p>31. The availability of mass-produced textiles in the 1950s eliminated the need for home crafts.</p>
+                    <select id="q31"><option value="">Select</option><option value="TRUE">TRUE</option><option value="FALSE">FALSE</option><option value="NOT GIVEN">NOT GIVEN</option></select>
+                    <p>32. Modern crafters no longer use techniques from the 1930s to 1950s.</p>
+                    <select id="q32"><option value="">Select</option><option value="TRUE">TRUE</option><option value="FALSE">FALSE</option><option value="NOT GIVEN">NOT GIVEN</option></select>
+                    <p>33. Home textile crafts contributed to women’s economic independence.</p>
+                    <select id="q33"><option value="">Select</option><option value="TRUE">TRUE</option><option value="FALSE">FALSE</option><option value="NOT GIVEN">NOT GIVEN</option></select>
+                </div>
+                <div class="question">
+                    <p><strong>Questions 34-36</strong></p>
+                    <p>Complete the sentences below.</p>
+                    <p>Choose <strong>NO MORE THAN TWO WORDS</strong> from the passage for each answer.</p>
+                    <p>34. The ‘make-do-and-mend’ ethos encouraged the use of _______ sacks.</p>
+                    <input id="q34" type="text" size="20">
+                    <p>35. Māori women used _______ flax in their weaving.</p>
+                    <input id="q35" type="text" size="20">
+                    <p>36. Post-war, _______ guilds grew in popularity.</p>
+                    <input id="q36" type="text" size="20">
+                </div>
+                <div class="question">
+                    <p><strong>Questions 37-40</strong></p>
+                    <p>Which paragraph contains the following information?</p>
+                    <p>37. The role of women’s magazines in sharing textile craft ideas</p>
+                    <select id="q37"><option value="">Select</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select>
+                    <p>38. The preservation of textile crafts in museums</p>
+                    <select id="q38"><option value="">Select</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select>
+                    <p>39. The patriotic contribution of textile crafts during World War II</p>
+                    <select id="q39"><option value="">Select</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select>
+                    <p>40. The blending of Māori and European textile techniques</p>
+                    <select id="q40"><option value="">Select</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select>
+                </div>
+            </div>
+            <button id="submit">Submit Answers</button>
+        </div>
+    </div>
+
+    <div id="report">
+        <h2>Test Report</h2>
+        <p id="score"></p>
+        <div id="details"></div>
+        <button onclick="closeReport()" style="background-color: #ffb6c1; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer;">Close</button>
+    </div>
+
+    <div id="menu">
+        <button class="menu-button" onclick="highlight('yellow')">Yellow</button>
+        <button class="menu-button" onclick="highlight('blue')">Blue</button>
+        <button class="menu-button" onclick="highlight('clear')">Clear</button>
+    </div>
+
+    <script>
+        // Timer
+        let timeLeft = 20 * 60; // 20 minutes in seconds
+        const timerElement = document.getElementById('timer');
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `Time left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            if (timeLeft <= 5 * 60) {
+                timerElement.style.color = 'var(--warning-color)';
+            }
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                alert('Time is up!');
+                submitAnswers();
+            }
+            timeLeft--;
+        }
+        const timerInterval = setInterval(updateTimer, 1000);
+
+        // Theme change
+        function changeTheme(theme) {
+            document.body.className = theme;
+        }
+
+        // Highlighting system for cross-browser compatibility
+        const passage = document.getElementById('passage');
+        const menu = document.getElementById('menu');
+        let currentRange = null;
+
+        function showHighlightMenu(e) {
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                if (!range.collapsed && passage.contains(range.commonAncestorContainer)) {
+                    currentRange = range;
+                    const rect = range.getBoundingClientRect();
+                    menu.style.display = 'flex';
+                    let posX = rect.left + window.scrollX;
+                    let posY = rect.bottom + window.scrollY + 5;
+                    const menuWidth = menu.offsetWidth || 120; // Fallback width
+                    const menuHeight = menu.offsetHeight || 40; // Fallback height
+                    if (posX + menuWidth > window.innerWidth) {
+                        posX = window.innerWidth - menuWidth - 10;
+                    }
+                    if (posY + menuHeight > window.innerHeight + window.scrollY) {
+                        posY = rect.top + window.scrollY - menuHeight - 5;
+                    }
+                    menu.style.left = `${posX}px`;
+                    menu.style.top = `${posY}px`;
+                } else {
+                    menu.style.display = 'none';
+                }
+            }
+        }
+
+        passage.addEventListener('mouseup', showHighlightMenu);
+        passage.addEventListener('touchend', (e) => {
+            setTimeout(() => showHighlightMenu(e), 100);
+        });
+
+        document.addEventListener('mousedown', (e) => {
+            if (!menu.contains(e.target) && !passage.contains(e.target)) {
+                menu.style.display = 'none';
+                window.getSelection().removeAllRanges();
+            }
+        });
+
+        document.addEventListener('touchstart', (e) => {
+            if (!menu.contains(e.target) && !passage.contains(e.target)) {
+                menu.style.display = 'none';
+                window.getSelection().removeAllRanges();
+            }
+        });
+
+        function highlight(color) {
+            if (!currentRange) return;
+            try {
+                if (!passage.contains(currentRange.commonAncestorContainer)) {
+                    console.warn('Selection outside passage');
+                    return;
+                }
+                const fragment = currentRange.extractContents();
+                if (color === 'clear') {
+                    currentRange.insertNode(fragment);
+                } else {
+                    const span = document.createElement('span');
+                    span.style.backgroundColor = color === 'yellow' ? 'var(--highlight-yellow)' : 'var(--highlight-blue)';
+                    span.appendChild(fragment);
+                    currentRange.insertNode(span);
+                }
+                passage.normalize();
+            } catch (err) {
+                console.error('Highlight error:', err);
+                alert('Error applying highlight. Please try again.');
+            }
+            menu.style.display = 'none';
+            currentRange = null;
+            window.getSelection().removeAllRanges();
+        }
+
+        // Submit and report
+        const correctAnswers = {
+            q27: 'TRUE', // Paragraph A: Material shortages encouraged textile crafts.
+            q28: 'FALSE', // Paragraph A: Women, not men, played a significant role.
+            q29: 'FALSE', // Paragraph C: Māori women blended traditional weaving with European methods.
+            q30: 'FALSE', // Paragraph D: Crafts like knitting for soldiers supported the war effort.
+            q31: 'FALSE', // Paragraph E: Home crafts remained popular despite mass-produced textiles.
+            q32: 'FALSE', // Paragraph F: Modern crafters revive techniques like patchwork.
+            q33: 'TRUE', // Paragraph G: Crafts provided economic independence.
+            q34: 'flour', // Paragraph B: Families repurposed flour sacks.
+            q35: 'native', // Paragraph C: Māori women used native flax (harakeke).
+            q36: 'embroidery', // Paragraph E: Embroidery guilds grew in popularity.
+            q37: 'B', // Paragraph B: Women’s magazines shared craft instructions.
+            q38: 'F', // Paragraph F: Crafts preserved in museums.
+            q39: 'D', // Paragraph D: Patriotic contribution during World War II.
+            q40: 'C' // Paragraph C: Blending Māori and European techniques.
+        };
+
+        const explanations = {
+            q27: 'Paragraph A: "The Great Depression and World War II created material shortages, encouraging households to repurpose old fabrics and create their own textiles."',
+            q28: 'Paragraph A: "Women, in particular, played a significant role," contradicting men being primarily responsible.',
+            q29: 'Paragraph C: "Māori women incorporated traditional weaving techniques... blending them with European sewing methods."',
+            q30: 'Paragraph D: "Women knitted socks, scarves, and balaclavas for soldiers, contributing to the war effort."',
+            q31: 'Paragraph E: "Home crafts remained popular, particularly in rural areas," despite mass-produced textiles.',
+            q32: 'Paragraph F: "Modern crafters draw inspiration from these designs, reviving techniques like patchwork."',
+            q33: 'Paragraph G: "Home textile crafts empowered women, providing economic independence through selling their creations."',
+            q34: 'Paragraph B: "Families repurposed flour sacks... into household textiles."',
+            q35: 'Paragraph C: "Māori women incorporated traditional weaving techniques, using native flax (harakeke)."',
+            q36: 'Paragraph E: "Craft groups, such as embroidery guilds, grew in popularity."',
+            q37: 'Paragraph B: "Instructions for such projects were shared through women’s magazines."',
+            q38: 'Paragraph F: "Many quilts and embroidered pieces... are preserved in museums."',
+            q39: 'Paragraph D: "Textile crafts took on a patriotic dimension... contributing to the war effort."',
+            q40: 'Paragraph C: "Māori women incorporated traditional weaving techniques... blending them with European sewing methods."'
+        };
+
+        document.getElementById('submit').addEventListener('click', submitAnswers);
+
+        function submitAnswers() {
+            clearInterval(timerInterval);
+            let score = 0;
+            const total = 14; // 27-40 = 14 questions
+            const details = document.getElementById('details');
+            details.innerHTML = '';
+            for (let i = 27; i <= 40; i++) {
+                const qid = `q${i}`;
+                const userAnswer = (i >= 34 && i <= 36 ? document.getElementById(qid).value.trim().toLowerCase() : document.getElementById(qid).value);
+                const correct = correctAnswers[qid].toLowerCase();
+                if (userAnswer === correct) {
+                    score++;
+                    const item = document.createElement('div');
+                    item.classList.add('report-item', 'correct');
+                    item.innerHTML = `<p>Question ${i}: Correct! Your answer: ${userAnswer}</p><p>Explanation: ${explanations[qid]}</p>`;
+                    details.appendChild(item);
+                } else {
+                    const item = document.createElement('div');
+                    item.classList.add('report-item', 'wrong');
+                    item.innerHTML = `<p>Question ${i}: Wrong. Your answer: ${userAnswer || 'None'} | Correct: ${correctAnswers[qid]}</p><p>Explanation: ${explanations[qid]}</p>`;
+                    details.appendChild(item);
+                }
+            }
+            document.getElementById('score').textContent = `Score: ${score}/${total}`;
+            document.getElementById('report').style.display = 'block';
+        }
+
+        function closeReport() {
+            document.getElementById('report').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
+```

@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Test: Headphones</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --success: #00b894;
+            --danger: #d63031;
+            --warning: #fdcb6e;
+            --info: #0984e3;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --background: #ffffff;
+            --text: #212529;
+            --border: #dee2e6;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --highlight-yellow: rgba(255, 255, 0, 0.3);
+            --highlight-blue: rgba(173, 216, 230, 0.3);
+        }
+
+        .night-theme {
+            --background: #1a1a2e;
+            --text: #e6e6e6;
+            --border: #4a4a6e;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        .sepia-theme {
+            --background: #f6f1d6;
+            --text: #5e4b3c;
+            --border: #c9b18e;
+            --shadow: rgba(94, 75, 60, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px var(--shadow);
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 0.5rem;
+        }
+
+        .theme-switcher {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .theme-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 2.5rem;
+            height: 2.5rem;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .telegram-btn {
+            background: #0088cc;
+            color: white;
+            border: none;
+            border-radius: 2rem;
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .telegram-btn:hover {
+            background: #0077b5;
+        }
+
+        .timer-container {
+            background-color: var(--secondary);
+            color: white;
+            padding: 0.5rem 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            box-shadow: 0 2px 5px var(--shadow);
+        }
+
+        .timer {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .timer.warning {
+            color: var(--warning);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .passage-container, .questions-container {
+            overflow-y: auto;
+            padding: 1.5rem;
+            height: calc(100vh - 130px);
+        }
+
+        .passage-container {
+            flex: 1;
+            border-right: 1px solid var(--border);
+        }
+
+        .questions-container {
+            flex: 1;
+        }
+
+        .passage-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .passage-content {
+            font-size: 1.1rem;
+            text-align: justify;
+        }
+
+        .passage-content p {
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            margin: 1.5rem 0 1rem;
+            color: var(--primary);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 0.5rem;
+        }
+
+        .question {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: rgba(108, 92, 231, 0.05);
+            border-left: 4px solid var(--secondary);
+        }
+
+        .question-text {
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+        }
+
+        .option:hover {
+            background-color: rgba(108, 92, 231, 0.1);
+        }
+
+        .option input {
+            cursor: pointer;
+        }
+
+        .summary {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: rgba(108, 92, 231, 0.05);
+            border-left: 4px solid var(--secondary);
+        }
+
+        .summary-gap {
+            display: inline-block;
+            min-width: 100px;
+            height: 30px;
+            border-bottom: 2px solid var(--primary);
+            text-align: center;
+            margin: 0 5px;
+            vertical-align: middle;
+            line-height: 30px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .summary-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .summary-option {
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 0.25rem;
+            text-align: center;
+            cursor: pointer;
+            background-color: rgba(108, 92, 231, 0.05);
+        }
+
+        .summary-option.selected {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .summary-option:hover {
+            background-color: rgba(108, 92, 231, 0.1);
+        }
+
+        .submit-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 2rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: block;
+            margin: 2rem auto;
+            box-shadow: 0 4px 8px var(--shadow);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px var(--shadow);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px var(--shadow);
+        }
+
+        .highlight-menu {
+            position: absolute;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 0.25rem;
+            display: flex;
+            box-shadow: 0 2px 10px var(--shadow);
+            z-index: 1000;
+        }
+
+        .highlight-btn {
+            width: 2rem;
+            height: 2rem;
+            border: none;
+            border-radius: 0.25rem;
+            margin: 0 0.25rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .yellow-highlight {
+            background-color: var(--highlight-yellow);
+        }
+
+        .blue-highlight {
+            background-color: var(--highlight-blue);
+        }
+
+        .clear-highlight {
+            background-color: #f8f9fa;
+        }
+
+        .result-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .result-content {
+            background-color: var(--background);
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--text);
+        }
+
+        .score {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 1rem 0;
+        }
+
+        .result-details {
+            margin-bottom: 1.5rem;
+        }
+
+        .result-question {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: rgba(108, 92, 231, 0.05);
+        }
+
+        .correct {
+            border-left: 4px solid var(--success);
+        }
+
+        .incorrect {
+            border-left: 4px solid var(--danger);
+        }
+
+        .answer-location {
+            font-size: 0.9rem;
+            color: var(--secondary);
+            margin-top: 0.5rem;
+        }
+
+        .close-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 2rem;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 992px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .passage-container, .questions-container {
+                height: auto;
+                max-height: 50vh;
+            }
+            
+            .passage-container {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+            
+            .summary-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 576px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .summary-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .theme-switcher {
+                align-self: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-headphones"></i>
+                <span>IELTS Reading Test</span>
+            </div>
+            <div class="theme-switcher">
+                <button class="theme-btn" id="day-theme" title="Day Theme"><i class="fas fa-sun"></i></button>
+                <button class="theme-btn" id="night-theme" title="Night Theme"><i class="fas fa-moon"></i></button>
+                <button class="theme-btn" id="sepia-theme" title="Sepia Theme"><i class="fas fa-feather"></i></button>
+            </div>
+            <a href="tg://resolve?domain=aftum_8" class="telegram-btn">
+                <i class="fab fa-telegram"></i>
+                <span>Телеграмм канал</span>
+            </a>
+        </header>
+
+        <div class="timer-container">
+            <div class="timer" id="timer">
+                <i class="fas fa-clock"></i>
+                <span id="time">20:00</span>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="passage-container">
+                <h2 class="passage-title">Some views on the use of headphones</h2>
+                <div class="passage-content" id="passage-content">
+                    <p>To visit a typical modern office today is to walk into a room with possibly a dozen songs playing simultaneously but to hear none of them. Up to half of younger workers listen to music on their headphones, and nearly all of them think it makes them better at their jobs. In survey after survey, people report with confidence that music makes them happier, better at concentrating, and more productive.</p>
+                    
+                    <p>Scientists do not share this belief, they maintain that listening to music hurts people's ability to recall other things they should be doing, and any pop song, loud or soft, reduces overall performance for both extroverts and introverts. A Taiwanese study linked music that has lyrics to lower marks on concentration tests for college students, and other research has shown music with lyrics scrambles our brains' verbal-processing skills. 'As silence has the best overall performance, it would still be advisable that people work in silence,' another reporter dryly concluded.</p>
+                    
+                    <p>The question is therefore: if headphones are so bad for productivity, why do so many people at work have them? One factor to consider is that countries like the USA have moved from a farming and manufacturing economy to a service economy, with an emphasis on jobs in offices that require higher levels of concentration, reflection and creativity. As an estimated 70 percent of office workers work in open-plan office spaces, it is more important to create one's own enclosing bubble of sound. Lending strength to the argument for headphones at work is evidence that music relaxes our muscles, improves our mood, and may even moderately reduce blood pressure, heart rate and anxiety.</p>
+                    
+                    <p>The story of headphones began in 1910, when the US Navy received an odd letter written in purple ink on blue-and-pink paper. The letter writer, an eccentric inventor and repairman named Nathaniel Baldwin, from the USA state of Utah, made what at the time was an astonishing claim: he had built, in his kitchen, a new kind of headset that could amplify sound. This was an opportune invention for the Navy, who asked for a sound test and then enthusiastically adopted the headsets, later called headphones, and used them in World War I for naval radio communication.</p>
+                    
+                    <p>The purpose of headphones is to concentrate a quiet and private sound in the ear of the listener, which is a radical departure from music's social purpose in history. 'Music, together with dance, co-evolved biologically and culturally to serve as a technology of social bonding,' Nills L Wallin and Bjorn Merker wrote in The Origins of Music. Songs don't leave behind fossils, but evidence of musical notation dates back to Sumeria, 3,5000 years ago, and in 1995 archeologists discovered a bone flute in southern Europe estimated to be 44,000 years old. If music evolved as a social glue for the species, as a way to make groups and keep them together, headphones have done what writing and literacy did for language – they made music private.</p>
+                    
+                    <p>Author and columnist Stephen Marche wrote that separation from other people is one of the first things ordinary Americans spend their money achieving. It is 'a by-product of a long-standing national appetite for independence,' he said. Americans are not alone in their desire for personal independence and privacy. Marche is right; wealth can buy – and modern technology can deliver – personal independence, and it is this that people have always sought.</p>
+                    
+                    <p>Dr Michael Bull, an expert on personal music devices from the University of Sussex in the UK, has repeatedly made the larger point that personal music devices change how we relate to public spaces. Controlling our public spaces is more important now that more people are moving from the edges of cities to live in urban centers. 'With the urban space, the more it's inhabited, the safer you feel,' Bull says. 'You feel safe if you can feel people there, but you don't' want to interact with them.' Headphones create shields for wearers, separating them from other people and their surroundings. Headphones have their own rules of good manners; they are like wearing a 'Do not disturb' sign. We assume that people wearing them are busy and we should respect their privacy, so now people wear them to appear busy. In fact, it is now becoming quite common for people not to listen to anything at all, but just to wear headphones.</p>
+                    
+                    <p>However, as pointed out at the beginning of this piece, although scientists have stated that headphones are bad for productivity, people still wear them at work. It is not just that headphones create privacy out of public areas, but also that music causes people to relax and reflect and pause. The outcome of relaxation, reflection and pausing at work won't be captured in minute-to-minute productivity metrics. What must be considered is that in moments of extreme focus, our attention radiates outward, toward the problem, rather than inward, on how to solve the problem. However, with music 'When our minds are at ease, we're more likely to direct the spotlight of attention inward,' Jonah Lehrer wrote in his book Imagine: How Creativity Works. 'The answers have been there all along. We just weren't listening.' In a crowded world, real estate is the ultimate scarce resource, and a headphone is a small invisible fence around our minds – making space, creating separation, and helping us listen to ourselves.</p>
+                </div>
+            </div>
+
+            <div class="questions-container">
+                <h3 class="section-title">Questions 27-31</h3>
+                <p>Do the following statements agree with the claims of the writer in Reading Passage 3?</p>
+                <p>In boxes 27-31 on your answer sheet, write</p>
+                <p><strong>YES</strong> if the statement agrees with the claims of the writer<br>
+                <strong>NO</strong> if the statement contradicts the claims of the writer<br>
+                <strong>NOT GIVEN</strong> if it is impossible to say what the writer thinks about this</p>
+
+                <div class="question" id="q27">
+                    <div class="question-text">27. Young people are easily persuaded by surveys that listening to music is beneficial</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q27" value="YES"> YES</label>
+                        <label class="option"><input type="radio" name="q27" value="NO"> NO</label>
+                        <label class="option"><input type="radio" name="q27" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+                </div>
+
+                <div class="question" id="q28">
+                    <div class="question-text">28. Different studies share the same conclusions about the desirability of working in silence</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q28" value="YES"> YES</label>
+                        <label class="option"><input type="radio" name="q28" value="NO"> NO</label>
+                        <label class="option"><input type="radio" name="q28" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+                </div>
+
+                <div class="question" id="q29">
+                    <div class="question-text">29. Some doctors recommend wearing headphones to lower blood pressure</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q29" value="YES"> YES</label>
+                        <label class="option"><input type="radio" name="q29" value="NO"> NO</label>
+                        <label class="option"><input type="radio" name="q29" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+                </div>
+
+                <div class="question" id="q30">
+                    <div class="question-text">30. Nathaniel Baldwin was a respected government researcher</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q30" value="YES"> YES</label>
+                        <label class="option"><input type="radio" name="q30" value="NO"> NO</label>
+                        <label class="option"><input type="radio" name="q30" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+                </div>
+
+                <div class="question" id="q31">
+                    <div class="question-text">31. The effect of the invention of headphones is comparable to the effect of the invention of the writing</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q31" value="YES"> YES</label>
+                        <label class="option"><input type="radio" name="q31" value="NO"> NO</label>
+                        <label class="option"><input type="radio" name="q31" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+                </div>
+
+                <h3 class="section-title">Questions 32-36</h3>
+                <p>Choose the correct letter, A, B, C or D.</p>
+
+                <div class="question" id="q32">
+                    <div class="question-text">32. What does the writer suggest about a service economy?</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q32" value="A"> A The work is mentally demanding</label>
+                        <label class="option"><input type="radio" name="q32" value="B"> B It provides employment for younger workers</label>
+                        <label class="option"><input type="radio" name="q32" value="C"> C It is a small part of a country's economy</label>
+                        <label class="option"><input type="radio" name="q32" value="D"> D Workers have to live in urban centres</label>
+                    </div>
+                </div>
+
+                <div class="question" id="q33">
+                    <div class="question-text">33. When the writer mentions the historical evidence for early music he is</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q33" value="A"> A emphasizing the diversity of musical forms</label>
+                        <label class="option"><input type="radio" name="q33" value="B"> B expressing his frustration with the limited archaeological evidence uncovered</label>
+                        <label class="option"><input type="radio" name="q33" value="C"> C lending support to the view that music has been important in human history</label>
+                        <label class="option"><input type="radio" name="q33" value="D"> D creating a geographical map of the evolution of music</label>
+                    </div>
+                </div>
+
+                <div class="question" id="q34">
+                    <div class="question-text">34. What does the writer say about the social effects of listening to music through headphones?</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q34" value="A"> A It has caused a reduction in the number of people who listen to music</label>
+                        <label class="option"><input type="radio" name="q34" value="B"> B It has increased people's participation in music events</label>
+                        <label class="option"><input type="radio" name="q34" value="C"> C It has reduced the global variation of music styles</label>
+                        <label class="option"><input type="radio" name="q34" value="D"> D It has changed the traditional role of music in society</label>
+                    </div>
+                </div>
+
+                <div class="question" id="q35">
+                    <div class="question-text">35. What does the writer say about personal independence?</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q35" value="A"> A Americans are unique in their desire for personal independence</label>
+                        <label class="option"><input type="radio" name="q35" value="B"> B Personal independence is something that can be purchased</label>
+                        <label class="option"><input type="radio" name="q35" value="C"> C Striving for personal independence is a recent phenomenon</label>
+                        <label class="option"><input type="radio" name="q35" value="D"> D Personal independence destroys social connections</label>
+                    </div>
+                </div>
+
+                <div class="question" id="q36">
+                    <div class="question-text">36. Why does the writer quote Jonah Lehrer in the last paragraph?</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q36" value="A"> A to support the writer's own view</label>
+                        <label class="option"><input type="radio" name="q36" value="B"> B to draw attention to an authoritative book about music</label>
+                        <label class="option"><input type="radio" name="q36" value="C"> C to raise awareness of people's loss of listening skills</label>
+                        <label class="option"><input type="radio" name="q36" value="D"> D to illustrate how music brings people closer to each other</label>
+                    </div>
+                </div>
+
+                <h3 class="section-title">Questions 37-40</h3>
+                <p>Complete the summary using the list of words, A-I, below.</p>
+                <p>Write the correct letter, <strong>A-I</strong>, in boxes 37-40 on your answer sheet.</p>
+
+                <div class="summary">
+                    <p><strong>Headphones and city living</strong></p>
+                    <p>Dr Michael Bull believes that listening to music through headphones has changed the 
+                    <span class="summary-gap" id="gap-37" data-question="37">______</span> the wearers of headphones have with public spaces. Living in the centre of cities is becoming popular, as people become less keen on living in the 
+                    <span class="summary-gap" id="gap-38" data-question="38">______</span> In densely populated city centres, headphones form 
+                    <span class="summary-gap" id="gap-39" data-question="39">______</span> that isolate people from fellow citizens and from their environment. Wearers of headphones are treated with 
+                    <span class="summary-gap" id="gap-40" data-question="40">______</span> that other people do not receive. This is because if we see someone wearing headphones, we believe they must be occupied in some way and should not be interrupted.</p>
+                </div>
+
+                <div class="summary-options">
+                    <div class="summary-option" data-value="A">A courtesy</div>
+                    <div class="summary-option" data-value="B">B relationship</div>
+                    <div class="summary-option" data-value="C">C difficulty</div>
+                    <div class="summary-option" data-value="D">D countryside</div>
+                    <div class="summary-option" data-value="E">E suburbs</div>
+                    <div class="summary-option" data-value="F">F language</div>
+                    <div class="summary-option" data-value="G">G barriers</div>
+                    <div class="summary-option" data-value="H">H obstacles</div>
+                    <div class="summary-option" data-value="I">I disapproval</div>
+                </div>
+
+                <button class="submit-btn" id="submit-btn">Submit Answers</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="result-overlay" id="result-overlay">
+        <div class="result-content">
+            <div class="result-header">
+                <h2>Test Results</h2>
+                <div class="score" id="score">0/14</div>
+                <p id="result-message"></p>
+            </div>
+            
+            <div class="result-details" id="result-details">
+                <!-- Results will be inserted here -->
+            </div>
+            
+            <button class="close-btn" id="close-btn">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Theme switching
+        document.getElementById('day-theme').addEventListener('click', () => {
+            document.body.classList.remove('night-theme', 'sepia-theme');
+        });
+
+        document.getElementById('night-theme').addEventListener('click', () => {
+            document.body.classList.add('night-theme');
+            document.body.classList.remove('sepia-theme');
+        });
+
+        document.getElementById('sepia-theme').addEventListener('click', () => {
+            document.body.classList.add('sepia-theme');
+            document.body.classList.remove('night-theme');
+        });
+
+        // Timer functionality
+        const timerElement = document.getElementById('time');
+        const timerContainer = document.getElementById('timer');
+        let timeLeft = 20 * 60; // 20 minutes in seconds
+        let timerInterval;
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                submitAnswers();
+                return;
+            }
+
+            timeLeft--;
+
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            if (timeLeft <= 5 * 60) { // 5 minutes left
+                timerContainer.classList.add('warning');
+            }
+        }
+
+        // Text highlighting
+        const passageContent = document.getElementById('passage-content');
+        let highlightMenu = null;
+
+        passageContent.addEventListener('mouseup', (e) => {
+            const selection = window.getSelection();
+            if (selection.toString().trim().length > 0) {
+                showHighlightMenu(e.clientX, e.clientY, selection);
+            }
+        });
+
+        document.addEventListener('mousedown', (e) => {
+            if (highlightMenu && !highlightMenu.contains(e.target)) {
+                document.body.removeChild(highlightMenu);
+                highlightMenu = null;
+            }
+        });
+
+        function showHighlightMenu(x, y, selection) {
+            if (highlightMenu) {
+                document.body.removeChild(highlightMenu);
+            }
+
+            highlightMenu = document.createElement('div');
+            highlightMenu.className = 'highlight-menu';
+            highlightMenu.style.position = 'absolute';
+            highlightMenu.style.left = `${x}px`;
+            highlightMenu.style.top = `${y}px`;
+
+            const yellowBtn = document.createElement('button');
+            yellowBtn.className = 'highlight-btn yellow-highlight';
+            yellowBtn.innerHTML = '<i class="fas fa-highlighter"></i>';
+            yellowBtn.title = 'Yellow Highlight';
+            yellowBtn.addEventListener('click', () => {
+                highlightSelection(selection, 'yellow');
+                document.body.removeChild(highlightMenu);
+                highlightMenu = null;
+            });
+
+            const blueBtn = document.createElement('button');
+            blueBtn.className = 'highlight-btn blue-highlight';
+            blueBtn.innerHTML = '<i class="fas fa-highlighter"></i>';
+            blueBtn.title = 'Blue Highlight';
+            blueBtn.addEventListener('click', () => {
+                highlightSelection(selection, 'blue');
+                document.body.removeChild(highlightMenu);
+                highlightMenu = null;
+            });
+
+            const clearBtn = document.createElement('button');
+            clearBtn.className = 'highlight-btn clear-highlight';
+            clearBtn.innerHTML = '<i class="fas fa-eraser"></i>';
+            clearBtn.title = 'Clear Highlight';
+            clearBtn.addEventListener('click', () => {
+                clearHighlight(selection);
+                document.body.removeChild(highlightMenu);
+                highlightMenu = null;
+            });
+
+            highlightMenu.appendChild(yellowBtn);
+            highlightMenu.appendChild(blueBtn);
+            highlightMenu.appendChild(clearBtn);
+            document.body.appendChild(highlightMenu);
+        }
+
+        function highlightSelection(selection, color) {
+            const range = selection.getRangeAt(0);
+            const selectedText = range.extractContents();
+            const span = document.createElement('span');
+            
+            if (color === 'yellow') {
+                span.style.backgroundColor = 'rgba(255, 255, 0, 0.3)';
+            } else if (color === 'blue') {
+                span.style.backgroundColor = 'rgba(173, 216, 230, 0.3)';
+            }
+            
+            span.appendChild(selectedText);
+            range.insertNode(span);
+            
+            // Clear selection
+            selection.removeAllRanges();
+        }
+
+        function clearHighlight(selection) {
+            const range = selection.getRangeAt(0);
+            const selectedContent = range.extractContents();
+            
+            // Create a new document fragment to hold the unhighlighted content
+            const fragment = document.createDocumentFragment();
+            
+            // If the selected content is a span with highlight, extract its children
+            if (selectedContent.querySelectorAll) {
+                const spans = selectedContent.querySelectorAll('span[style*="background-color"]');
+                spans.forEach(span => {
+                    while (span.firstChild) {
+                        fragment.appendChild(span.firstChild);
+                    }
+                    span.parentNode.removeChild(span);
+                });
+            }
+            
+            // If there's still content, add it to the fragment
+            if (selectedContent.childNodes.length > 0) {
+                fragment.appendChild(selectedContent);
+            }
+            
+            range.insertNode(fragment);
+            selection.removeAllRanges();
+        }
+
+        // Summary options selection - FIXED VERSION
+        const summaryOptions = document.querySelectorAll('.summary-option');
+        const gaps = {
+            37: document.getElementById('gap-37'),
+            38: document.getElementById('gap-38'),
+            39: document.getElementById('gap-39'),
+            40: document.getElementById('gap-40')
+        };
+        
+        // Store selected answers
+        const selectedAnswers = {
+            37: null,
+            38: null,
+            39: null,
+            40: null
+        };
+
+        summaryOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const value = option.getAttribute('data-value');
+                const letter = value.charAt(0); // A, B, C, etc.
+                const word = value.substring(2); // The actual word
+                
+                // Determine which question this option belongs to
+                let questionNum = null;
+                if (letter === 'A' || letter === 'B' || letter === 'C') {
+                    questionNum = 37;
+                } else if (letter === 'D' || letter === 'E') {
+                    questionNum = 38;
+                } else if (letter === 'F' || letter === 'G' || letter === 'H') {
+                    questionNum = 39;
+                } else if (letter === 'I') {
+                    questionNum = 40;
+                }
+                
+                if (questionNum && gaps[questionNum]) {
+                    // Remove selected class from all options for this question
+                    summaryOptions.forEach(opt => {
+                        const optValue = opt.getAttribute('data-value');
+                        const optLetter = optValue.charAt(0);
+                        
+                        let optQuestionNum = null;
+                        if (optLetter === 'A' || optLetter === 'B' || optLetter === 'C') {
+                            optQuestionNum = 37;
+                        } else if (optLetter === 'D' || optLetter === 'E') {
+                            optQuestionNum = 38;
+                        } else if (optLetter === 'F' || optLetter === 'G' || optLetter === 'H') {
+                            optQuestionNum = 39;
+                        } else if (optLetter === 'I') {
+                            optQuestionNum = 40;
+                        }
+                        
+                        if (optQuestionNum === questionNum) {
+                            opt.classList.remove('selected');
+                        }
+                    });
+                    
+                    // Add selected class to clicked option
+                    option.classList.add('selected');
+                    
+                    // Update the gap text
+                    gaps[questionNum].textContent = letter;
+                    
+                    // Store the selected answer
+                    selectedAnswers[questionNum] = letter;
+                }
+            });
+        });
+
+        // Answer submission and evaluation
+        const correctAnswers = {
+            '27': 'YES',
+            '28': 'YES',
+            '29': 'NOT GIVEN',
+            '30': 'NO',
+            '31': 'YES',
+            '32': 'A',
+            '33': 'C',
+            '34': 'D',
+            '35': 'B',
+            '36': 'A',
+            '37': 'B',
+            '38': 'E',
+            '39': 'G',
+            '40': 'A'
+        };
+
+        const answerLocations = {
+            '27': 'Paragraph 1: "In survey after survey, people report with confidence that music makes them happier, better at concentrating, and more productive."',
+            '28': 'Paragraph 2: "Scientists do not share this belief... \'As silence has the best overall performance, it would still be advisable that people work in silence,\' another reporter dryly concluded."',
+            '29': 'Paragraph 3: "Lending strength to the argument for headphones at work is evidence that music... may even moderately reduce blood pressure..." (No mention of doctors recommending headphones)',
+            '30': 'Paragraph 4: "The letter writer, an eccentric inventor and repairman named Nathaniel Baldwin..." (Not a respected government researcher)',
+            '31': 'Paragraph 5: "headphones have done what writing and literacy did for language – they made music private."',
+            '32': 'Paragraph 3: "with an emphasis on jobs in offices that require higher levels of concentration, reflection and creativity."',
+            '33': 'Paragraph 5: "If music evolved as a social glue for the species, as a way to make groups and keep them together..."',
+            '34': 'Paragraph 5: "headphones have done what writing and literacy did for language – they made music private."',
+            '35': 'Paragraph 6: "wealth can buy – and modern technology can deliver – personal independence"',
+            '36': 'Paragraph 8: "In a crowded world, real estate is the ultimate scarce resource, and a headphone is a small invisible fence around our minds..." (The quote supports the writer\'s view)',
+            '37': 'Paragraph 7: "personal music devices change how we relate to public spaces"',
+            '38': 'Paragraph 7: "more people are moving from the edges of cities to live in urban centers" (edges of cities = suburbs)',
+            '39': 'Paragraph 7: "Headphones create shields for wearers" (shields = barriers)',
+            '40': 'Paragraph 7: "Headphones have their own rules of good manners... We assume that people wearing them are busy and we should respect their privacy" (respect = courtesy)'
+        };
+
+        document.getElementById('submit-btn').addEventListener('click', submitAnswers);
+
+        function submitAnswers() {
+            clearInterval(timerInterval);
+            
+            let score = 0;
+            const results = [];
+            
+            // Check Yes/No/Not Given questions (27-31)
+            for (let i = 27; i <= 31; i++) {
+                const selectedOption = document.querySelector(`input[name="q${i}"]:checked`);
+                const userAnswer = selectedOption ? selectedOption.value : 'Not answered';
+                const isCorrect = userAnswer === correctAnswers[i];
+                
+                if (isCorrect) score++;
+                
+                results.push({
+                    question: i,
+                    userAnswer,
+                    correctAnswer: correctAnswers[i],
+                    isCorrect,
+                    location: answerLocations[i]
+                });
+            }
+            
+            // Check multiple choice questions (32-36)
+            for (let i = 32; i <= 36; i++) {
+                const selectedOption = document.querySelector(`input[name="q${i}"]:checked`);
+                const userAnswer = selectedOption ? selectedOption.value : 'Not answered';
+                const isCorrect = userAnswer === correctAnswers[i];
+                
+                if (isCorrect) score++;
+                
+                results.push({
+                    question: i,
+                    userAnswer,
+                    correctAnswer: correctAnswers[i],
+                    isCorrect,
+                    location: answerLocations[i]
+                });
+            }
+            
+            // Check summary completion questions (37-40)
+            for (let i = 37; i <= 40; i++) {
+                const userAnswer = selectedAnswers[i] || 'Not answered';
+                const isCorrect = userAnswer === correctAnswers[i];
+                
+                if (isCorrect) score++;
+                
+                results.push({
+                    question: i,
+                    userAnswer,
+                    correctAnswer: correctAnswers[i],
+                    isCorrect,
+                    location: answerLocations[i]
+                });
+            }
+            
+            // Display results
+            document.getElementById('score').textContent = `${score}/14`;
+            
+            let message = '';
+            if (score >= 12) {
+                message = 'Excellent! You have a great understanding of the text.';
+            } else if (score >= 8) {
+                message = 'Good job! You understood most of the text.';
+            } else if (score >= 5) {
+                message = 'Not bad, but you could benefit from more practice.';
+            } else {
+                message = 'Keep practicing! Review the text and try again.';
+            }
+            document.getElementById('result-message').textContent = message;
+            
+            const resultDetails = document.getElementById('result-details');
+            resultDetails.innerHTML = '';
+            
+            results.forEach(result => {
+                const resultElement = document.createElement('div');
+                resultElement.className = `result-question ${result.isCorrect ? 'correct' : 'incorrect'}`;
+                
+                resultElement.innerHTML = `
+                    <p><strong>Question ${result.question}:</strong> ${result.isCorrect ? 'Correct' : 'Incorrect'}</p>
+                    <p>Your answer: ${result.userAnswer}</p>
+                    <p>Correct answer: ${result.correctAnswer}</p>
+                    <p class="answer-location">${result.location}</p>
+                `;
+                
+                resultDetails.appendChild(resultElement);
+            });
+            
+            document.getElementById('result-overlay').style.display = 'flex';
+        }
+
+        document.getElementById('close-btn').addEventListener('click', () => {
+            document.getElementById('result-overlay').style.display = 'none';
+        });
+
+        // Start the timer when the page loads
+        window.addEventListener('load', () => {
+            startTimer();
+        });
+    </script>
+</body>
+</html>

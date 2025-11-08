@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Test: Mars Climate</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --day-bg: #f8f9fa;
+            --day-text: #212529;
+            --day-primary: #6f42c1;
+            --day-secondary: #e9ecef;
+            --day-highlight: #fff9c4;
+            --day-highlight2: #bbdefb;
+            
+            --night-bg: #1a1a2e;
+            --night-text: #e6e6e6;
+            --night-primary: #a78bfa;
+            --night-secondary: #16213e;
+            --night-highlight: #374151;
+            --night-highlight2: #1e3a8a;
+            
+            --sepia-bg: #f5ecd8;
+            --sepia-text: #3b2c1e;
+            --sepia-primary: #8b5a2b;
+            --sepia-secondary: #e8d9c0;
+            --sepia-highlight: #e3cda5;
+            --sepia-highlight2: #c9af8f;
+            
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--day-bg);
+            color: var(--day-text);
+            transition: var(--transition);
+            line-height: 1.6;
+        }
+
+        body.night-mode {
+            background-color: var(--night-bg);
+            color: var(--night-text);
+        }
+
+        body.sepia-mode {
+            background-color: var(--sepia-bg);
+            color: var(--sepia-text);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .header-center {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .telegram-btn {
+            background-color: #0088cc;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .telegram-btn:hover {
+            background-color: #006da3;
+            transform: translateY(-2px);
+        }
+
+        .theme-switcher {
+            display: flex;
+            gap: 10px;
+        }
+
+        .theme-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .timer {
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        .timer.warning {
+            color: #ff6b6b;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .passage-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 1px solid #ddd;
+        }
+
+        .night-mode .passage-container {
+            border-right-color: #444;
+        }
+
+        .sepia-mode .passage-container {
+            border-right-color: #c9b18a;
+        }
+
+        .questions-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .passage-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .night-mode .passage-content {
+            background-color: var(--night-secondary);
+        }
+
+        .sepia-mode .passage-content {
+            background-color: var(--sepia-secondary);
+        }
+
+        .passage-content h1 {
+            color: var(--day-primary);
+            border-bottom: 2px solid var(--day-primary);
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        .night-mode .passage-content h1 {
+            color: var(--night-primary);
+            border-bottom-color: var(--night-primary);
+        }
+
+        .sepia-mode .passage-content h1 {
+            color: var(--sepia-primary);
+            border-bottom-color: var(--sepia-primary);
+        }
+
+        .passage-content p {
+            margin-bottom: 15px;
+        }
+
+        .highlight-menu {
+            position: absolute;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            padding: 5px;
+            display: flex;
+            z-index: 1000;
+        }
+
+        .highlight-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            margin: 0 3px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .highlight-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .yellow-highlight {
+            background-color: #fff9c4;
+        }
+
+        .blue-highlight {
+            background-color: #bbdefb;
+        }
+
+        .clear-highlight {
+            background-color: #f8f9fa;
+        }
+
+        .question-section {
+            margin-bottom: 30px;
+        }
+
+        .question-section h2 {
+            color: var(--day-primary);
+            margin-top: 0;
+        }
+
+        .night-mode .question-section h2 {
+            color: var(--night-primary);
+        }
+
+        .sepia-mode .question-section h2 {
+            color: var(--sepia-primary);
+        }
+
+        .question {
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .night-mode .question {
+            background-color: var(--night-secondary);
+        }
+
+        .sepia-mode .question {
+            background-color: var(--sepia-secondary);
+        }
+
+        select, input {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            background-color: white;
+            color: var(--day-text);
+            font-family: inherit;
+        }
+
+        .night-mode select, .night-mode input {
+            background-color: #2d3748;
+            border-color: #4a5568;
+            color: var(--night-text);
+        }
+
+        .sepia-mode select, .sepia-mode input {
+            background-color: #e8d9c0;
+            border-color: #c9b18a;
+            color: var(--sepia-text);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            display: block;
+            margin: 20px auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .result-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .result-modal.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .result-content {
+            background-color: white;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            border-radius: 10px;
+            padding: 30px;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .night-mode .result-content {
+            background-color: var(--night-secondary);
+        }
+
+        .sepia-mode .result-content {
+            background-color: var(--sepia-secondary);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        .night-mode .close-btn:hover {
+            color: #fff;
+        }
+
+        .sepia-mode .close-btn:hover {
+            color: var(--sepia-text);
+        }
+
+        .score-display {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .answer-feedback {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+
+        .night-mode .answer-feedback {
+            background-color: #2d3748;
+        }
+
+        .sepia-mode .answer-feedback {
+            background-color: #e8d9c0;
+        }
+
+        .correct {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .incorrect {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .answer-reference {
+            font-style: italic;
+            margin-top: 5px;
+            color: #6c757d;
+        }
+
+        .night-mode .answer-reference {
+            color: #a0aec0;
+        }
+
+        .sepia-mode .answer-reference {
+            color: #8b7d6b;
+        }
+
+        @media (max-width: 992px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .passage-container {
+                border-right: none;
+                border-bottom: 1px solid #ddd;
+                max-height: 40vh;
+            }
+            
+            .night-mode .passage-container {
+                border-bottom-color: #444;
+            }
+            
+            .sepia-mode .passage-container {
+                border-bottom-color: #c9b18a;
+            }
+        }
+
+        .highlighted-yellow {
+            background-color: #fff9c4;
+            transition: var(--transition);
+        }
+
+        .highlighted-blue {
+            background-color: #bbdefb;
+            transition: var(--transition);
+        }
+
+        .night-mode .highlighted-yellow {
+            background-color: #5a4e1f;
+        }
+
+        .night-mode .highlighted-blue {
+            background-color: #1e3a5f;
+        }
+
+        .sepia-mode .highlighted-yellow {
+            background-color: #e3cda5;
+        }
+
+        .sepia-mode .highlighted-blue {
+            background-color: #c9af8f;
+        }
+
+        .true-false-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .true-false-btn {
+            padding: 8px 15px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            background-color: white;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .true-false-btn.selected {
+            background-color: #6f42c1;
+            color: white;
+            border-color: #6f42c1;
+        }
+
+        .night-mode .true-false-btn {
+            background-color: #2d3748;
+            border-color: #4a5568;
+            color: var(--night-text);
+        }
+
+        .sepia-mode .true-false-btn {
+            background-color: #e8d9c0;
+            border-color: #c9b18a;
+            color: var(--sepia-text);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="theme-switcher">
+                <button class="theme-btn" id="day-theme" title="Day Mode"><i class="fas fa-sun"></i></button>
+                <button class="theme-btn" id="night-theme" title="Night Mode"><i class="fas fa-moon"></i></button>
+                <button class="theme-btn" id="sepia-theme" title="Sepia Mode"><i class="fas fa-book"></i></button>
+            </div>
+            
+            <div class="header-center">
+                <a href="tg://resolve?domain=aftum_8" class="telegram-btn">
+                    <i class="fab fa-telegram"></i> Телеграмм канал
+                </a>
+            </div>
+            
+            <div class="timer" id="timer">20:00</div>
+        </header>
+        
+        <div class="content">
+            <div class="passage-container">
+                <div class="passage-content" id="passage-content">
+                    <h1>Reading Practice</h1>
+                    <h2>Conflicting climatic phenomena co-existing on the Mars</h2>
+                    
+                    <p><strong>A</strong> On Mars, signs of wetness keep pouring in: deeply carved river valleys, vast deltas and widespread remnants of evaporating seas have convinced many experts that liquid water may have covered large parts of the Red Planet for a billion years or more. But most efforts to explain how Martian climate ever permitted such element conditions come up dry.  
+                    Bitterly cold and parched today, Mars needed a potent greenhouse atmosphere to sustain its watery past. A thick layer of heat-trapping carbon dioxide from volcanoes probably shrouded the young planet, but climate models indicate time and again that CO2 alone could not have kept the surface above freezing.</p>
+                    
+                    <p><strong>B</strong> Now, inspired by the surprising discovery that sulfur minerals are pervasive in the Martian soil, scientists are beginning to suspect that CO2 had a warm-up partner: sulfur dioxide (SO2). Like CO2, SO2 is a common gas emitted when volcanoes erupt, a frequent occurrence on Mars when it was still young. A hundredth or even a thousandth of a percent SO2 in Mars's early atmosphere could have provided the extra boost of greenhouse warming that the Red Planet needed to stay wet, explains geochemist Daniel p. Schrag of Harvard University.</p>
+                    
+                    <p><strong>C</strong> That may not sound like much, but for many gases, even minuscule concentrations are hard to maintain. On our home planet, SO2 provides no significant long-term warmth because it combines almost instantly with oxygen in the atmosphere to form sulfate, a type of salt. Early Mars would have been virtually free of atmospheric oxygen, though, so SO2 would have stuck around much longer.</p>
+                    
+                    <p><strong>D</strong> "When you take away oxygen, it's a profound change, and the atmosphere works really differently," Schrag remarks. According to Schrag and his colleagues, that difference also implies that SO2 would have played a starring role in the Martian water cycle—thus resolving another climate conundrum, namely, a lack of certain rocks.</p>
+                    
+                    <p><strong>E</strong> Schrag's team contends that on early Mars, much of the SO2 would have combined with airborne water droplets and fallen as sulfurous acid rain, rather than transforming into a salt as on Earth. The resulting acidity would have inhibited the formation of thick layers of limestone and other carbonate rocks. Researchers assumed Mars would be chock-full of carbonate rocks because their formation is such a fundamental consequence of the humid, CO2-rich atmosphere. Over millions of years, this rock-forming process has sequestered enough of the carbon dioxide spewed from earthly volcanoes to limit the buildup of the gas in the atmosphere. stifling this CO2-sequestration step on early Mars would have forced more of the gas to accumulate in the atmosphere—another way SO2 could have boosted greenhouse warming, Schrag suggests.</p>
+                    
+                    <p><strong>F</strong> Some scientists doubt that SO2 was really up to these climatic tasks . Even in an oxygen-free atmosphere, SO2 is still extremely fragile; the sun's ultraviolet radiation splits apart SO2 molecules quite readily, points out James F. Kasting, an atmospheric chemist at Pennsylvania state University. In Easting's computer models of Earth's early climate, which is often compared with that of early Mars, this photochemical destruction capped SO2 concentrations at one thousandth as much as Schrag and his colleagues describe. "There may be ways to make this idea work," Kasting says. "But it would take some detailed modeling to convince skeptics, including me, that it is actually feasible."</p>
+                    
+                    <p><strong>G</strong> Schrag admits that the details are uncertain, but he cites estimates by other researchers who suggest that early Martian volcanoes could have spewed enough S02 to keep pace with the S02 destroyed photochemically. Previous findings also indicate that a thick C02 atmosphere would have effectively scattered the most destructive wavelengths of ultraviolet radiation—yet another example of an apparently mutually beneficial partnership between C02 and S02 on early Mars.</p>
+                    
+                    <p><strong>H</strong> Kasting maintains that an S02 climate feedback could not have made early Mars as warm as Earth, but he does allow for the possibility that S02 concentrations may have remained high enough to keep the planet partly defrosted, with perhaps enough rainfall to form river valleys. Over that point, Schrag does not quibble. "Our hypothesis doesn't depend at all on whether there was a big ocean, a few lakes or just a few little puddles," he says. " Warm doesn't mean warm like the Amazon. It could mean warm like Iceland— just warm enough to create those river valleys . " with S02, it only takes a little. If sulfur dioxide warmed early Mars, as a new hypothesis suggests, minerals called sulfites would have formed in standing water at the surface. No sulfites have yet turned up, possibly because no one was looking for them. The next-generation rover, the Mars Science Laboratory, is well equipped for the search. Scheduled to launch in 2009, the rover (shown here in an artist's conception) will be the first to carry an x-ray diffractometer, which can scan and identify the crystal structure of any mineral it encounters.</p>
+                </div>
+            </div>
+            
+            <div class="questions-container">
+                <div class="question-section">
+                    <h2>Questions 1-6</h2>
+                    <p>The reading Passage has eight paragraphs A-H.<br>
+                    Which paragraph contains the following information? Write the correct letter A-H, in boxes 1-6 on your answer sheet.</p>
+                    
+                    <p><strong>NB</strong> You may use any letter more than once.</p>
+                    
+                    <div class="question">
+                        <p><strong>1. </strong>
+                            <select id="q1">
+                                <option value="">Select paragraph</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                                <option value="H">H</option>
+                            </select>
+                            A problem indirectly solved by SO2
+                        </p>
+                    </div>
+                    
+                    <div class="question">
+                        <p><strong>2. </strong>
+                            <select id="q2">
+                                <option value="">Select paragraph</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                                <option value="H">H</option>
+                            </select>
+                            A device with an astounding ability for detection
+                        </p>
+                    </div>
+                    
+                    <div class="question">
+                        <p><strong>3. </strong>
+                            <select id="q3">
+                                <option value="">Select paragraph</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                                <option value="H">H</option>
+                            </select>
+                            A potential contributor to the warmth of the Mars interacting with CO2
+                        </p>
+                    </div>
+                    
+                    <div class="question">
+                        <p><strong>4. </strong>
+                            <select id="q4">
+                                <option value="">Select paragraph</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                                <option value="H">H</option>
+                            </select>
+                            The destructive effect brought by the sunlight proposed by the opponents
+                        </p>
+                    </div>
+                    
+                    <div class="question">
+                        <p><strong>5. </strong>
+                            <select id="q5">
+                                <option value="">Select paragraph</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                                <option value="H">H</option>
+                            </select>
+                            A specific condition on early Mars to guarantee the SO2 to maintain in the atmosphere for a long time
+                        </p>
+                    </div>
+                    
+                    <div class="question">
+                        <p><strong>6. </strong>
+                            <select id="q6">
+                                <option value="">Select paragraph</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                                <option value="H">H</option>
+                            </select>
+                            Conflicting climatic phenomena co-existing on the Mars
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="question-section">
+                    <h2>Questions 7-9</h2>
+                    <p>Do the following statements agree with the information given in Reading Passage? In boxes 7-9 on your answer sheet, write</p>
+                    
+                    <p><strong>TRUE</strong> <em>if the statement is true</em><br>
+                    <strong>FALSE</strong> <em>if the statement is false</em><br>
+                    <strong>NOT GIVEN</strong> <em>if the information is not given in the passage</em></p>
+                    
+                    <div class="question">
+                        <p><strong>7. </strong> Schrag has provided concrete proofs to fight against the skeptics for his view.</p>
+                        <div class="true-false-buttons">
+                            <button class="true-false-btn" data-question="7" data-value="TRUE">TRUE</button>
+                            <button class="true-false-btn" data-question="7" data-value="FALSE">FALSE</button>
+                            <button class="true-false-btn" data-question="7" data-value="NOT GIVEN">NOT GIVEN</button>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <p><strong>8. </strong> More and more evidences show up to be in favor of the leading role SO2 has for the warming up the Mars.</p>
+                        <div class="true-false-buttons">
+                            <button class="true-false-btn" data-question="8" data-value="TRUE">TRUE</button>
+                            <button class="true-false-btn" data-question="8" data-value="FALSE">FALSE</button>
+                            <button class="true-false-btn" data-question="8" data-value="NOT GIVEN">NOT GIVEN</button>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <p><strong>9. </strong> The sulfites have not been detected probably because of no concern for them.</p>
+                        <div class="true-false-buttons">
+                            <button class="true-false-btn" data-question="9" data-value="TRUE">TRUE</button>
+                            <button class="true-false-btn" data-question="9" data-value="FALSE">FALSE</button>
+                            <button class="true-false-btn" data-question="9" data-value="NOT GIVEN">NOT GIVEN</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question-section">
+                    <h2>Questions 10-13</h2>
+                    <p><strong>Summary</strong></p>
+                    <p>Complete the following summary of the paragraphs of Reading Passage, using No <strong>More than Three</strong> words from the Reading Passage for each answer. Write your answers in boxes 10-13 on your answer sheet.</p>
+                    
+                    <div class="question">
+                        <p>An opinion held by Schrag's team indicates that <input type="text" id="q10" style="width: 200px;"> formed from the integration of SO2 with <input type="text" id="q11" style="width: 200px;"> would have stopped the built up of thick layers of limestone as well as certain carbonate rocks. Wetness and abundance in CO2 could directly result in the good production rocky layer of <input type="text" id="q12" style="width: 200px;">. As time went by, sufficient CO2 was emitted from the volcanoes and restricted the formation of the gas in the afr. To stop this process made SO2 possible to accelerate <input type="text" id="q13" style="width: 200px;">.</p>
+                    </div>
+                </div>
+                
+                <button class="submit-btn" id="submit-btn">Submit Answers</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="result-modal" id="result-modal">
+        <div class="result-content">
+            <button class="close-btn" id="close-results">&times;</button>
+            <h2>Test Results</h2>
+            
+            <div class="score-display">
+                <div class="score-circle" id="score-circle">0/13</div>
+                <h3 id="score-text">Your Score: 0 out of 13</h3>
+            </div>
+            
+            <div id="answer-feedback">
+                <!-- Results will be inserted here -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme switching
+            const body = document.body;
+            const dayThemeBtn = document.getElementById('day-theme');
+            const nightThemeBtn = document.getElementById('night-theme');
+            const sepiaThemeBtn = document.getElementById('sepia-theme');
+            
+            dayThemeBtn.addEventListener('click', () => {
+                body.className = '';
+                localStorage.setItem('theme', 'day');
+            });
+            
+            nightThemeBtn.addEventListener('click', () => {
+                body.className = 'night-mode';
+                localStorage.setItem('theme', 'night');
+            });
+            
+            sepiaThemeBtn.addEventListener('click', () => {
+                body.className = 'sepia-mode';
+                localStorage.setItem('theme', 'sepia');
+            });
+            
+            // Load saved theme
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'night') {
+                body.className = 'night-mode';
+            } else if (savedTheme === 'sepia') {
+                body.className = 'sepia-mode';
+            }
+            
+            // Timer functionality
+            const timerElement = document.getElementById('timer');
+            let timeLeft = 20 * 60; // 20 minutes in seconds
+            let timerInterval;
+            
+            function startTimer() {
+                clearInterval(timerInterval);
+                timerInterval = setInterval(updateTimer, 1000);
+            }
+            
+            function updateTimer() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                
+                timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft === 5 * 60) {
+                    timerElement.classList.add('warning');
+                }
+                
+                if (timeLeft === 0) {
+                    clearInterval(timerInterval);
+                    submitAnswers();
+                } else {
+                    timeLeft--;
+                }
+            }
+            
+            startTimer();
+            
+            // Text highlighting functionality
+            const passageContent = document.getElementById('passage-content');
+            let highlightMenu = null;
+            let currentSelection = null;
+            
+            passageContent.addEventListener('mouseup', function(e) {
+                const selection = window.getSelection();
+                if (selection.toString().length > 0) {
+                    showHighlightMenu(e, selection);
+                } else if (highlightMenu) {
+                    removeHighlightMenu();
+                }
+            });
+            
+            document.addEventListener('mousedown', function(e) {
+                if (highlightMenu && !highlightMenu.contains(e.target)) {
+                    removeHighlightMenu();
+                }
+            });
+            
+            function showHighlightMenu(e, selection) {
+                removeHighlightMenu();
+                currentSelection = selection;
+                
+                highlightMenu = document.createElement('div');
+                highlightMenu.className = 'highlight-menu';
+                
+                const yellowBtn = document.createElement('button');
+                yellowBtn.className = 'highlight-btn yellow-highlight';
+                yellowBtn.innerHTML = '<i class="fas fa-highlighter"></i>';
+                yellowBtn.title = 'Yellow Highlight';
+                yellowBtn.addEventListener('click', () => highlightSelection('yellow'));
+                
+                const blueBtn = document.createElement('button');
+                blueBtn.className = 'highlight-btn blue-highlight';
+                blueBtn.innerHTML = '<i class="fas fa-highlighter"></i>';
+                blueBtn.title = 'Blue Highlight';
+                blueBtn.addEventListener('click', () => highlightSelection('blue'));
+                
+                const clearBtn = document.createElement('button');
+                clearBtn.className = 'highlight-btn clear-highlight';
+                clearBtn.innerHTML = '<i class="fas fa-eraser"></i>';
+                clearBtn.title = 'Clear Highlight';
+                clearBtn.addEventListener('click', clearHighlight);
+                
+                highlightMenu.appendChild(yellowBtn);
+                highlightMenu.appendChild(blueBtn);
+                highlightMenu.appendChild(clearBtn);
+                
+                document.body.appendChild(highlightMenu);
+                
+                const rect = selection.getRangeAt(0).getBoundingClientRect();
+                highlightMenu.style.top = `${rect.bottom + window.scrollY + 5}px`;
+                highlightMenu.style.left = `${rect.left + window.scrollX}px`;
+            }
+            
+            function removeHighlightMenu() {
+                if (highlightMenu) {
+                    highlightMenu.remove();
+                    highlightMenu = null;
+                    currentSelection = null;
+                }
+            }
+            
+            function highlightSelection(color) {
+                if (!currentSelection || currentSelection.toString().length === 0) return;
+                
+                const range = currentSelection.getRangeAt(0);
+                const selectedText = range.extractContents();
+                
+                const span = document.createElement('span');
+                span.appendChild(selectedText);
+                span.className = `highlighted-${color}`;
+                
+                range.insertNode(span);
+                
+                // Clear selection and remove menu
+                currentSelection.removeAllRanges();
+                removeHighlightMenu();
+            }
+            
+            function clearHighlight() {
+                if (!currentSelection || currentSelection.toString().length === 0) return;
+                
+                const range = currentSelection.getRangeAt(0);
+                const selectedContent = range.extractContents();
+                
+                // Create a document fragment to hold the content
+                const fragment = document.createDocumentFragment();
+                
+                // Process each node in the selected content
+                const nodes = Array.from(selectedContent.childNodes);
+                nodes.forEach(node => {
+                    if (node.nodeType === Node.ELEMENT_NODE && 
+                        (node.classList.contains('highlighted-yellow') || 
+                         node.classList.contains('highlighted-blue'))) {
+                        // Extract the text content from the highlighted span
+                        const textNode = document.createTextNode(node.textContent);
+                        fragment.appendChild(textNode);
+                    } else {
+                        fragment.appendChild(node.cloneNode(true));
+                    }
+                });
+                
+                range.insertNode(fragment);
+                
+                // Clear selection and remove menu
+                currentSelection.removeAllRanges();
+                removeHighlightMenu();
+            }
+            
+            // True/False/Not Given button functionality
+            const trueFalseButtons = document.querySelectorAll('.true-false-btn');
+            trueFalseButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const questionNum = this.getAttribute('data-question');
+                    const value = this.getAttribute('data-value');
+                    
+                    // Remove selected class from all buttons in this question group
+                    document.querySelectorAll(`.true-false-btn[data-question="${questionNum}"]`).forEach(btn => {
+                        btn.classList.remove('selected');
+                    });
+                    
+                    // Add selected class to clicked button
+                    this.classList.add('selected');
+                });
+            });
+            
+            // Answer submission and evaluation
+            const submitBtn = document.getElementById('submit-btn');
+            const resultModal = document.getElementById('result-modal');
+            const closeResultsBtn = document.getElementById('close-results');
+            const scoreCircle = document.getElementById('score-circle');
+            const scoreText = document.getElementById('score-text');
+            const answerFeedback = document.getElementById('answer-feedback');
+            
+            submitBtn.addEventListener('click', submitAnswers);
+            closeResultsBtn.addEventListener('click', () => {
+                resultModal.classList.remove('show');
+            });
+            
+            function submitAnswers() {
+                clearInterval(timerInterval);
+                
+                const correctAnswers = {
+                    q1: 'D', q2: 'H', q3: 'B', q4: 'F', q5: 'C', q6: 'A',
+                    q7: 'FALSE', q8: 'NOT GIVEN', q9: 'TRUE',
+                    q10: 'sulfurous acid rain', q11: 'airborne water droplets', 
+                    q12: 'limestone and carbonate', q13: 'greenhouse warming'
+                };
+                
+                let score = 0;
+                let feedbackHTML = '';
+                
+                // Check questions 1-6 (dropdowns)
+                for (let i = 1; i <= 6; i++) {
+                    const userAnswer = document.getElementById(`q${i}`).value;
+                    const isCorrect = userAnswer === correctAnswers[`q${i}`];
+                    
+                    if (isCorrect) score++;
+                    
+                    feedbackHTML += `
+                        <div class="answer-feedback">
+                            <p><strong>Question ${i}:</strong> Your answer: ${userAnswer || 'Not answered'} 
+                            <span class="${isCorrect ? 'correct' : 'incorrect'}">${isCorrect ? '✓ Correct' : '✗ Incorrect'}</span></p>
+                            <p class="answer-reference">Correct answer: ${correctAnswers[`q${i}`]}</p>
+                        </div>
+                    `;
+                }
+                
+                // Check questions 7-9 (True/False/Not Given)
+                for (let i = 7; i <= 9; i++) {
+                    const selectedButton = document.querySelector(`.true-false-btn[data-question="${i}"].selected`);
+                    const userAnswer = selectedButton ? selectedButton.getAttribute('data-value') : 'Not answered';
+                    const isCorrect = userAnswer === correctAnswers[`q${i}`];
+                    
+                    if (isCorrect) score++;
+                    
+                    feedbackHTML += `
+                        <div class="answer-feedback">
+                            <p><strong>Question ${i}:</strong> Your answer: ${userAnswer} 
+                            <span class="${isCorrect ? 'correct' : 'incorrect'}">${isCorrect ? '✓ Correct' : '✗ Incorrect'}</span></p>
+                            <p class="answer-reference">Correct answer: ${correctAnswers[`q${i}`]}</p>
+                        </div>
+                    `;
+                }
+                
+                // Check questions 10-13 (text inputs)
+                for (let i = 10; i <= 13; i++) {
+                    const userAnswer = document.getElementById(`q${i}`).value.trim().toLowerCase();
+                    const correctAnswer = correctAnswers[`q${i}`].toLowerCase();
+                    const isCorrect = userAnswer === correctAnswer;
+                    
+                    if (isCorrect) score++;
+                    
+                    feedbackHTML += `
+                        <div class="answer-feedback">
+                            <p><strong>Question ${i}:</strong> Your answer: ${userAnswer || 'Not answered'} 
+                            <span class="${isCorrect ? 'correct' : 'incorrect'}">${isCorrect ? '✓ Correct' : '✗ Incorrect'}</span></p>
+                            <p class="answer-reference">Correct answer: ${correctAnswers[`q${i}`]}</p>
+                        </div>
+                    `;
+                }
+                
+                scoreCircle.textContent = `${score}/13`;
+                scoreText.textContent = `Your Score: ${score} out of 13`;
+                answerFeedback.innerHTML = feedbackHTML;
+                
+                resultModal.classList.add('show');
+            }
+        });
+    </script>
+</body>
+</html>

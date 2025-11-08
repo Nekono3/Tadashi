@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Test: Violins and very cold weather</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --day-bg: #f8f9fa;
+            --day-text: #212529;
+            --day-primary: #6f42c1;
+            --day-secondary: #e9ecef;
+            --day-highlight-yellow: rgba(255, 255, 0, 0.3);
+            --day-highlight-blue: rgba(0, 191, 255, 0.3);
+            
+            --night-bg: #1a1a2e;
+            --night-text: #e6e6e6;
+            --night-primary: #8a2be2;
+            --night-secondary: #16213e;
+            --night-highlight-yellow: rgba(255, 215, 0, 0.4);
+            --night-highlight-blue: rgba(30, 144, 255, 0.4);
+            
+            --sepia-bg: #f4ecd8;
+            --sepia-text: #5c4b37;
+            --sepia-primary: #8b4513;
+            --sepia-secondary: #e3d5b8;
+            --sepia-highlight-yellow: rgba(210, 180, 140, 0.4);
+            --sepia-highlight-blue: rgba(101, 139, 165, 0.4);
+            
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            transition: var(--transition);
+            overflow: hidden;
+        }
+
+        body.day-mode {
+            --bg: var(--day-bg);
+            --text: var(--day-text);
+            --primary: var(--day-primary);
+            --secondary: var(--day-secondary);
+            --highlight-yellow: var(--day-highlight-yellow);
+            --highlight-blue: var(--day-highlight-blue);
+        }
+
+        body.night-mode {
+            --bg: var(--night-bg);
+            --text: var(--night-text);
+            --primary: var(--night-primary);
+            --secondary: var(--night-secondary);
+            --highlight-yellow: var(--night-highlight-yellow);
+            --highlight-blue: var(--night-highlight-blue);
+        }
+
+        body.sepia-mode {
+            --bg: var(--sepia-bg);
+            --text: var(--sepia-text);
+            --primary: var(--sepia-primary);
+            --secondary: var(--sepia-secondary);
+            --highlight-yellow: var(--sepia-highlight-yellow);
+            --highlight-blue: var(--sepia-highlight-blue);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .theme-selector {
+            display: flex;
+            gap: 10px;
+        }
+
+        .theme-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .telegram-btn {
+            background: #0088cc;
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .telegram-btn:hover {
+            background: #006da3;
+            transform: translateY(-2px);
+        }
+
+        .timer {
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        .timer.warning {
+            color: #ff6b6b;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        .content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+        }
+
+        .passage-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            border-right: 1px solid var(--secondary);
+        }
+
+        .questions-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: var(--secondary);
+        }
+
+        .passage {
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .passage h1 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+        }
+
+        .passage p {
+            margin-bottom: 16px;
+        }
+
+        .highlight-yellow {
+            background-color: var(--highlight-yellow);
+        }
+
+        .highlight-blue {
+            background-color: var(--highlight-blue);
+        }
+
+        .highlight-menu {
+            position: absolute;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: flex;
+            gap: 5px;
+        }
+
+        .highlight-menu button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 3px;
+            transition: var(--transition);
+        }
+
+        .highlight-menu button:hover {
+            background: #f0f0f0;
+        }
+
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: var(--bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .question h3 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+
+        .options {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            border: 1px solid var(--secondary);
+            border-radius: 4px;
+            background-color: var(--bg);
+            color: var(--text);
+            width: 200px;
+        }
+
+        .submit-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 30px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .results {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--bg);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 20px;
+            display: none;
+        }
+
+        .results.visible {
+            display: block;
+        }
+
+        .results-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .score {
+            text-align: center;
+            font-size: 2rem;
+            margin: 20px 0;
+            color: var(--primary);
+        }
+
+        .answer {
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: var(--secondary);
+        }
+
+        .correct {
+            border-left: 5px solid #4caf50;
+        }
+
+        .incorrect {
+            border-left: 5px solid #f44336;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .reference {
+            font-style: italic;
+            color: var(--primary);
+            margin-top: 5px;
+        }
+
+        select {
+            padding: 8px;
+            border: 1px solid var(--secondary);
+            border-radius: 4px;
+            background-color: var(--bg);
+            color: var(--text);
+            width: 100%;
+            max-width: 300px;
+        }
+    </style>
+</head>
+<body class="day-mode">
+    <div class="container">
+        <header>
+            <div class="theme-selector">
+                <button class="theme-btn" title="Day Mode" onclick="setTheme('day')"><i class="fas fa-sun"></i></button>
+                <button class="theme-btn" title="Night Mode" onclick="setTheme('night')"><i class="fas fa-moon"></i></button>
+                <button class="theme-btn" title="Sepia Mode" onclick="setTheme('sepia')"><i class="fas fa-seedling"></i></button>
+            </div>
+            <a href="tg://resolve?domain=aftum_8" class="telegram-btn">
+                <i class="fab fa-telegram"></i> Телеграмм канал
+            </a>
+            <div class="timer" id="timer">20:00</div>
+        </header>
+
+        <div class="content">
+            <div class="passage-container">
+                <div class="passage" id="reading-passage">
+                    <h1>Violins and very cold weather – a hypothesis</h1>
+                    <p><em>Lloyd Burckle and Henri D Grissino-Mayer suggest a link between the great Italian violin-makers and a mini ice-age 300 years ago</em></p>
+
+                    <p><strong>A</strong> There is considerable controversy surrounding reasons why instruments made by the artisans of Cremona in Italy in the late 17th and early 18th centuries sound superior compared to modern instruments. The famous violin-making families of Amati, Stradivari, and Guarneri certainly included many highly accomplished craftsmen, and the popular belief is that the skills of these Cremonese artisans, combined with either a secret ingredient or undocumented process, gave their instruments the rich sound so highly admired by professional musicians. The nature of that secret ingredient has been the subject of conjecture for many years and is still fuelling discussion. Theories have included the development and use of a specially formulated varnish applied to the wood to protect it, drying the wood in ovens, the re-use of old wood taken from castles, and soaking the wood in water to get rid of supposedly harmful chemicals before seasoning.</p>
+
+                    <p><strong>B</strong> However, no basis has been found for these possible explanations. There is no documented evidence of wood being artificially dried by violin-makers, and this process was most likely unknown to these artisans. Nor can seasoning – the practice of leaving wood for the moisture to evaporate naturally – be invoked as a possible explanation, as considerable variability exists in the lengths of seasoning periods, even among individual makers. Instruments made by the most renowned of all violin-makers, Antonio Stradivari (1644-1737), have seasoning periods as short as seven years and as long as 31 years, for example. A secret varnish has yet to be demonstrated, despite considerable scientific analyses that include ultraviolet photography, electron microscopy, ion backscattering and x-ray investigations. Finally, some have suggested that Stradivari used wood taken from castles. This theory has been discounted because analyses on numerous instruments attributed to Stradivari demonstrated ages for the wood that were contemporary with his lifetime.</p>
+
+                    <p><strong>C</strong> Violin-makers have always known that the secret of a quality instrument lies in the selection of the wood. Maple wood (<em>Acer spp.</em>) is preferred for the back, ribs, and neck of the instrument while spruce (<em>Picea spp.</em>) is often used for the top. These woods have superior acoustical and mechanical properties, having the least loss of energy through internal friction compared to other woods. For example, spruce cells are light, physiologically simple, hollow, and rigid-ideal properties for enhanced acoustic quality. Only trees that have grown in thin, poor soils at higher elevations on north-facing slopes have the dense wood grain that helps instill a superior tone in violins. Long winters and cool summers produce wood that has the slow, even growth ideal for producing quality sounding boards.</p>
+
+                    <p><strong>D</strong> Stradivari and other eminent Italian violin-makers of the 17th and early 18th centuries had neighbouring workshops in Cremona and would most probably have used the nearby high forest slopes of the southern Italian Alps for their supplies of spruce wood. A probable location is the famous "Forest of the Violins" in the Parco Naturale Paneveggio in the eastern part of Trentino, long familiar to violin-makers for its 'fir trees of resonance'.</p>
+
+                    <p><strong>E</strong> Wood with high density can, however, be found in trees growing in a variety of habitats and environmental settings in numerous higher-elevation locations throughout the world. Hence, an account of the Cremonese craftsmen's superior sound quality based solely on wood properties is insufficient. Instead, could the superior sound quality be explained by a combination of wood properties, environmental characteristics, and macroclimatic conditions? Could the wood used by the Cremonese makers have had particular physical characteristics that were perhaps time-specific? These were questions that required more thorough research.</p>
+
+                    <p><strong>F</strong> The well-documented Maunder Minimum (1645-1715) was a period characterized by a scarcity of sunspots and a reduction in overall solar activity. It coincided with a sharp dip in temperatures and a period of extremely cold weather in western Europe. Analyses of high-elevation forest areas of the European Alps reveal a long period of reduced growth rates between approximately 1625 and 1720, identified by the narrow rings visible in the cross-sections of tree samples from that era.</p>
+
+                    <p><strong>G</strong> It seems likely that the narrow tree rings that identify the Maunder Minimum in Europe played a significant role in the enhanced sound quality of instruments produced by the Cremonese craftsmen. Narrow rings would not only strengthen the violin, but lend the wood a high degree of density-the property so important for acoustic resonance. It is surely significant that Stradivari's working lifetime coincides exactly with this climatic period, and that to fashion the most prized and valued instruments of his 'Golden Period' (1700-1720), he would have used the only wood available to him, i.e. from trees that grew during the Maunder Minimum. The onset of the Maunder Minimum at a time when the skills of the Cremonese violin-makers reached their peak perhaps made that crucial difference in the violin's tone and brilliance. Furthermore, the conjunction of elevation, topography, soil properties and a deterioration in climate was temporally unique-climate conditions with temperatures such as those that occurred during the Maunder Minimum simply cannot and do not occur today in areas where the Cremonese makers obtained their wood.</p>
+                </div>
+            </div>
+
+            <div class="questions-container">
+                <h2>Questions 14-20</h2>
+                <p>Reading Passage 2 has seven paragraphs, <strong>A-G</strong>.</p>
+                <p>Choose the correct heading for each paragraph from the list of headings below.</p>
+                <p>Write the correct number, <strong>i-ix</strong>, in boxes <strong>14-20</strong> on your answer sheet.</p>
+
+                <div style="background: var(--bg); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <h3>List of Headings</h3>
+                    <p>i. Propositions that needed further investigation</p>
+                    <p>ii. The most valuable instrument ever made</p>
+                    <p>iii. An unrepeated mix of professional and environmental circumstances</p>
+                    <p>iv. A remarkable woodworking technique</p>
+                    <p>v. An ongoing debate</p>
+                    <p>vi. Choosing the materials for different parts of a violin</p>
+                    <p>vii. Disproving some hypotheses</p>
+                    <p>viii. A well-known source of suitable wood</p>
+                    <p>ix. Evidence of some exceptional environmental conditions</p>
+                </div>
+
+                <div class="question">
+                    <h3>14. Paragraph A</h3>
+                    <select id="q14">
+                        <option value="">Select heading</option>
+                        <option value="i">i</option>
+                        <option value="ii">ii</option>
+                        <option value="iii">iii</option>
+                        <option value="iv">iv</option>
+                        <option value="v">v</option>
+                        <option value="vi">vi</option>
+                        <option value="vii">vii</option>
+                        <option value="viii">viii</option>
+                        <option value="ix">ix</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <h3>15. Paragraph B</h3>
+                    <select id="q15">
+                        <option value="">Select heading</option>
+                        <option value="i">i</option>
+                        <option value="ii">ii</option>
+                        <option value="iii">iii</option>
+                        <option value="iv">iv</option>
+                        <option value="v">v</option>
+                        <option value="vi">vi</option>
+                        <option value="vii">vii</option>
+                        <option value="viii">viii</option>
+                        <option value="ix">ix</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <h3>16. Paragraph C</h3>
+                    <select id="q16">
+                        <option value="">Select heading</option>
+                        <option value="i">i</option>
+                        <option value="ii">ii</option>
+                        <option value="iii">iii</option>
+                        <option value="iv">iv</option>
+                        <option value="v">v</option>
+                        <option value="vi">vi</option>
+                        <option value="vii">vii</option>
+                        <option value="viii">viii</option>
+                        <option value="ix">ix</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <h3>17. Paragraph D</h3>
+                    <select id="q17">
+                        <option value="">Select heading</option>
+                        <option value="i">i</option>
+                        <option value="ii">ii</option>
+                        <option value="iii">iii</option>
+                        <option value="iv">iv</option>
+                        <option value="v">v</option>
+                        <option value="vi">vi</option>
+                        <option value="vii">vii</option>
+                        <option value="viii">viii</option>
+                        <option value="ix">ix</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <h3>18. Paragraph E</h3>
+                    <select id="q18">
+                        <option value="">Select heading</option>
+                        <option value="i">i</option>
+                        <option value="ii">ii</option>
+                        <option value="iii">iii</option>
+                        <option value="iv">iv</option>
+                        <option value="v">v</option>
+                        <option value="vi">vi</option>
+                        <option value="vii">vii</option>
+                        <option value="viii">viii</option>
+                        <option value="ix">ix</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <h3>19. Paragraph F</h3>
+                    <select id="q19">
+                        <option value="">Select heading</option>
+                        <option value="i">i</option>
+                        <option value="ii">ii</option>
+                        <option value="iii">iii</option>
+                        <option value="iv">iv</option>
+                        <option value="v">v</option>
+                        <option value="vi">vi</option>
+                        <option value="vii">vii</option>
+                        <option value="viii">viii</option>
+                        <option value="ix">ix</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <h3>20. Paragraph G</h3>
+                    <select id="q20">
+                        <option value="">Select heading</option>
+                        <option value="i">i</option>
+                        <option value="ii">ii</option>
+                        <option value="iii">iii</option>
+                        <option value="iv">iv</option>
+                        <option value="v">v</option>
+                        <option value="vi">vi</option>
+                        <option value="vii">vii</option>
+                        <option value="viii">viii</option>
+                        <option value="ix">ix</option>
+                    </select>
+                </div>
+
+                <h2>Questions 21-24</h2>
+                <p>Complete the summary below.</p>
+                <p>Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.</p>
+                <p>Write your answers in boxes <strong>21-24</strong> on your answer sheet.</p>
+
+                <div style="background: var(--bg); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <h3>The Cremonese violins: fine artistry-but what else?</h3>
+                    <p>There is no doubt that the superior quality of the late 17th-and early 18th-century Cremonese violins is due in large part to the <input type="text" id="q21" style="width: 120px;"> of the people who crafted them. But it has long been felt that other factors were involved.</p>
+                    <p>There has been extensive research into whether the composition of the varnish that was put on the wood could account for the unique sound of the Cremonese violins. Some people have also put forward the idea that Stradivari made his instruments from wood which had already been used in old buildings such as <input type="text" id="q22" style="width: 120px;">. Scientific analysis has proved this not to be the case.</p>
+                    <p>Other theories have focused on the violin-makers' method of using <input type="text" id="q23" style="width: 120px;"> to dry their wood before use, or using water to remove dangerous <input type="text" id="q24" style="width: 120px;"> from the wood. A further suggestion concerns the amount of time taken for the process known as seasoning. However, craftsmen differed in the time they allowed for this.</p>
+                </div>
+
+                <h2>Questions 25 and 26</h2>
+                <p>Choose <strong>TWO</strong> letters, <strong>A-E</strong>.</p>
+                <p>Write the correct letters in boxes <strong>25</strong> and <strong>26</strong> on your answer sheet.</p>
+
+                <div class="question">
+                    <h3>Which TWO of these factors are mentioned in the passage as possibly having a significant effect on the eventual quality of a violin?</h3>
+                    <div class="options">
+                        <label class="option"><input type="checkbox" name="q25-26" value="A"> A the altitude at which a tree is grown</label>
+                        <label class="option"><input type="checkbox" name="q25-26" value="B"> B the stage of a tree's growth at which it is cut down</label>
+                        <label class="option"><input type="checkbox" name="q25-26" value="C"> C the steepness of the mountains where a tree is grown</label>
+                        <label class="option"><input type="checkbox" name="q25-26" value="D"> D the lack of rain during a tree's growing period</label>
+                        <label class="option"><input type="checkbox" name="q25-26" value="E"> E the nutritional composition of the earth in which a tree is grown</label>
+                    </div>
+                </div>
+
+                <button class="submit-btn" onclick="submitAnswers()">Submit Answers</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="results" id="results">
+        <div class="results-content">
+            <h2>Your Results</h2>
+            <div class="score" id="score"></div>
+            
+            <div id="answers-review"></div>
+            
+            <button class="close-btn" onclick="closeResults()">&times;</button>
+        </div>
+    </div>
+
+    <script>
+        // Таймер
+        let timeLeft = 20 * 60; // 20 минут в секундах
+        const timerElement = document.getElementById('timer');
+        let timerInterval;
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            timerElement.textContent = `${minutes}:${seconds}`;
+            
+            if (timeLeft === 5 * 60) {
+                timerElement.classList.add('warning');
+            }
+            
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                submitAnswers();
+            } else {
+                timeLeft--;
+            }
+        }
+
+        // Система выделения текста
+        let highlightMenu = null;
+
+        document.getElementById('reading-passage').addEventListener('mouseup', function(e) {
+            const selection = window.getSelection();
+            if (selection.toString().length > 0) {
+                showHighlightMenu(e, selection);
+            }
+        });
+
+        document.addEventListener('mousedown', function(e) {
+            if (highlightMenu && !highlightMenu.contains(e.target)) {
+                document.body.removeChild(highlightMenu);
+                highlightMenu = null;
+            }
+        });
+
+        function showHighlightMenu(e, selection) {
+            if (highlightMenu) {
+                document.body.removeChild(highlightMenu);
+            }
+            
+            highlightMenu = document.createElement('div');
+            highlightMenu.className = 'highlight-menu';
+            
+            const yellowBtn = document.createElement('button');
+            yellowBtn.title = 'Yellow Highlight';
+            yellowBtn.innerHTML = '<i class="fas fa-highlighter" style="color: #ffeb3b;"></i>';
+            yellowBtn.onclick = function() {
+                highlightSelection(selection, 'yellow');
+                document.body.removeChild(highlightMenu);
+                highlightMenu = null;
+            };
+            
+            const blueBtn = document.createElement('button');
+            blueBtn.title = 'Blue Highlight';
+            blueBtn.innerHTML = '<i class="fas fa-highlighter" style="color: #00b0ff;"></i>';
+            blueBtn.onclick = function() {
+                highlightSelection(selection, 'blue');
+                document.body.removeChild(highlightMenu);
+                highlightMenu = null;
+            };
+            
+            const clearBtn = document.createElement('button');
+            clearBtn.title = 'Clear Highlight';
+            clearBtn.innerHTML = '<i class="fas fa-eraser"></i>';
+            clearBtn.onclick = function() {
+                removeHighlight(selection);
+                document.body.removeChild(highlightMenu);
+                highlightMenu = null;
+            };
+            
+            highlightMenu.appendChild(yellowBtn);
+            highlightMenu.appendChild(blueBtn);
+            highlightMenu.appendChild(clearBtn);
+            
+            document.body.appendChild(highlightMenu);
+            
+            const rect = selection.getRangeAt(0).getBoundingClientRect();
+            highlightMenu.style.top = (rect.bottom + window.scrollY - 40) + 'px';
+            highlightMenu.style.left = (rect.left + window.scrollX) + 'px';
+        }
+
+        function highlightSelection(selection, color) {
+            const range = selection.getRangeAt(0);
+            const selectedText = range.extractContents();
+            const span = document.createElement('span');
+            
+            span.appendChild(selectedText);
+            span.className = `highlight-${color}`;
+            
+            range.insertNode(span);
+            selection.removeAllRanges();
+        }
+
+        function removeHighlight(selection) {
+            const range = selection.getRangeAt(0);
+            const parentElement = range.startContainer.parentElement;
+            
+            if (parentElement.classList.contains('highlight-yellow') || 
+                parentElement.classList.contains('highlight-blue')) {
+                
+                const text = parentElement.textContent;
+                const textNode = document.createTextNode(text);
+                
+                parentElement.parentNode.replaceChild(textNode, parentElement);
+            }
+            
+            selection.removeAllRanges();
+        }
+
+        // Смена темы
+        function setTheme(theme) {
+            document.body.className = `${theme}-mode`;
+            localStorage.setItem('theme', theme);
+        }
+
+        // Проверка ответов
+        function submitAnswers() {
+            clearInterval(timerInterval);
+            
+            const answers = {
+                q14: document.getElementById('q14').value,
+                q15: document.getElementById('q15').value,
+                q16: document.getElementById('q16').value,
+                q17: document.getElementById('q17').value,
+                q18: document.getElementById('q18').value,
+                q19: document.getElementById('q19').value,
+                q20: document.getElementById('q20').value,
+                q21: document.getElementById('q21').value.trim().toLowerCase(),
+                q22: document.getElementById('q22').value.trim().toLowerCase(),
+                q23: document.getElementById('q23').value.trim().toLowerCase(),
+                q24: document.getElementById('q24').value.trim().toLowerCase(),
+                q25_26: getCheckboxValues('q25-26')
+            };
+            
+            const correctAnswers = {
+                q14: 'v',
+                q15: 'vii',
+                q16: 'vi',
+                q17: 'viii',
+                q18: 'i',
+                q19: 'ix',
+                q20: 'iii',
+                q21: 'skills',
+                q22: 'castles',
+                q23: 'ovens',
+                q24: 'chemicals',
+                q25_26: ['A', 'E']
+            };
+            
+            const references = {
+                q14: 'Paragraph A: "There is considerable controversy surrounding reasons..."',
+                q15: 'Paragraph B: "However, no basis has been found for these possible explanations..."',
+                q16: 'Paragraph C: "Maple wood is preferred for the back, ribs, and neck of the instrument while spruce is often used for the top."',
+                q17: 'Paragraph D: "A probable location is the famous Forest of the Violins..."',
+                q18: 'Paragraph E: "These were questions that required more thorough research."',
+                q19: 'Paragraph F: "The well-documented Maunder Minimum (1645-1715) was a period characterized by a scarcity of sunspots..."',
+                q20: 'Paragraph G: "The conjunction of elevation, topography, soil properties and a deterioration in climate was temporally unique..."',
+                q21: 'Paragraph A: "the skills of these Cremonese artisans"',
+                q22: 'Paragraph B: "some have suggested that Stradivari used wood taken from castles"',
+                q23: 'Paragraph A: "drying the wood in ovens"',
+                q24: 'Paragraph A: "soaking the wood in water to get rid of supposedly harmful chemicals"',
+                q25_26: 'Paragraph C: "Only trees that have grown in thin, poor soils at higher elevations"'
+            };
+            
+            let score = 0;
+            let resultsHTML = '';
+            
+            // Проверка вопросов 14-20
+            for (let i = 14; i <= 20; i++) {
+                const q = 'q' + i;
+                const userAnswer = answers[q];
+                const correctAnswer = correctAnswers[q];
+                const isCorrect = userAnswer === correctAnswer;
+                
+                if (isCorrect) score++;
+                
+                resultsHTML += `
+                    <div class="answer ${isCorrect ? 'correct' : 'incorrect'}">
+                        <p><strong>Question ${i}:</strong> ${isCorrect ? 'Correct' : 'Incorrect'}</p>
+                        <p>Your answer: ${userAnswer || 'No answer'}</p>
+                        <p>Correct answer: ${correctAnswer}</p>
+                        <p class="reference">${references[q]}</p>
+                    </div>
+                `;
+            }
+            
+            // Проверка вопросов 21-24
+            for (let i = 21; i <= 24; i++) {
+                const q = 'q' + i;
+                const userAnswer = answers[q];
+                const correctAnswer = correctAnswers[q];
+                const isCorrect = userAnswer === correctAnswer;
+                
+                if (isCorrect) score++;
+                
+                resultsHTML += `
+                    <div class="answer ${isCorrect ? 'correct' : 'incorrect'}">
+                        <p><strong>Question ${i}:</strong> ${isCorrect ? 'Correct' : 'Incorrect'}</p>
+                        <p>Your answer: ${userAnswer || 'No answer'}</p>
+                        <p>Correct answer: ${correctAnswer}</p>
+                        <p class="reference">${references[q]}</p>
+                    </div>
+                `;
+            }
+            
+            // Проверка вопросов 25-26
+            const q25_26 = answers.q25_26;
+            const correct25_26 = correctAnswers.q25_26;
+            const isCorrect25 = q25_26.includes('A');
+            const isCorrect26 = q25_26.includes('E');
+            
+            if (isCorrect25 && isCorrect26 && q25_26.length === 2) {
+                score += 2;
+                resultsHTML += `
+                    <div class="answer correct">
+                        <p><strong>Questions 25-26:</strong> Correct</p>
+                        <p>Your answers: ${q25_26.join(', ')}</p>
+                        <p>Correct answers: A, E</p>
+                        <p class="reference">${references.q25_26}</p>
+                    </div>
+                `;
+            } else {
+                resultsHTML += `
+                    <div class="answer incorrect">
+                        <p><strong>Questions 25-26:</strong> Incorrect</p>
+                        <p>Your answers: ${q25_26.join(', ') || 'No answer'}</p>
+                        <p>Correct answers: A, E</p>
+                        <p class="reference">${references.q25_26}</p>
+                    </div>
+                `;
+            }
+            
+            const percentage = Math.round((score / 15) * 100);
+            document.getElementById('score').textContent = `Score: ${score}/15 (${percentage}%)`;
+            document.getElementById('answers-review').innerHTML = resultsHTML;
+            document.getElementById('results').classList.add('visible');
+        }
+
+        function getCheckboxValues(name) {
+            const checkboxes = document.querySelectorAll(`input[name="${name}"]:checked`);
+            return Array.from(checkboxes).map(cb => cb.value);
+        }
+
+        function closeResults() {
+            document.getElementById('results').classList.remove('visible');
+        }
+
+        // Инициализация
+        window.onload = function() {
+            const savedTheme = localStorage.getItem('theme') || 'day';
+            setTheme(savedTheme);
+            startTimer();
+        };
+    </script>
+</body>
+</html>

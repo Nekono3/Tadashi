@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading: Biology of Bitterness</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --day-bg: #f8f9fa;
+            --day-text: #212529;
+            --day-primary: #4e7ae6;
+            --day-secondary: #e9ecef;
+            --day-accent: #ff6b6b;
+            --day-card: #ffffff;
+            
+            --night-bg: #1a1a2e;
+            --night-text: #e6e6e6;
+            --night-primary: #7b9acc;
+            --night-secondary: #2d3748;
+            --night-accent: #ff7f50;
+            --night-card: #242439;
+            
+            --sepia-bg: #f5efe0;
+            --sepia-text: #5c4b37;
+            --sepia-primary: #8b5a2b;
+            --sepia-secondary: #e3d5c8;
+            --sepia-accent: #c76c4a;
+            --sepia-card: #f8f2e4;
+            
+            --current-bg: var(--day-bg);
+            --current-text: var(--day-text);
+            --current-primary: var(--day-primary);
+            --current-secondary: var(--day-secondary);
+            --current-accent: var(--day-accent);
+            --current-card: var(--day-card);
+            
+            --transition: all 0.3s ease;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+        }
+
+        .theme-day {
+            --current-bg: var(--day-bg);
+            --current-text: var(--day-text);
+            --current-primary: var(--day-primary);
+            --current-secondary: var(--day-secondary);
+            --current-accent: var(--day-accent);
+            --current-card: var(--day-card);
+        }
+
+        .theme-night {
+            --current-bg: var(--night-bg);
+            --current-text: var(--night-text);
+            --current-primary: var(--night-primary);
+            --current-secondary: var(--night-secondary);
+            --current-accent: var(--night-accent);
+            --current-card: var(--night-card);
+        }
+
+        .theme-sepia {
+            --current-bg: var(--sepia-bg);
+            --current-text: var(--sepia-text);
+            --current-primary: var(--sepia-primary);
+            --current-secondary: var(--sepia-secondary);
+            --current-accent: var(--sepia-accent);
+            --current-card: var(--sepia-card);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: var(--transition);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--current-bg);
+            color: var(--current-text);
+            line-height: 1.6;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header {
+            background-color: var(--current-primary);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 0.5rem;
+        }
+
+        .theme-selector {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .theme-btn {
+            background: none;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .theme-btn.day { background-color: #4e7ae6; }
+        .theme-btn.night { background-color: #1a1a2e; }
+        .theme-btn.sepia { background-color: #8b5a2b; }
+
+        .telegram-btn {
+            background-color: #0088cc;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .telegram-btn:hover {
+            background-color: #006da3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .timer {
+            font-size: 1.2rem;
+            font-weight: bold;
+            background-color: var(--current-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .timer.warning {
+            color: var(--current-accent);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .passage-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--current-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .passage-header {
+            padding: 1rem;
+            background-color: var(--current-primary);
+            color: white;
+            border-top-left-radius: var(--radius);
+            border-top-right-radius: var(--radius);
+        }
+
+        .passage-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+
+        .questions-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--current-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .questions-header {
+            padding: 1rem;
+            background-color: var(--current-primary);
+            color: white;
+            border-top-left-radius: var(--radius);
+            border-top-right-radius: var(--radius);
+        }
+
+        .questions-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            margin: 1.5rem 0 1rem;
+            color: var(--current-primary);
+        }
+
+        .passage-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .passage-text p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        .paragraph {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--current-secondary);
+        }
+
+        .paragraph-label {
+            font-weight: bold;
+            color: var(--current-primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .highlight-menu {
+            position: absolute;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            padding: 0.5rem;
+            display: flex;
+            gap: 0.5rem;
+            z-index: 1000;
+            transform: translateY(-100%);
+        }
+
+        .highlight-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .yellow { background-color: #ffd43b; }
+        .blue { background-color: #4dabf7; }
+        .clear { background-color: #fa5252; }
+
+        .question {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: var(--current-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .question-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--current-primary);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .option:hover {
+            background-color: rgba(78, 122, 230, 0.1);
+        }
+
+        .option input {
+            cursor: pointer;
+        }
+
+        .summary-blanks {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .blank {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            width: 100%;
+        }
+
+        .blank-number {
+            font-weight: bold;
+            min-width: 30px;
+        }
+
+        input[type="text"] {
+            padding: 0.5rem;
+            border-radius: 6px;
+            border: 1px solid var(--current-primary);
+            background-color: var(--current-bg);
+            color: var(--current-text);
+            flex: 1;
+        }
+
+        .yes-no-options {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .submit-container {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .submit-btn {
+            background-color: var(--current-primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .result-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .result-content {
+            background-color: var(--current-card);
+            color: var(--current-text);
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .score {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--current-primary);
+            margin: 1rem 0;
+        }
+
+        .result-details {
+            margin: 1.5rem 0;
+        }
+
+        .result-item {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            background-color: var(--current-secondary);
+        }
+
+        .correct {
+            border-left: 4px solid #40c057;
+        }
+
+        .incorrect {
+            border-left: 4px solid #fa5252;
+        }
+
+        .result-question {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-answer {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-location {
+            font-style: italic;
+            color: var(--current-primary);
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .result-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .action-btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .restart-btn {
+            background-color: var(--current-primary);
+            color: white;
+        }
+
+        .close-btn {
+            background-color: var(--current-secondary);
+            color: var(--current-text);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 992px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .passage-container, .questions-container {
+                min-height: 400px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+            
+            .theme-selector {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .telegram-btn {
+                order: 2;
+            }
+            
+            .timer {
+                order: 1;
+            }
+            
+            .main-content {
+                padding: 0.5rem;
+            }
+            
+            .passage-content, .questions-content {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .passage-text {
+                font-size: 1rem;
+            }
+        }
+
+        .highlight-yellow {
+            background-color: rgba(255, 212, 59, 0.3);
+        }
+
+        .highlight-blue {
+            background-color: rgba(77, 171, 247, 0.3);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--current-primary);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            opacity: 0.8;
+            display: none;
+        }
+
+        .passage-container:hover .scroll-indicator,
+        .questions-container:hover .scroll-indicator {
+            display: block;
+        }
+    </style>
+</head>
+<body class="theme-day">
+    <header>
+        <div class="logo">
+            <i class="fas fa-book-reader"></i>
+            <span>IELTS Reading Test</span>
+        </div>
+        <div class="theme-selector">
+            <button class="theme-btn day" title="Day Mode" onclick="changeTheme('day')"><i class="fas fa-sun"></i></button>
+            <button class="theme-btn night" title="Night Mode" onclick="changeTheme('night')"><i class="fas fa-moon"></i></button>
+            <button class="theme-btn sepia" title="Sepia Mode" onclick="changeTheme('sepia')"><i class="fas fa-book"></i></button>
+        </div>
+        <a href="tg://resolve?domain=aftum_8" class="telegram-btn">
+            <i class="fab fa-telegram"></i>
+            Телеграмм канал
+        </a>
+        <div class="timer" id="timer">
+            <i class="fas fa-clock"></i>
+            <span id="time">20:00</span>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="passage-container">
+            <div class="passage-header">
+                <h1>Biology of Bitterness</h1>
+            </div>
+            <div class="passage-content" id="passage-content">
+                <div class="passage-text" id="passage-text">
+                    <div class="paragraph">
+                        <div class="paragraph-label">A</div>
+                        <p>There is a reason why grapefruit juice is served in little glasses: most people don't want to drink more than a few ounces at a time. Naringin, a natural chemical compound found in grapefruit, tastes bitter. Some people like that bitterness in small doses and believe it enhances the general flavor, but others would rather avoid it altogether. So juice packagers often select grapefruit with low naringin though the compound has antioxidant properties that some nutritionists contend may help prevent cancer and arteriosclerosis.</p>
+                    </div>
+
+                    <div class="paragraph">
+                        <div class="paragraph-label">B</div>
+                        <p>It is possible, however, to get the goodness of grapefruit juice without the bitter taste. I found that out by participating in a test conducted at the Linguagen Corporation, a biotechnology company in Cranbury, New Jersey. Sets of two miniature white paper cups, labeled 304 and 305, were placed before five people seated around a conference table. Each of us drank from one cup and then the other, cleansing our palates between tastes with water and a soda cracker. Even the smallest sip of 304 had grapefruit's unmistakable bitter bite. But 305 was smoother; there was the sour taste of citrus but none of the bitterness of naringin. This juice had been treated with adenosine monophosphate, or AMP, a compound that blocks the bitterness in foods without making them less nutritious.</p>
+                    </div>
+
+                    <div class="paragraph">
+                        <div class="paragraph-label">C</div>
+                        <p>Taste research is a booming business these days, with scientists delving into all five basics-sweet, bitter, sour, salty, and umami, the savory taste of protein. Bitterness is of special interest to industry because of its untapped potential in food. There are thousands of bitter-tasting compounds in nature. They defend plants by warning animals away and protect animals by letting them know when a plant may be poisonous. But the system isn't foolproof. Grapefruit and cruciferous vegetable like Brussels sprouts and kale are nutritious despite-and sometimes because of-their bitter-tasting components. Over time, many people have learned to love them, at least in small doses. "Humans are the only species that enjoys bitter taste," says Charles Zuker, a neuroscientist at the University of California School of Medicine at San Diego. "Every other species is averse to bitter because it means bad news. But we have learned to enjoy it. We drink coffee, which is bitter, and quinine [in tonic water] too. We enjoy having that spice in our lives." Because bitterness can be pleasing in small quantities but repellent when intense, bitter blockers like AMP could make a whole range of foods, drinks, and medicines more palatable-and therefore more profitable.</p>
+                    </div>
+
+                    <div class="paragraph">
+                        <div class="paragraph-label">D</div>
+                        <p>People have varying capacities for tasting bitterness, and the differences appear to be genetic. About 75 percent of people are sensitive to the taste of the bitter compounds phenylthiocarbamide and 6-n-propylthiouracil. and 25 percent are insensitive. Those who are sensitive to phenylthiocarbamide seem to be less likely than others to eat cruciferous vegetables, according to Stephen Wooding, a geneticist at the University of Utah. Some people, known as supertasters, are especially sensitive to 6-n-propylthiouracil because they have an unusually high number of taste buds. Supertasters tend to shun all kinds of bitter-tasting things, including vegetable, coffee, and dark chocolate. Perhaps as a result, they tend to be thin. They're also less fond of alcoholic drinks, which are often slightly bitter. Dewar's scotch, for instance, tastes somewhat sweet to most people. "But a supertaster tastes no sweetness at all, only bitterness," says Valerie Duffy, an associate professor of dietetics at the University of Connecticut at Storrs.</p>
+                    </div>
+
+                    <div class="paragraph">
+                        <div class="paragraph-label">E</div>
+                        <p>In one recent study, Duffy found that supertasters consume alcoholic beverages, on average, only two to three times a week, compared with five or six times for the average nontasters. Each taste bud, which looks like an onion, consists of 50 to 100 elongated cells running from the top of the bud to the bottom. At the top is a little clump of receptors that capture the taste molecules, known as tastants, in food and drink. The receptors function much like those for sight and smell. Once a bitter signal has been received, it is relayed via proteins known as G proteins. The G protein involved in the perception of bitterness, sweetness, and umami was identified in the early 1990s by Linguagen's founder, Robert Margolskee, at Mount Sinai School of Medicine in New York City. Known as gustducin, the protein triggers a cascade of chemical reactions that lead to changes in ion concentrations within the cell. Ultimately, this delivers a signal to the brain that registers as bitter. "The signaling system is like a bucket brigade," Margolskee says. "It goes from the G protein to other proteins."</p>
+                    </div>
+
+                    <div class="paragraph">
+                        <div class="paragraph-label">F</div>
+                        <p>In 2000 Zuker and others found some 30 different kinds of genes that code for bitter-taste receptors. "We knew the number would have to be large because there is such a large universe of bitter tastants," Zuker says. Yet no matter which tastant enters the mouth or which receptor it attaches to, bitter always tastes the same to us. The only variation derives from its intensity and the ways in which it can be flavored by the sense of smell. "Taste cells are like a light switch," Zuker says. "They are either on or off."</p>
+                    </div>
+
+                    <div class="paragraph">
+                        <div class="paragraph-label">G</div>
+                        <p>Once they figured put the taste mechanism, scientists began to think of ways to interfere with it. They tried AMP, an organic compound found in breast milk and other substances, which is created as cells break down food. Amp has no bitterness of its own, but when put it in foods, Margolskee and his colleagues discovered, it attaches to bitter-taste receptors. As effective as it is, AMP may not be able to dampen every type of bitter taste, because it probably doesn't attach to all 30 bitter-taste receptors. So Linguagen has scaled up the hunt for other bitter blockers with a technology called high-throughput screening. Researchers start by coaxing cells in culture to activate bitter-taste receptors. Then candidate substances, culled from chemical compound libraries, are dropped onto the receptors, and scientists look for evidence of a reaction.</p>
+                    </div>
+
+                    <div class="paragraph">
+                        <div class="paragraph-label">H</div>
+                        <p>In time, some taste researchers believe, compounds like AMP will help make processed foods less unhealthy. Consider, for example, that a single cup of Campbell's chicken noodle soup contains 850 milligrams of sodium chloride, or table salt-more than a third of the recommended daily allowance. The salt masks the bitterness created by the high temperatures used in the canning process, which cause sugars and amino acids to react. Part of the salt could be replaced by another salt, potassium chloride, which tends to be scarce in some people's diets. Potassium chloride has a bitter aftertaste, but that could be eliminated with a dose of AMP. Bitter blockers could also be used in place of cherry or grape flavoring to take the harshness out of children's cough syrup, and they could dampen the bitterness of antihistamines, antibiotics, certain HIV drugs, and other medications.</p>
+                    </div>
+
+                    <div class="paragraph">
+                        <div class="paragraph-label">I</div>
+                        <p>A number of foodmakers have already begun to experiment with AMP in their products, and other bitter blockers are being developed by rival firms such as Senomyx in La Jolla, California. In a few years, perhaps, after food companies have taken the bitterness from canned soup and TV dinners, they can set their sights on something more useful: a bitter blocker in a bottle that any of us can sprinkle on our brussels sprouts or stir into our grapefruit juice.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-indicator">Scroll independently</div>
+        </div>
+
+        <div class="questions-container">
+            <div class="questions-header">
+                <h1>Questions</h1>
+            </div>
+            <div class="questions-content">
+                <h2>Questions 1-8</h2>
+                <p>The reading Passage has nine paragraphs A-I.</p>
+                <p><strong>Which paragraph contains the following information?</strong></p>
+                <p>Write the correct letter A-I, in boxes 1-8 on your answer sheet.</p>
+
+                <div class="question">
+                    <div class="question-title">1. Experiment on bitterness conducted</div>
+                    <select name="q1" id="q1">
+                        <option value="">Select</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                        <option value="G">G</option>
+                        <option value="H">H</option>
+                        <option value="I">I</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">2. Look into the future application</div>
+                    <select name="q2" id="q2">
+                        <option value="">Select</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                        <option value="G">G</option>
+                        <option value="H">H</option>
+                        <option value="I">I</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">3. Bitterness means different information for human and animals</div>
+                    <select name="q3" id="q3">
+                        <option value="">Select</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                        <option value="G">G</option>
+                        <option value="H">H</option>
+                        <option value="I">I</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">4. Spread process of bitterness inside of body</div>
+                    <select name="q4" id="q4">
+                        <option value="">Select</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                        <option value="G">G</option>
+                        <option value="H">H</option>
+                        <option value="I">I</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">5. How AMP blocks bitterness</div>
+                    <select name="q5" id="q5">
+                        <option value="">Select</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                        <option value="G">G</option>
+                        <option value="H">H</option>
+                        <option value="I">I</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">6. Some bitterness blocker may help lower unhealthy impact</div>
+                    <select name="q6" id="q6">
+                        <option value="">Select</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                        <option value="G">G</option>
+                        <option value="H">H</option>
+                        <option value="I">I</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">7. Bitterness introduced from a fruit</div>
+                    <select name="q7" id="q7">
+                        <option value="">Select</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                        <option value="G">G</option>
+                        <option value="H">H</option>
+                        <option value="I">I</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">8. Genetic feature determines sensitivity</div>
+                    <select name="q8" id="q8">
+                        <option value="">Select</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                        <option value="G">G</option>
+                        <option value="H">H</option>
+                        <option value="I">I</option>
+                    </select>
+                </div>
+
+                <h2>Questions 9-12</h2>
+                <p><strong>Summary</strong></p>
+                <p>Complete the following summary of the paragraphs of Reading Passage, using no more than two words from the Reading Passage for each answer. Write your answers in boxes 9-12 on your answer sheet.</p>
+
+                <div class="question">
+                    <div class="question-title">The reason why grapefruit tastes bitter is because a substance called</div>
+                    <div class="blank">
+                        <span class="blank-number">9</span>
+                        <input type="text" name="q9" id="q9">
+                        <span>contained in it.</span>
+                    </div>
+                    
+                    <div class="question-title">However, bitterness plays a significant role for plants. It gives a signal that certain plant is</div>
+                    <div class="blank">
+                        <span class="blank-number">10</span>
+                        <input type="text" name="q10" id="q10">
+                    </div>
+                    
+                    <div class="question-title">For human beings, different person carries various genetic abilities of tasting bitterness. According to a scientist at the University of Utah,</div>
+                    <div class="blank">
+                        <span class="blank-number">11</span>
+                        <input type="text" name="q11" id="q11">
+                        <span>have exceptionally plenty of</span>
+                    </div>
+                    
+                    <div class="blank">
+                        <span class="blank-number">12</span>
+                        <input type="text" name="q12" id="q12">
+                        <span>, which allows them to perceive bitter compounds.</span>
+                    </div>
+                </div>
+
+                <h2>Questions 13-14</h2>
+                <p>Choose the correct letter, A, B, C or D.</p>
+                <p>Write your answers in boxes 13-14 on your answer sheet.</p>
+
+                <div class="question">
+                    <div class="question-title">13. What is the main feature of AMP according to this passage?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q13" value="A">
+                            A offset bitter flavour in food
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q13" value="B">
+                            B only exist in 304 cup
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q13" value="C">
+                            C tastes like citrus
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q13" value="D">
+                            D chemical reaction when meets biscuit
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">14. What is the main function of G protein?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q14" value="A">
+                            A collecting taste molecule
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q14" value="B">
+                            B identifying different flavors elements
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q14" value="C">
+                            C resolving large molecules
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q14" value="D">
+                            D transmitting bitter signals to the brain
+                        </label>
+                    </div>
+                </div>
+
+                <div class="submit-container">
+                    <button class="submit-btn" id="submit-btn">
+                        <i class="fas fa-paper-plane"></i>
+                        Submit Answers
+                    </button>
+                </div>
+            </div>
+            <div class="scroll-indicator">Scroll independently</div>
+        </div>
+    </div>
+
+    <div class="result-overlay" id="result-overlay">
+        <div class="result-content">
+            <div class="result-header">
+                <h2>Test Results</h2>
+                <div class="score" id="score">0/14</div>
+                <p id="result-message">Check your answers below</p>
+            </div>
+
+            <div class="result-details" id="result-details">
+                <!-- Results will be inserted here -->
+            </div>
+
+            <div class="result-actions">
+                <button class="action-btn restart-btn" onclick="restartTest()">
+                    <i class="fas fa-redo"></i>
+                    Restart Test
+                </button>
+                <button class="action-btn close-btn" onclick="closeResults()">
+                    <i class="fas fa-times"></i>
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme switching
+        function changeTheme(theme) {
+            document.body.className = `theme-${theme}`;
+        }
+
+        // Timer functionality
+        let timeLeft = 20 * 60; // 20 minutes in seconds
+        const timerElement = document.getElementById('time');
+        const timerContainer = document.getElementById('timer');
+        let timerInterval;
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                submitAnswers();
+                return;
+            }
+
+            timeLeft--;
+
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            // Add warning class when 5 minutes left
+            if (timeLeft === 5 * 60) {
+                timerContainer.classList.add('warning');
+            }
+        }
+
+        // Text highlighting functionality
+        let highlightMenu = null;
+        let currentSelection = null;
+
+        function createHighlightMenu(x, y) {
+            // Remove existing menu if any
+            if (highlightMenu) {
+                highlightMenu.remove();
+            }
+
+            highlightMenu = document.createElement('div');
+            highlightMenu.className = 'highlight-menu';
+            highlightMenu.style.left = `${x}px`;
+            highlightMenu.style.top = `${y}px`;
+
+            const yellowBtn = document.createElement('button');
+            yellowBtn.className = 'highlight-btn yellow';
+            yellowBtn.innerHTML = '<i class="fas fa-highlighter"></i>';
+            yellowBtn.onclick = () => applyHighlight('yellow');
+            highlightMenu.appendChild(yellowBtn);
+
+            const blueBtn = document.createElement('button');
+            blueBtn.className = 'highlight-btn blue';
+            blueBtn.innerHTML = '<i class="fas fa-highlighter"></i>';
+            blueBtn.onclick = () => applyHighlight('blue');
+            highlightMenu.appendChild(blueBtn);
+
+            const clearBtn = document.createElement('button');
+            clearBtn.className = 'highlight-btn clear';
+            clearBtn.innerHTML = '<i class="fas fa-eraser"></i>';
+            clearBtn.onclick = () => applyHighlight('clear');
+            highlightMenu.appendChild(clearBtn);
+
+            document.body.appendChild(highlightMenu);
+        }
+
+        function applyHighlight(color) {
+            if (!currentSelection || currentSelection.rangeCount === 0) return;
+
+            const range = currentSelection.getRangeAt(0);
+            const selectedText = range.toString();
+            
+            if (!selectedText) return;
+
+            if (color === 'clear') {
+                // Remove any highlighting
+                const parent = range.commonAncestorContainer;
+                if (parent.nodeType !== 1) {
+                    parent.parentNode.replaceChild(
+                        document.createTextNode(parent.textContent),
+                        parent
+                    );
+                } else {
+                    const textContent = parent.textContent;
+                    parent.outerHTML = textContent;
+                }
+            } else {
+                // Apply highlighting
+                const span = document.createElement('span');
+                span.className = `highlight-${color}`;
+                span.textContent = selectedText;
+                
+                try {
+                    range.deleteContents();
+                    range.insertNode(span);
+                } catch (e) {
+                    console.error('Error applying highlight:', e);
+                }
+            }
+
+            // Clear selection and remove menu
+            window.getSelection().removeAllRanges();
+            if (highlightMenu) {
+                highlightMenu.remove();
+                highlightMenu = null;
+            }
+        }
+
+        // Event listeners for text selection
+        document.addEventListener('selectionchange', () => {
+            const selection = window.getSelection();
+            if (!selection.toString().trim()) return;
+
+            currentSelection = selection;
+            
+            const range = selection.getRangeAt(0);
+            const rect = range.getBoundingClientRect();
+            
+            createHighlightMenu(rect.left + window.scrollX, rect.top + window.scrollY - 40);
+        });
+
+        document.addEventListener('mousedown', (e) => {
+            if (highlightMenu && !highlightMenu.contains(e.target)) {
+                highlightMenu.remove();
+                highlightMenu = null;
+            }
+        });
+
+        // Answer checking
+        const correctAnswers = {
+            q1: 'B',
+            q2: 'I',
+            q3: 'C',
+            q4: 'E',
+            q5: 'G',
+            q6: 'H',
+            q7: 'A',
+            q8: 'D',
+            q9: 'NARINGIN',
+            q10: 'POISONOUS',
+            q11: 'SUPERTASTERS',
+            q12: 'TASTE BUDS',
+            q13: 'A',
+            q14: 'D'
+        };
+
+        const answerLocations = {
+            q1: "Paragraph B: 'I found that out by participating in a test conducted at the Linguagen Corporation'",
+            q2: "Paragraph I: 'In a few years, perhaps, after food companies have taken the bitterness from canned soup and TV dinners'",
+            q3: "Paragraph C: 'Humans are the only species that enjoys bitter taste... Every other species is averse to bitter because it means bad news'",
+            q4: "Paragraph E: 'Once a bitter signal has been received, it is relayed via proteins known as G proteins... delivers a signal to the brain that registers as bitter'",
+            q5: "Paragraph G: 'AMP, an organic compound found in breast milk and other substances... it attaches to bitter-taste receptors'",
+            q6: "Paragraph H: 'compounds like AMP will help make processed foods less unhealthy'",
+            q7: "Paragraph A: 'Naringin, a natural chemical compound found in grapefruit, tastes bitter'",
+            q8: "Paragraph D: 'People have varying capacities for tasting bitterness, and the differences appear to be genetic'",
+            q9: "Paragraph A: 'Naringin, a natural chemical compound found in grapefruit, tastes bitter'",
+            q10: "Paragraph C: 'They defend plants by warning animals away and protect animals by letting them know when a plant may be poisonous'",
+            q11: "Paragraph D: 'Some people, known as supertasters, are especially sensitive to 6-n-propylthiouracil because they have an unusually high number of taste buds'",
+            q12: "Paragraph D: 'Some people, known as supertasters, are especially sensitive to 6-n-propylthiouracil because they have an unusually high number of taste buds'",
+            q13: "Paragraph B: 'a compound that blocks the bitterness in foods without making them less nutritious'",
+            q14: "Paragraph E: 'Once a bitter signal has been received, it is relayed via proteins known as G proteins... delivers a signal to the brain that registers as bitter'"
+        };
+
+        function submitAnswers() {
+            clearInterval(timerInterval);
+            
+            let score = 0;
+            const results = [];
+            
+            for (let i = 1; i <= 14; i++) {
+                const questionName = `q${i}`;
+                let userAnswer = '';
+                
+                if (i <= 8) {
+                    // Dropdown questions
+                    const selected = document.getElementById(questionName);
+                    userAnswer = selected ? selected.value : '';
+                } else if (i <= 12) {
+                    // Text input questions
+                    const input = document.getElementById(questionName);
+                    userAnswer = input ? input.value.trim().toUpperCase() : '';
+                } else {
+                    // Multiple choice questions
+                    const selected = document.querySelector(`input[name="${questionName}"]:checked`);
+                    userAnswer = selected ? selected.value : '';
+                }
+                
+                const isCorrect = userAnswer === correctAnswers[questionName];
+                if (isCorrect) score++;
+                
+                results.push({
+                    question: i,
+                    userAnswer: userAnswer || 'Not answered',
+                    correctAnswer: correctAnswers[questionName],
+                    isCorrect: isCorrect,
+                    location: answerLocations[questionName]
+                });
+            }
+            
+            showResults(score, results);
+        }
+
+        function showResults(score, results) {
+            const scoreElement = document.getElementById('score');
+            const resultMessage = document.getElementById('result-message');
+            const resultDetails = document.getElementById('result-details');
+            
+            scoreElement.textContent = `${score}/14`;
+            
+            // Set message based on score
+            if (score >= 12) {
+                resultMessage.textContent = 'Excellent! You have a great understanding of the text.';
+            } else if (score >= 8) {
+                resultMessage.textContent = 'Good job! You understood most of the text.';
+            } else {
+                resultMessage.textContent = 'Keep practicing! Review the text and try again.';
+            }
+            
+            // Clear previous results
+            resultDetails.innerHTML = '';
+            
+            // Add result details
+            results.forEach(result => {
+                const resultItem = document.createElement('div');
+                resultItem.className = `result-item ${result.isCorrect ? 'correct' : 'incorrect'}`;
+                
+                resultItem.innerHTML = `
+                    <div class="result-question">Question ${result.question}: ${result.isCorrect ? '✓ Correct' : '✗ Incorrect'}</div>
+                    <div class="result-answer">
+                        <span>Your answer: ${result.userAnswer}</span>
+                        ${!result.isCorrect ? `<span>Correct answer: ${result.correctAnswer}</span>` : ''}
+                    </div>
+                    <div class="result-location">Location in text: ${result.location}</div>
+                `;
+                
+                resultDetails.appendChild(resultItem);
+            });
+            
+            // Show results overlay
+            document.getElementById('result-overlay').style.display = 'flex';
+        }
+
+        function restartTest() {
+            // Reset timer
+            timeLeft = 20 * 60;
+            timerContainer.classList.remove('warning');
+            updateTimer();
+            startTimer();
+            
+            // Clear all selections
+            const allInputs = document.querySelectorAll('input[type="radio"], input[type="text"], select');
+            allInputs.forEach(input => {
+                if (input.type === 'radio') {
+                    input.checked = false;
+                } else if (input.type === 'text') {
+                    input.value = '';
+                } else {
+                    input.selectedIndex = 0;
+                }
+            });
+            
+            // Remove highlights
+            const highlights = document.querySelectorAll('[class^="highlight-"]');
+            highlights.forEach(highlight => {
+                highlight.outerHTML = highlight.textContent;
+            });
+            
+            // Hide results
+            document.getElementById('result-overlay').style.display = 'none';
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        function closeResults() {
+            document.getElementById('result-overlay').style.display = 'none';
+        }
+
+        // Initialize the test
+        document.getElementById('submit-btn').addEventListener('click', submitAnswers);
+        window.addEventListener('load', () => {
+            startTimer();
+            updateTimer();
+        });
+    </script>
+</body>
+</html>

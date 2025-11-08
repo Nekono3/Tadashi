@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Test: Marketing and the information age</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --success: #00b894;
+            --danger: #d63031;
+            --warning: #fdcb6e;
+            --info: #0984e3;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --background: #ffffff;
+            --text: #212529;
+            --border: #dee2e6;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --highlight-yellow: rgba(255, 255, 0, 0.3);
+            --highlight-blue: rgba(173, 216, 230, 0.3);
+        }
+
+        .night-theme {
+            --background: #1a1a2e;
+            --text: #e6e6e6;
+            --border: #4a4a6e;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        .sepia-theme {
+            --background: #f6f1d6;
+            --text: #5e4b3c;
+            --border: #c9b18e;
+            --shadow: rgba(94, 75, 60, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px var(--shadow);
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 0.5rem;
+        }
+
+        .theme-switcher {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .theme-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 2.5rem;
+            height: 2.5rem;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .telegram-btn {
+            background: #0088cc;
+            color: white;
+            border: none;
+            border-radius: 2rem;
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .telegram-btn:hover {
+            background: #0077b5;
+        }
+
+        .timer-container {
+            background-color: var(--secondary);
+            color: white;
+            padding: 0.5rem 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            box-shadow: 0 2px 5px var(--shadow);
+        }
+
+        .timer {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .timer.warning {
+            color: var(--warning);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .passage-container, .questions-container {
+            overflow-y: auto;
+            padding: 1.5rem;
+            height: calc(100vh - 130px);
+        }
+
+        .passage-container {
+            flex: 1;
+            border-right: 1px solid var(--border);
+        }
+
+        .questions-container {
+            flex: 1;
+        }
+
+        .passage-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .passage-content {
+            font-size: 1.1rem;
+            text-align: justify;
+        }
+
+        .passage-content p {
+            margin-bottom: 1rem;
+        }
+
+        .paragraph {
+            margin-bottom: 1.5rem;
+        }
+
+        .paragraph-label {
+            font-weight: bold;
+            color: var(--primary);
+            margin-right: 0.5rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            margin: 1.5rem 0 1rem;
+            color: var(--primary);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 0.5rem;
+        }
+
+        .question {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: rgba(108, 92, 231, 0.05);
+            border-left: 4px solid var(--secondary);
+        }
+
+        .question-text {
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+        }
+
+        .option:hover {
+            background-color: rgba(108, 92, 231, 0.1);
+        }
+
+        .option input {
+            cursor: pointer;
+        }
+
+        .flow-chart {
+            margin: 1.5rem 0;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: rgba(108, 92, 231, 0.05);
+            border-left: 4px solid var(--secondary);
+        }
+
+        .flow-step {
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 0.25rem;
+            background-color: var(--background);
+        }
+
+        .flow-arrow {
+            text-align: center;
+            margin: 0.5rem 0;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 0.25rem;
+            margin-top: 0.5rem;
+            background-color: var(--background);
+            color: var(--text);
+        }
+
+        .submit-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 2rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: block;
+            margin: 2rem auto;
+            box-shadow: 0 4px 8px var(--shadow);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px var(--shadow);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px var(--shadow);
+        }
+
+        .highlight-menu {
+            position: absolute;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 0.25rem;
+            display: flex;
+            box-shadow: 0 2px 10px var(--shadow);
+            z-index: 1000;
+        }
+
+        .highlight-btn {
+            width: 2rem;
+            height: 2rem;
+            border: none;
+            border-radius: 0.25rem;
+            margin: 0 0.25rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .yellow-highlight {
+            background-color: var(--highlight-yellow);
+        }
+
+        .blue-highlight {
+            background-color: var(--highlight-blue);
+        }
+
+        .clear-highlight {
+            background-color: #f8f9fa;
+        }
+
+        .result-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .result-content {
+            background-color: var(--background);
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .score {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 1rem 0;
+        }
+
+        .result-details {
+            margin-bottom: 1.5rem;
+        }
+
+        .result-question {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: rgba(108, 92, 231, 0.05);
+        }
+
+        .correct {
+            border-left: 4px solid var(--success);
+        }
+
+        .incorrect {
+            border-left: 4px solid var(--danger);
+        }
+
+        .answer-location {
+            font-size: 0.9rem;
+            color: var(--secondary);
+            margin-top: 0.5rem;
+        }
+
+        .close-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 2rem;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 992px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .passage-container, .questions-container {
+                height: auto;
+                max-height: 50vh;
+            }
+            
+            .passage-container {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+        }
+
+        @media (max-width: 576px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .theme-switcher {
+                align-self: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                <span>IELTS Reading Test</span>
+            </div>
+            <div class="theme-switcher">
+                <button class="theme-btn" id="day-theme" title="Day Theme"><i class="fas fa-sun"></i></button>
+                <button class="theme-btn" id="night-theme" title="Night Theme"><i class="fas fa-moon"></i></button>
+                <button class="theme-btn" id="sepia-theme" title="Sepia Theme"><i class="fas fa-feather"></i></button>
+            </div>
+            <a href="tg://resolve?domain=aftum_8" class="telegram-btn">
+                <i class="fab fa-telegram"></i>
+                <span>Телеграмм канал</span>
+            </a>
+        </header>
+
+        <div class="timer-container">
+            <div class="timer" id="timer">
+                <i class="fas fa-clock"></i>
+                <span id="time">20:00</span>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="passage-container">
+                <h2 class="passage-title">Marketing and the information age</h2>
+                <div class="passage-content" id="passage-content">
+                    <div class="paragraph">
+                        <span class="paragraph-label">A</span>
+                        For the early practitioners of marketing in the late 19th and early 20th centuries, the business of selling was simply a matter of continually finding new customers. By contrast, marketing managers in the current era recognise the importance of gathering information about the market and about potential customers. They recognise that if companies are to be profitable, customers must gain and retain their perceptions of value from the brands they buy over a long time frame, rather than from a single transaction. This also means that customers must see value in returning continually to the stores where they shop, as well as to the service providers they deal with.
+                    </div>
+                    
+                    <div class="paragraph">
+                        <span class="paragraph-label">B</span>
+                        Marketing practitioners and marketing scientists have never worked more closely than they currently do. There are many reasons for this, including the fact that this is the information age where convergence in telecommunications, media and technology is causing old ways to be challenged, and new methods and tools to be tested. Customer expectations have risen as new technologies allow new approaches. For instance, the subscriber-TV music channel Channel [V], encourages its viewers to sign up for text messages and email alerts that tell them when their favourite artists and songs are about to be broadcast. Competitive advantage lies in being able to recognise which customers can be given greater attention, not just because they demand it but because it makes commercial sense to provide high levels of product quality and service.
+                    </div>
+                    
+                    <div class="paragraph">
+                        <span class="paragraph-label">C</span>
+                        Modern marketing information systems rely on information technology to enable marketing intelligence to be gathered and to store and analyse marketing research information. While some of the information used is gathered by government bodies such as the Australian Bureau of Statistics and Statistics New Zealand, most of it is purposefully gathered by marketing organisations for client companies. In the process, computer technology is used to manipulate the data and then to present the information in such a way that executives can readily identify any problems or issues, and quickly arrive at solutions.
+                    </div>
+                    
+                    <div class="paragraph">
+                        <span class="paragraph-label">D</span>
+                        In order to produce superior value and satisfaction for customers, marketing managers need information at almost every turn. They need information about customers-end-users and resellers - as well as competitors and governmental and other forces in the marketplace. One marketing executive put it this way: "To manage a business well is to manage its future; and to manage the future is to manage information." Increasingly, marketers are viewing information not just as an input for making better decisions but also as an important strategic asset and marketing tool. As household incomes increase, choice widens and buyers become better discriminating, so sellers need information about how buyers respond to different products and advertising campaigns.
+                    </div>
+                    
+                    <div class="paragraph">
+                        <span class="paragraph-label">E</span>
+                        The supply of information has also increased greatly. It has been suggested by the futurist and best selling author John Naisbitt that the United States and, by observation, developed countries such as Australia, New Zealand and Singapore are moving from industrial to information-based economies. These post-industrial economies earn 70-80% of their Gross Domestic Product from services, and have entered what some commentators have termed the 'Information Age' or the 'Information Technology Era'.
+                    </div>
+                    
+                    <div class="paragraph">
+                        <span class="paragraph-label">F</span>
+                        One study found that with all the information now available through supermarket scanners, a packaged goods product controller is bombarded with one million to one billion new numbers each week. As Naisbitt points out: 'Running out of information is not a problem, but drowning in it is. Yet marketers frequently complain that they lack information of the right kind but have plenty of the wrong kind, or they claim that marketing information is so widely spread throughout the organisation that it takes great effort to locate even simple facts. In addition, subordinates may withhold information they believe will reflect badly on their performance and important information often arrives too late to be useful, or on-time information is not accurate. So marketing managers need better information.
+                    </div>
+                    
+                    <div class="paragraph">
+                        <span class="paragraph-label">G</span>
+                        Although marketing organisations have greater capacity to provide managers with information, they often do not use it well. As a result, many marketing organisations are now studying their managers' information needs and designing information systems specifically to meet those needs. One solution is to use a Marketing Information System (MIS). This consists of people, equipment and procedures which, when put together, are able to gather, analyse, evaluate and distribute needed, timely and accurate information to marketing decision-makers. The MIS begins and ends with marketing managers. First, it interacts with these managers to assess the information needs they have. Next, it develops the needed information from internal records, marketing intelligence activities and the research process. The analysis unit processes the data to make it more useful and, finally, the MIS distributes it to managers in the right form and at the right time to help them make better marketing decisions.
+                    </div>
+                    
+                    <div class="paragraph">
+                        <span class="paragraph-label">H</span>
+                        However, the costs of obtaining, processing, storing and delivering information can mount quickly. In some cases additional information will do little to change or improve a manager's decision, or the costs of the information will exceed the returns from the improved decision. For example, if an organisation estimates that launching a new product without any further information will yield a profit of $500,000, then it would be foolish to spend $30,000 for additional information that would increase the profit to only $525,000. By itself information is valueless - its value comes from its use.
+                    </div>
+                </div>
+            </div>
+
+            <div class="questions-container">
+                <h3 class="section-title">Questions 27-31</h3>
+                <p>Reading Passage 3 has eight paragraphs, A-H.</p>
+                <p>Which paragraph contains the following information?</p>
+                <p>Write the correct letter, A-H, in boxes <strong>27-31</strong> on your answer sheet.</p>
+
+                <div class="question" id="q27">
+                    <div class="question-text">27. the fact that there may be too much information to cope with</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q27" value="A"> A</label>
+                        <label class="option"><input type="radio" name="q27" value="B"> B</label>
+                        <label class="option"><input type="radio" name="q27" value="C"> C</label>
+                        <label class="option"><input type="radio" name="q27" value="D"> D</label>
+                        <label class="option"><input type="radio" name="q27" value="E"> E</label>
+                        <label class="option"><input type="radio" name="q27" value="F"> F</label>
+                        <label class="option"><input type="radio" name="q27" value="G"> G</label>
+                        <label class="option"><input type="radio" name="q27" value="H"> H</label>
+                    </div>
+                </div>
+
+                <div class="question" id="q28">
+                    <div class="question-text">28. the relevance of generating repeat business</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q28" value="A"> A</label>
+                        <label class="option"><input type="radio" name="q28" value="B"> B</label>
+                        <label class="option"><input type="radio" name="q28" value="C"> C</label>
+                        <label class="option"><input type="radio" name="q28" value="D"> D</label>
+                        <label class="option"><input type="radio" name="q28" value="E"> E</label>
+                        <label class="option"><input type="radio" name="q28" value="F"> F</label>
+                        <label class="option"><input type="radio" name="q28" value="G"> G</label>
+                        <label class="option"><input type="radio" name="q28" value="H"> H</label>
+                    </div>
+                </div>
+
+                <div class="question" id="q29">
+                    <div class="question-text">29. an example of personalised marketing</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q29" value="A"> A</label>
+                        <label class="option"><input type="radio" name="q29" value="B"> B</label>
+                        <label class="option"><input type="radio" name="q29" value="C"> C</label>
+                        <label class="option"><input type="radio" name="q29" value="D"> D</label>
+                        <label class="option"><input type="radio" name="q29" value="E"> E</label>
+                        <label class="option"><input type="radio" name="q29" value="F"> F</label>
+                        <label class="option"><input type="radio" name="q29" value="G"> G</label>
+                        <label class="option"><input type="radio" name="q29" value="H"> H</label>
+                    </div>
+                </div>
+
+                <div class="question" id="q30">
+                    <div class="question-text">30. an illustration of a situation where commissioning new information research might not be advisable</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q30" value="A"> A</label>
+                        <label class="option"><input type="radio" name="q30" value="B"> B</label>
+                        <label class="option"><input type="radio" name="q30" value="C"> C</label>
+                        <label class="option"><input type="radio" name="q30" value="D"> D</label>
+                        <label class="option"><input type="radio" name="q30" value="E"> E</label>
+                        <label class="option"><input type="radio" name="q30" value="F"> F</label>
+                        <label class="option"><input type="radio" name="q30" value="G"> G</label>
+                        <label class="option"><input type="radio" name="q30" value="H"> H</label>
+                    </div>
+                </div>
+
+                <div class="question" id="q31">
+                    <div class="question-text">31. how the greater wealth of customers enables them to select from a broader range of products</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q31" value="A"> A</label>
+                        <label class="option"><input type="radio" name="q31" value="B"> B</label>
+                        <label class="option"><input type="radio" name="q31" value="C"> C</label>
+                        <label class="option"><input type="radio" name="q31" value="D"> D</label>
+                        <label class="option"><input type="radio" name="q31" value="E"> E</label>
+                        <label class="option"><input type="radio" name="q31" value="F"> F</label>
+                        <label class="option"><input type="radio" name="q31" value="G"> G</label>
+                        <label class="option"><input type="radio" name="q31" value="H"> H</label>
+                    </div>
+                </div>
+
+                <h3 class="section-title">Questions 32-36</h3>
+                <p>Do the following statements agree with the claims of the writer in Reading Passage 3?</p>
+                <p>In boxes 32-36 on your answer sheet, write</p>
+                <p><strong>YES</strong> if the statement agrees with the claims of the writer<br>
+                <strong>NO</strong> if the statement contradicts the claims of the writer<br>
+                <strong>NOT GIVEN</strong> if it is impossible to say what the writer thinks about this</p>
+
+                <div class="question" id="q32">
+                    <div class="question-text">32. The majority of marketing statistics are gathered by government agencies.</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q32" value="YES"> YES</label>
+                        <label class="option"><input type="radio" name="q32" value="NO"> NO</label>
+                        <label class="option"><input type="radio" name="q32" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+                </div>
+
+                <div class="question" id="q33">
+                    <div class="question-text">33. The move from an industrial to an information-based economy has happened more quickly in New Zealand than in Australia.</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q33" value="YES"> YES</label>
+                        <label class="option"><input type="radio" name="q33" value="NO"> NO</label>
+                        <label class="option"><input type="radio" name="q33" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+                </div>
+
+                <div class="question" id="q34">
+                    <div class="question-text">34. Employees sometimes hide information that gives a poor impression of them.</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q34" value="YES"> YES</label>
+                        <label class="option"><input type="radio" name="q34" value="NO"> NO</label>
+                        <label class="option"><input type="radio" name="q34" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+                </div>
+
+                <div class="question" id="q35">
+                    <div class="question-text">35. Managers frequently fail to make good use of the information they receive.</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q35" value="YES"> YES</label>
+                        <label class="option"><input type="radio" name="q35" value="NO"> NO</label>
+                        <label class="option"><input type="radio" name="q35" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+                </div>
+
+                <div class="question" id="q36">
+                    <div class="question-text">36. Marketing information has to be used to be valuable.</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q36" value="YES"> YES</label>
+                        <label class="option"><input type="radio" name="q36" value="NO"> NO</label>
+                        <label class="option"><input type="radio" name="q36" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+                </div>
+
+                <h3 class="section-title">Questions 37-40</h3>
+                <p>Complete the flow-chart below.</p>
+                <p>Choose <strong>NO MORE THAN TWO WORDS</strong> from the passage for each answer.</p>
+                <p>Write your answers in boxes 37-40 on your answer sheet.</p>
+
+                <div class="flow-chart">
+                    <div class="flow-step">
+                        <strong>The Marketing Information System (MIS)</strong>
+                    </div>
+                    <div class="flow-arrow">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+                    <div class="flow-step">
+                        37. <input type="text" class="input-field" id="q37" placeholder="Enter your answer">
+                    </div>
+                    <div class="flow-arrow">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+                    <div class="flow-step">
+                        Find out their 38. <input type="text" class="input-field" id="q38" placeholder="Enter your answer">
+                    </div>
+                    <div class="flow-arrow">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+                    <div class="flow-step">
+                        Developed through:<br>
+                        - 39. <input type="text" class="input-field" id="q39" placeholder="Enter your answer"><br>
+                        - marketing intelligence activities<br>
+                        - research process
+                    </div>
+                    <div class="flow-arrow">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+                    <div class="flow-step">
+                        Processed by the 40. <input type="text" class="input-field" id="q40" placeholder="Enter your answer">
+                    </div>
+                    <div class="flow-arrow">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+                    <div class="flow-step">
+                        Timely and accurate data distribution
+                    </div>
+                </div>
+
+                <button class="submit-btn" id="submit-btn">Submit Answers</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="result-overlay" id="result-overlay">
+        <div class="result-content">
+            <div class="result-header">
+                <h2>Test Results</h2>
+                <div class="score" id="score">0/14</div>
+                <p id="result-message"></p>
+            </div>
+            
+            <div class="result-details" id="result-details">
+                <!-- Results will be inserted here -->
+            </div>
+            
+            <button class="close-btn" id="close-btn">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Theme switching
+        document.getElementById('day-theme').addEventListener('click', () => {
+            document.body.classList.remove('night-theme', 'sepia-theme');
+        });
+
+        document.getElementById('night-theme').addEventListener('click', () => {
+            document.body.classList.add('night-theme');
+            document.body.classList.remove('sepia-theme');
+        });
+
+        document.getElementById('sepia-theme').addEventListener('click', () => {
+            document.body.classList.add('sepia-theme');
+            document.body.classList.remove('night-theme');
+        });
+
+        // Timer functionality
+        const timerElement = document.getElementById('time');
+        const timerContainer = document.getElementById('timer');
+        let timeLeft = 20 * 60; // 20 minutes in seconds
+        let timerInterval;
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                submitAnswers();
+                return;
+            }
+
+            timeLeft--;
+
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            if (timeLeft <= 5 * 60) { // 5 minutes left
+                timerContainer.classList.add('warning');
+            }
+        }
+
+        // Text highlighting
+        const passageContent = document.getElementById('passage-content');
+        let highlightMenu = null;
+
+        passageContent.addEventListener('mouseup', (e) => {
+            const selection = window.getSelection();
+            if (selection.toString().trim().length > 0) {
+                showHighlightMenu(e.clientX, e.clientY, selection);
+            }
+        });
+
+        document.addEventListener('mousedown', (e) => {
+            if (highlightMenu && !highlightMenu.contains(e.target)) {
+                document.body.removeChild(highlightMenu);
+                highlightMenu = null;
+            }
+        });
+
+        function showHighlightMenu(x, y, selection) {
+            if (highlightMenu) {
+                document.body.removeChild(highlightMenu);
+            }
+
+            highlightMenu = document.createElement('div');
+            highlightMenu.className = 'highlight-menu';
+            highlightMenu.style.position = 'absolute';
+            highlightMenu.style.left = `${x}px`;
+            highlightMenu.style.top = `${y}px`;
+
+            const yellowBtn = document.createElement('button');
+            yellowBtn.className = 'highlight-btn yellow-highlight';
+            yellowBtn.innerHTML = '<i class="fas fa-highlighter"></i>';
+            yellowBtn.title = 'Yellow Highlight';
+            yellowBtn.addEventListener('click', () => {
+                highlightSelection(selection, 'yellow');
+                document.body.removeChild(highlightMenu);
+                highlightMenu = null;
+            });
+
+            const blueBtn = document.createElement('button');
+            blueBtn.className = 'highlight-btn blue-highlight';
+            blueBtn.innerHTML = '<i class="fas fa-highlighter"></i>';
+            blueBtn.title = 'Blue Highlight';
+            blueBtn.addEventListener('click', () => {
+                highlightSelection(selection, 'blue');
+                document.body.removeChild(highlightMenu);
+                highlightMenu = null;
+            });
+
+            const clearBtn = document.createElement('button');
+            clearBtn.className = 'highlight-btn clear-highlight';
+            clearBtn.innerHTML = '<i class="fas fa-eraser"></i>';
+            clearBtn.title = 'Clear Highlight';
+            clearBtn.addEventListener('click', () => {
+                clearHighlight(selection);
+                document.body.removeChild(highlightMenu);
+                highlightMenu = null;
+            });
+
+            highlightMenu.appendChild(yellowBtn);
+            highlightMenu.appendChild(blueBtn);
+            highlightMenu.appendChild(clearBtn);
+            document.body.appendChild(highlightMenu);
+        }
+
+        function highlightSelection(selection, color) {
+            const range = selection.getRangeAt(0);
+            const selectedText = range.extractContents();
+            const span = document.createElement('span');
+            
+            if (color === 'yellow') {
+                span.style.backgroundColor = 'rgba(255, 255, 0, 0.3)';
+            } else if (color === 'blue') {
+                span.style.backgroundColor = 'rgba(173, 216, 230, 0.3)';
+            }
+            
+            span.appendChild(selectedText);
+            range.insertNode(span);
+            
+            // Clear selection
+            selection.removeAllRanges();
+        }
+
+        function clearHighlight(selection) {
+            const range = selection.getRangeAt(0);
+            const selectedContent = range.extractContents();
+            
+            // Create a new document fragment to hold the unhighlighted content
+            const fragment = document.createDocumentFragment();
+            
+            // If the selected content is a span with highlight, extract its children
+            if (selectedContent.querySelectorAll) {
+                const spans = selectedContent.querySelectorAll('span[style*="background-color"]');
+                spans.forEach(span => {
+                    while (span.firstChild) {
+                        fragment.appendChild(span.firstChild);
+                    }
+                    span.parentNode.removeChild(span);
+                });
+            }
+            
+            // If there's still content, add it to the fragment
+            if (selectedContent.childNodes.length > 0) {
+                fragment.appendChild(selectedContent);
+            }
+            
+            range.insertNode(fragment);
+            selection.removeAllRanges();
+        }
+
+        // Answer submission and evaluation
+        const correctAnswers = {
+            '27': 'F',
+            '28': 'A',
+            '29': 'B',
+            '30': 'H',
+            '31': 'D',
+            '32': 'NO',
+            '33': 'NOT GIVEN',
+            '34': 'YES',
+            '35': 'YES',
+            '36': 'YES',
+            '37': 'marketing managers',
+            '38': 'information needs',
+            '39': 'internal records',
+            '40': 'analysis unit'
+        };
+
+        const answerLocations = {
+            '27': 'Paragraph F: "Running out of information is not a problem, but drowning in it is."',
+            '28': 'Paragraph A: "customers must see value in returning continually to the stores where they shop"',
+            '29': 'Paragraph B: "the subscriber-TV music channel Channel [V], encourages its viewers to sign up for text messages and email alerts"',
+            '30': 'Paragraph H: "it would be foolish to spend $30,000 for additional information that would increase the profit to only $525,000"',
+            '31': 'Paragraph D: "As household incomes increase, choice widens and buyers become better discriminating"',
+            '32': 'Paragraph C: "While some of the information used is gathered by government bodies... most of it is purposefully gathered by marketing organisations"',
+            '33': 'Paragraph E: No comparison of speed between New Zealand and Australia is made',
+            '34': 'Paragraph F: "subordinates may withhold information they believe will reflect badly on their performance"',
+            '35': 'Paragraph G: "Although marketing organisations have greater capacity to provide managers with information, they often do not use it well"',
+            '36': 'Paragraph H: "By itself information is valueless - its value comes from its use"',
+            '37': 'Paragraph G: "The MIS begins and ends with marketing managers"',
+            '38': 'Paragraph G: "First, it interacts with these managers to assess the information needs they have"',
+            '39': 'Paragraph G: "it develops the needed information from internal records, marketing intelligence activities and the research process"',
+            '40': 'Paragraph G: "The analysis unit processes the data to make it more useful"'
+        };
+
+        document.getElementById('submit-btn').addEventListener('click', submitAnswers);
+
+        function submitAnswers() {
+            clearInterval(timerInterval);
+            
+            let score = 0;
+            const results = [];
+            
+            // Check paragraph questions (27-31)
+            for (let i = 27; i <= 31; i++) {
+                const selectedOption = document.querySelector(`input[name="q${i}"]:checked`);
+                const userAnswer = selectedOption ? selectedOption.value : 'Not answered';
+                const isCorrect = userAnswer === correctAnswers[i];
+                
+                if (isCorrect) score++;
+                
+                results.push({
+                    question: i,
+                    userAnswer,
+                    correctAnswer: correctAnswers[i],
+                    isCorrect,
+                    location: answerLocations[i]
+                });
+            }
+            
+            // Check Yes/No/Not Given questions (32-36)
+            for (let i = 32; i <= 36; i++) {
+                const selectedOption = document.querySelector(`input[name="q${i}"]:checked`);
+                const userAnswer = selectedOption ? selectedOption.value : 'Not answered';
+                const isCorrect = userAnswer === correctAnswers[i];
+                
+                if (isCorrect) score++;
+                
+                results.push({
+                    question: i,
+                    userAnswer,
+                    correctAnswer: correctAnswers[i],
+                    isCorrect,
+                    location: answerLocations[i]
+                });
+            }
+            
+            // Check flow-chart questions (37-40)
+            for (let i = 37; i <= 40; i++) {
+                const inputField = document.getElementById(`q${i}`);
+                const userAnswer = inputField ? inputField.value.trim().toLowerCase() : 'Not answered';
+                const isCorrect = userAnswer === correctAnswers[i].toLowerCase();
+                
+                if (isCorrect) score++;
+                
+                results.push({
+                    question: i,
+                    userAnswer,
+                    correctAnswer: correctAnswers[i],
+                    isCorrect,
+                    location: answerLocations[i]
+                });
+            }
+            
+            // Display results
+            document.getElementById('score').textContent = `${score}/14`;
+            
+            let message = '';
+            if (score >= 12) {
+                message = 'Excellent! You have a great understanding of the text.';
+            } else if (score >= 8) {
+                message = 'Good job! You understood most of the text.';
+            } else if (score >= 5) {
+                message = 'Not bad, but you could benefit from more practice.';
+            } else {
+                message = 'Keep practicing! Review the text and try again.';
+            }
+            document.getElementById('result-message').textContent = message;
+            
+            const resultDetails = document.getElementById('result-details');
+            resultDetails.innerHTML = '';
+            
+            results.forEach(result => {
+                const resultElement = document.createElement('div');
+                resultElement.className = `result-question ${result.isCorrect ? 'correct' : 'incorrect'}`;
+                
+                resultElement.innerHTML = `
+                    <p><strong>Question ${result.question}:</strong> ${result.isCorrect ? 'Correct' : 'Incorrect'}</p>
+                    <p>Your answer: ${result.userAnswer}</p>
+                    <p>Correct answer: ${result.correctAnswer}</p>
+                    <p class="answer-location">${result.location}</p>
+                `;
+                
+                resultDetails.appendChild(resultElement);
+            });
+            
+            document.getElementById('result-overlay').style.display = 'flex';
+        }
+
+        document.getElementById('close-btn').addEventListener('click', () => {
+            document.getElementById('result-overlay').style.display = 'none';
+        });
+
+        // Start the timer when the page loads
+        window.addEventListener('load', () => {
+            startTimer();
+        });
+    </script>
+</body>
+</html>
